@@ -1,0 +1,382 @@
+Cahier des charges amélioré pour la refonte du site Bininyé
+
+
+1. Résumé exécutif & contexte
+Binin Yé est une ONG béninoise qui œuvre pour la santé, l’éducation, la gouvernance locale et la protection des droits humains. Son site actuel, basé sur WordPress, utilise Elementor et Yoast SEO mais présente plusieurs limitations : performance médiocre, navigation peu intuitive, difficultés de mise à jour et absence d’intégration avec des outils modernes de collecte de données. Les utilisateurs se plaignent notamment de temps de chargement longs et d’une expérience mobile dégradée. L’audit technique a permis d’identifier la structure du site actuel (pages institutionnelles, campagnes de dons, blog, galerie) et d’extraire les éléments utiles (titres, méta‑données, formulaires, médias, etc.)[1][2]. Plusieurs pages contiennent des formulaires de don et d’adhésion, des témoignages et un blog. Cependant, la structure de contenu est figée, ce qui freine l’évolution.
+Pour remédier à ces problèmes et préparer l’avenir, le site sera reconstruit avec Next.js 15 et un CMS Strapi en mode headless. Le front‑end servira un contenu dynamique généré en temps réel ou de façon statique selon les besoins. Ce changement permettra de bénéficier de performances optimales, d’une flexibilité accrue et d’une meilleure expérience utilisateur, tout en dotant l’équipe d’un outil de gestion de contenu puissant.
+2. Objectifs de la refonte
+La refonte vise à :
+    1. Moderniser la plateforme en adoptant la stack Next.js + Strapi, gage de performance, de modularité et de maintenabilité. Les pages seront construites à partir de blocs réutilisables et typés.
+    2. Optimiser la performance et le SEO : temps de chargement inférieur à 2,5 s (LCP), amélioration de l’indexation grâce à un balisage sémantique approprié et schémas JSON‑LD. Utiliser les caches CDN et l’ISR pour des mises à jour rapides.
+    3. Améliorer l’accessibilité : atteindre WCAG 2.1 AA, notamment en garantissant un contraste suffisant, des alternatives textuelles complètes et une navigation clavier. Prévoir des tests automatisés d’accessibilité.
+    4. Enrichir l’expérience utilisateur : design responsive, interactions fluides, transitions soignées, micro‑interactions (animations légères) et un parcours utilisateur clair menant à des appels à l’action (donner, rejoindre, s’informer). Les pages doivent inspirer confiance et encourager l’engagement.
+    5. Mieux gérer le contenu : déployer un CMS headless Strapi pour permettre aux équipes de créer, éditer et publier du contenu sans intervention technique. Supporter la localisation (français, anglais) et l’organisation par domaines, campagnes, événements, etc.
+    6. Préparer la scalabilité : anticiper l’intégration de fonctionnalités telles que le paiement en ligne, l’authentification, les statistiques avancées ou de nouveaux modules (boutique, forum). Mettre en place une architecture CI/CD et des environnements séparés (dev, staging, prod).
+
+2.1. Arborescence du Site
+L'analyse du site a permis de reconstituer l'arborescence suivante, qui servira de base à la nouvelle architecture de l'information. Le sitemap complet est disponible dans le fichier `sitemap.xml` joint.
+
+- **Accueil :** Page principale présentant l'ONG, ses missions et ses dernières actualités.
+- **À Propos :**
+    - Qui sommes-nous ? : Présentation détaillée de l'ONG, de sa vision et de ses valeurs.
+    - Nos Domaines : Description des grands axes d'intervention.
+    - Nos Équipes : Présentation des membres de l'organisation.
+- **Nos Activités :** Catalogue des projets et événements passés et à venir.
+- **Contribuer :** Page dédiée aux dons et au soutien de l'ONG.
+- **Ressources :**
+    - Blog : Articles et actualités.
+    - Médiathèque : Galeries de photos et de vidéos.
+    - Nous Rejoindre : Formulaire d'adhésion pour devenir membre ou bénévole.
+    - Témoignages : Retours d'expérience de bénéficiaires ou de partenaires.
+- **Contact :** Formulaire de contact et coordonnées de l'ONG.
+
+voici les url de lancien site :
+
+*Contraintes de crawl**
+1. Point de départs (start URLs) — commence par ces pages et vas sur les liens internes du même domaine jusqu’à profondeur 2 :
+   - https://bininye.com/
+   - https://bininye.com/qui-sommes-nous/
+   - https://bininye.com/nos-domaines/   (si existent)
+   - https://bininye.com/equipes/
+   - https://bininye.com/evenements/ sera activte
+   - https://bininye.com/contribuer/
+   - https://bininye.com/blog/
+   - https://bininye.com/photos-et-videos/
+   - https://bininye.com/nous-rejoindre/
+   - https://bininye.com/temoignages/
+   - https://bininye.com/contact/
+   - plus les pages de campagnes détectées (ex : /campaigns/...)
+
+
+3. Arborescence de l’information
+Sur la base de l’audit, l’arborescence cible se structure ainsi :
+    • Accueil : présentation succincte de l’ONG, valeurs et domaines, dernières actualités, encarts campagne et témoignages.
+    • À propos :
+    • Histoire et mission (ex‑« Qui sommes‑nous ? ») : vision, origine, valeurs[1];
+    • Domaines d’intervention : nutrition, santé et droits sexuels, gouvernance locale, hygiène, lutte contre les violences, promotion des droits[3];
+    • Notre équipe : membres, rôles, biographies courtes[4];
+    • Nos partenaires : logos et descriptions.
+    • Nos activités : liste paginée d’événements (à venir et passés), avec filtre par domaine, dates, localité, etc. Chaque événement a sa page de détail[5].
+    • Contribuer :
+    • Campagnes : liste et détail des campagnes de dons, formulaire de promesse de don (hors ligne)[2];
+    • Devenir bénévole : informations sur le bénévolat, formulaire d’adhésion complet[6];
+    • Parrainage : programme de parrainage.
+    • Ressources :
+    • Blog : articles et actualités[7];
+    • Médiathèque : galerie photos/vidéos avec filtres[8];
+    • Publications : rapports, brochures, dossiers téléchargeables.
+    • Témoignages : retours d’expériences de bénévoles ou bénéficiaires[9].
+    • FAQs : questions et réponses sur l’ONG et ses actions[10].
+    • Contact : formulaire, coordonnées, carte interactive. Ajouter un chatbot optionnel (futur) pour assistance.
+    • Pages légales : mentions légales, politique de confidentialité, politique des cookies, conditions d’utilisation.
+Avertissement sur les URLs existantes
+Les pages d’anciennes campagnes, d’utilisateurs (« recu », « profil »…), ou de tests doivent être redirigées vers les nouvelles sections pour éviter les erreurs 404 et préserver le SEO. Un plan de migration SEO est à prévoir.
+4. Périmètre fonctionnel global
+Le site comprendra :
+    1. Pages de contenu statique (histoire, domaines, équipes, partenaires). Ces pages seront générées en SSG et stockées dans Strapi. Les valeurs fondamentales et la mission seront mises en avant, avec des micro‑animations pour renforcer l’engagement.
+    2. Actualités et événements : module de gestion des événements comprenant listage filtrable, pages de détail, calendrier, intégration iCal, et formulaire d’inscription. Possibilité de marquer les événements « À venir », « En cours » ou « Passés ».
+    3. Blog : module de publication avec rich text (images, vidéos, citations, bloc code). Recherche plein‑texte, tags et catégories. Possibilité de commentaires modérés (option future).
+    4. Campagnes de dons : pages de campagne avec description, objectifs, avancement en temps réel (montant collecté vs cible), formulaire de promesse de don (montant, message, contact). Les dons en ligne ne seront pas intégrés pour le moment, mais l’architecture restera extensible (API de paiement). Intégration de partages sociaux pour chaque campagne.
+    5. Formulaires d’adhésion : formulaires multi‑étapes pour devenir bénévole ou partenaire. Champs obligatoires, validations côté client et serveur, stockage dans Strapi et envoi d’e‑mail de confirmation.
+    6. Médiathèque : galerie filtrable par type (photo, vidéo), par événement ou par domaine. Intégration d’une lightbox accessible, possibilité d’afficher des légendes et crédits, et de partager sur les réseaux sociaux.
+    7. Témoignages : affichage de témoignages avec filtres par type (bénéficiaire, volontaire, partenaire), classement, et possibilité de soumettre un témoignage via formulaire.
+    8. Internationalisation : structure multilingue dès le départ (i18n), interfaces pour gérer les traductions dans Strapi. La langue par défaut est le français; l’anglais sera la première langue additionnelle.
+    9. Gestion des fichiers : possibilité de téléverser des PDFs ou images pour la section « Publications » et d’en gérer les métadonnées (titre, langue, date de publication).
+    10. SEO avancé : génération automatique des sitemaps, gestion des balises <meta>, open graph, JSON‑LD pour chaque type de contenu (Organisation, Person, Event, Article, Campaign, FAQ). Implementation d’un système d’URL canonique, de redirections 301 pour les anciennes pages, et d’un « robots.txt » adapté.
+    11. Notifications : configuration d’alertes e‑mail pour les administrateurs lorsqu’un formulaire est soumis (contact, promesse de don, adhésion) et intégration d’un service de notifications push (pwa) pour les utilisateurs souhaitant suivre les nouveautés.
+5. Détails par page (design, fonctionnalités, SEO, accessibilité)
+Chaque page est conçue comme un ensemble de blocs modulaires. Les blocs seront définis dans Strapi et rendus par des composants React. La hiérarchie de titre (h1, h2, h3, etc.), les balises section et article respecteront le HTML sémantique.
+5.1 Accueil
+Design et UX : - Grande bannière immersive (hero) avec image représentative ou vidéo courte; texte d’accroche et CTA primaire (contribuer) et secondaire (découvrir nos actions). La bannière peut changer selon l’actualité (campagne du moment). - Section Domaines : six cartes colorées représentant chaque domaine. Chaque carte contient une icône personnalisée, un titre, un résumé et un bouton « En savoir plus ». Les cartes se comportent comme des liens et adoptent un effet de survol, par exemple un léger zoom. - Section Actualités & Événements : un composant « carrousel » ou « grille masonry » qui met en avant les trois dernières actualités et trois prochaines activités. Utiliser un design asymétrique pour dynamiser la page. - Section Campagnes : trois campagnes mises en avant. Chaque card comporte l’image de la campagne, un court texte, une barre de progression animée et un bouton pour voir le détail. Les montants récoltés seront mis à jour via ISR. - Section Témoignages : slider au défilement horizontal avec photos en médaillon et citations. Le slider peut comporter des boutons de navigation et un mode auto‑scroll. - Section Équipe : aperçu de 4 membres avec photo, nom et fonction. Un bouton « Voir toute l’équipe » dirige vers la page dédiée. - Section Blog : carrousel ou grille de trois articles récents avec image, titre et résumé. Éventuellement un tag pour signaler la catégorie. - Section Galerie : mosaïque de photos/vidéos; chaque miniature ouvre la lightbox. Le design accentue les couleurs de l’ONG. - Section Newsletter : formulaire simple (champ e‑mail + bouton) avec texte court incitant à s’abonner et mention du RGPD. - Footer : four columns : liens rapides, domaines, contact, réseaux sociaux & newsletter. Présence des mentions légales et du plan du site.
+Fonctionnalités techniques : - Pages statiques générées (SSG) avec ISR pour certaines sections (actu, campagnes). Données récupérées via Strapi. Utilisation de React Server Components pour la structuration et de Suspense pour le chargement progressif. - Rendu adaptatif pour la bannière (images de taille différente selon le viewport). Utilisation de next/image pour optimiser la livraison.
+SEO/accessibilité : - <title> : version courte et accrocheuse (ex. « ONG Binin Yé – Ensemble changeons des vies »). <meta name="description"> : résumé accrocheur. - Balises h1 à h3 structurent la page; attributs aria-live pour signaler la mise à jour de la barre de progression des campagnes; alt complet sur les images. - Intégration d’un schéma WebPage et Organization en JSON‑LD.
+5.2 Histoire et mission
+Cette page remplace la page « Qui sommes‑nous ? » et offre une narration plus travaillée. Un graphique chronologique ou un tableau comparatif pourra présenter les grandes étapes de Binin Yé depuis sa création. Les valeurs (excellence, durabilité, intégrité) seront mises en avant via des cards ou une frise graphique. Des citations de fondateurs ou d’anciens bénévoles agrémenteront la page. Une section « Nos impacts » présentera des chiffres clés (nombre de bénéficiaires, nombre de volontaires). L’algorithme de Next.js fera un SSG pour cette page. SEO : schéma AboutPage et Organization avec les informations de contact; micro‑données pour l’adresse postale, l’email et le téléphone.
+5.3 Domaines d’intervention
+Chaque domaine sera présenté sous la forme d’une carte détaillée avec icône personnalisée, un résumé et un lien « En savoir plus ». Cliquer sur une carte ouvre une sous‑page de domaine pour un approfondissement : problèmes ciblés, objectifs, projets réalisés, témoignages et photos. Un « call to action » encouragera à rejoindre ou à soutenir ce domaine précis. Les domaines seront gérés comme un type Strapi (nom, slug, couleur, icône SVG, description longue et courte, galerie d’images, documents associés). SEO : schéma Service ou Cause.
+5.4 Notre équipe
+Page avec un héros engageant. Les membres seront affichés sous forme de cartes (photo, nom, rôle, biographie courte, réseaux sociaux). Un bouton filtrant par catégorie (direction, staff, bénévoles de longue durée) permettra d’afficher plus ou moins de membres. Des animations d’apparition peuvent accompagner le scroll (ex. fade in). Chaque membre peut avoir sa propre page si son profil est détaillé (réalisations, citations). Les données viendront d’un modèle Strapi team-member (id, prénom, nom, rôle, bio, photo, position, réseaux sociaux). SEO : schéma Person et OrganizationRole.
+5.5 Nos activités (événements)
+La page liste est construite comme un tableau filtrable et paginé. Les filtres : date (avec calendrier), lieu (commune), domaine associé, statut (à venir/passer). La liste s’affiche sous forme de cartes ou en liste détaillée (avec date, heure, lieu, résumé et photo). La recherche se fait en temps réel en interrogeant Strapi via API. Page de détail : galerie de photos, récit complet, intervenants, appel à l’action (s’inscrire, partager). Option de téléchargement d’un flyer PDF. SEO : schéma Event avec date, lieu, description. Accessibilité : champs de filtre clairs, navigation clavier, focus visible sur les éléments interactifs. Revalidation ISR pour lister les événements récents.
+5.6 Blog
+Le blog sera organisé en catégories (santé, gouvernance, éducation, témoignages) et tags (mots‑clés). La page liste propose un moteur de recherche plein‑texte, un tri par date et un système de pagination ou de chargement infini (infinite scroll avec bouton « Charger plus »). Les cartes d’articles se présentent sous un format journalistique : image, titre, date, auteur, résumé, tags, bouton « Lire la suite ». Sur mobile, un design en colonne unique avec l’image occupant toute la largeur et du texte en dessous. Les pages d’articles supportent des composants intégrés comme citations, encadrés, images en pleine largeur, vidéos, listes et callouts. Les articles sont générés en SSG/ISR selon la fréquence de publication. SEO : schéma Article et BlogPosting. Possibilité d’afficher la date de mise à jour, l’auteur, l’estimation du temps de lecture. Accessibilité : contenu structuré, figures avec figcaption, texte ancré au contraste suffisant.
+5.7 Médiathèque
+La galerie de photos/vidéos propose une recherche par mot‑clé et des filtres (type, domaine, année). Les miniatures adoptent un rapport d’aspect variable (masonry). Les vidéos peuvent être lues via un lecteur intégré (YouTube, Vimeo ou PlayerJS). Les images sont optimisées et servies via next/image. La lightbox prend en charge le clavier (Esc pour fermer, flèches pour naviguer). Les metadatas (auteur, date, description) sont affichées sous la photo. Un code QR peut être généré pour partager un média. SEO : schéma ImageObject et VideoObject. Accessibilité : descriptions textuelles, commande clavier pour la lightbox, focus trap.
+5.8 Bénévolat et parrainage
+La page « Devenir bénévole » (ou « Nous rejoindre ») se compose d’un texte qui valorise l’engagement, d’une liste de missions typiques et d’un formulaire d’adhésion multi‑étapes. Le formulaire est conçu pour être accessible et encourage le remplissage (échantillons de réponse, outils d’auto‑complétion). Il comprend des champs dynamiques (cases à cocher pour les domaines d’intérêt, calendriers de disponibilité, zones de texte pour la motivation), un champ RGPD, un CAPTCHA ou un honeypot contre le spam. Le parrainage (ex : sponsorship d’un enfant ou d’un projet) est présenté sur une sous‑page avec son propre formulaire. Les soumissions sont stockées dans Strapi et un mail de confirmation est envoyé. SEO : schéma ContactPage ou Offer. Accessibilité : labels, aria‑describedby, tabIndex logique.
+5.9 Témoignages
+Les témoignages seront affichés sur une page spécifique et également mis en avant sur d’autres pages (accueil, domaines). Chaque témoignage est constitué d’un texte, d’un nom, d’un rôle, d’une photo et éventuellement d’une note audio/vidéo. Les témoignages seront gérés via un modèle Strapi testimonial (auteur, rôle, texte, photo, type, publication). Les utilisateurs pourront soumettre un témoignage via un formulaire simple (nom, message, consentement). Une zone d’aperçu leur permet de relire avant de valider. SEO : schéma Review. Accessibilité : titres clairs, citations entre <blockquote>, alternatives textuelles.
+5.10 Campagnes et promesses de dons
+Les campagnes sont des projets d’envergure pour collecter des fonds ou des ressources matérielles. Chaque campagne a une page individuelle où apparaissent son objectif, sa durée, sa zone d’action, son responsable et une description détaillée[2]. Une barre de progression présente l’évolution des promesses de dons. Les utilisateurs peuvent faire une promesse de don en remplissant un formulaire (nom, prénom, email, téléphone, montant, message). Les dons en espèces ou par virement seront confirmés par l’équipe. Une section « Questions fréquentes » et des boutons de partage social complètent la page. Une API REST servira les données des campagnes et enregistrera les promesses. SEO : schéma DonateAction et Cause. Accessibilité : labels explicites, messages de validation, navigation fluide.
+5.11 FAQs et pages d’aide
+La FAQ rassemble les questions récurrentes sur l’ONG : mécanismes de dons, processus de bénévolat, utilisation des fonds, moyens de contact, etc.[10]. Organisée en catégories, elle utilise des composants accordéons pour afficher/masquer les réponses. Chaque élément d’accordéon est accessible (attributs aria-expanded, aria-controls). Possibilité d’un champ de recherche dédié. SEO : schéma FAQPage. Accessibilité : navigation clavier, repères visuels lors de l’expansion.
+6. UX/UI : design et expérience visuelle
+La refonte s’appuiera sur un design system complet, cohérent avec l’identité visuelle de Binin Yé. Les composants UI seront conçus pour être réutilisables et flexibles. Voici les principales recommandations :
+6.1 Identité visuelle
+    • Palette de couleurs : déclinaisons autour du bordeaux/rouge (couleur principale), du jaune et du vert pour rappeler l’espoir et la santé. Utiliser des nuances claires et foncées pour créer des niveaux de profondeur. Prévoir des couleurs d’état (succès, avertissement, erreur) et un mode sombre.
+    • Typographie : choisir deux familles de polices complémentaires. Par exemple, une police sans serif moderne pour les titres (Poppins ou Montserrat) et une police plus neutre pour le corps de texte (Open Sans ou Lato). Les tailles de police seront définies selon un scale typographique (ex. base 16 px, 1.25 rem…).
+    • Iconographie : créer un set d’icônes personnalisées au style linéaire ou utiliser une librairie open source (Heroicons, Feather). Les icônes doivent être cohérentes, facilement reconnaissables et décrites par un alt text.
+    • Illustrations & photos : sélectionner des visuels authentiques de l’ONG (photos des projets, portraits des membres) plutôt que des banques d’images génériques. Prévoir un brief photo pour uniformiser l’aspect visuel (ex. lumière naturelle, composition centrée). Les illustrations vectorielles peuvent être utilisées pour les infographies et schémas.
+    • Micro‑interactions : ajouter des animations subtiles (hover, focus, transitions) pour rendre l’expérience plus vivante sans distraire l’utilisateur. Utiliser les animations CSS ou Framer Motion et respecter la performance.
+6.2 Modélisation des pages
+    • Grille : base responsive sur 12 colonnes pour desktop, 8 colonnes pour tablette et 4 colonnes pour mobile. Espace de marges et gouttières bien défini (ex. 16 px). Les cartes et sections se positionnent en fonction de cette grille.
+    • Composants design : navbar collante (sticky) en haut de page, boutons arrondis, cards ombrées, badges de tags, carrousels, accordéons, modal et toasts de notification. Les composants comportent plusieurs variantes (taille, couleur, icône). Des prototypes haute‑fidélité seront réalisés dans Figma.
+    • États : définir les états de focus, hover, disabled pour tous les boutons, champs, liens. Les champs invalides auront un message d’erreur accessible (aria-live). Les formulaires afficheront une progression lorsque la soumission est en cours.
+    • Pattern library : créer une bibliothèque de patterns (ex. hero section, feature grids, pricing cards, timeline, testimonials slider) pour que les équipes puissent composer de nouvelles pages sans coder. Strapi stockera ces blocs modulaires.
+6.3 Accessibilité et inclusivité
+    • Prévoir un contrôle complet via clavier : navigation au Tab, activation via Entrée ou Espace, focus visible. Utiliser la hiérarchie et l’ordre des éléments logiques.
+    • Respecter un contraste couleur de 4.5:1 pour le texte, 3:1 pour les éléments de l’UI. Utiliser l’outil color-contrast-checker dans la CI.
+    • Fournir des alternatives textuelles pour chaque image ou élément visuel (équivalent alt). Les icônes utilisées uniquement pour l’esthétique seront cachées aux lecteurs d’écran via aria-hidden="true".
+    • Implémenter des mécanismes ARIA (ex. aria-expanded, aria-controls, role="alert") pour informer les utilisateurs utilisant des lecteurs d’écran.
+    • Permettre le redimensionnement de la police jusqu’à 200 % sans perte de contenu et implémenter un mode « contraste élevé » si nécessaire.
+    • Prendre en compte les handicaps cognitifs en privilégiant un langage clair, des phrases courtes et un contenu structuré. Proposer la lecture audio (text‑to‑speech) ou la traduction en Langue des Signes (projet futur).
+7. Architecture technique
+7.1 Stack technologique
+    • Front‑end : Next.js 15 (React 18) avec l’architecture app/. Utilisation de React Server Components, Server Actions, React Suspense et Streaming pour optimiser le chargement. Gestion du routage avec les dossiers route.ts. TypeScript utilisé pour la robustesse du code.
+    • UI : Tailwind CSS pour la mise en page rapide, la cohérence de la grille et la personnalisation. Ajout d’un framework de composants accessible comme Headless UI ou Radix UI. Intégration de Framer Motion pour les animations.
+    • CMS : Strapi v4 en mode headless. Strapi exposera une API GraphQL ou REST sécurisé par JWT et ACL. Les rôles seront définis (Admin, Éditeur, Auteur). Chaque type de contenu sera versionné et localisable (i18n plugin). Les médias seront stockés sur un adaptateur S3 (Cloudinary) pour la performance.
+    • Base de données : Strapi repose sur une base PostgreSQL (recommandée pour la production). On utilisera un plan multi‑environnements (dev, staging, prod) via des variables d’environnement pour sécuriser l’accès.
+    • Hosting : Vercel pour le front‑end (déploiement SSR, edge functions, ISR) et un service comme DigitalOcean ou AWS pour Strapi. Les DNS seront gérés par Cloudflare ou Vercel. On active un WAF (web application firewall).
+7.2 Stratégie de rendu
+Type de page
+Méthode de rendu
+Détails
+Pages à faible fréquence de mise à jour (Accueil, Histoire, Domaines, Équipe, FAQs)
+Static Site Generation (SSG)
+Générées au build ; revalidation périodique (toutes les 24 h) via ISR pour mettre à jour en cas de changement.
+Listes de contenu dynamique (Activités, Blog, Campagnes)
+Incremental Static Regeneration (ISR)
+Les listes seront régénérées automatiquement à intervalles réguliers (1 h). Prévoir un paramètre revalidate dynamique en fonction du volume de contenu.
+Pages de détail (Article, Événement, Campagne, Domaine)
+SSG avec getStaticParams
+Les slugs seront obtenus via Strapi. La revalidation se fera page par page.
+Galerie médias
+Server Side Rendering (SSR)
+Contenu potentiellement volumineux et fréquemment mis à jour ; SSR permet un rafraîchissement immédiat des médias.
+API (promesse de don, contact, inscription newsletter, adhésion)
+API routes / Edge Functions
+Ces routes sécurisées traitent les données en backend, effectuent l’envoi d’e‑mails, déclenchent des workflows (ex. Zapier) et enregistrent les données dans Strapi.
+7.3 Sécurité et protection des données
+Implementer : - HTTPS avec certificats TLS auto‑renouvelés (via Let’s Encrypt). Activation du HSTS pour forcer l’utilisation du HTTPS. - Content Security Policy (CSP) stricte pour limiter les sources de scripts et de médias, éviter l’injection XSS et réduire les risques de clickjacking. - CORS strict pour restreindre les origines autorisées dans l’API. Utiliser des tokens anti‑CSRF pour les formulaires sensibles. - Validation des entrées via une bibliothèque de validation (Zod ou Yup) côté client et serveur. Vérifier les types, la longueur et le format des champs. - Protection contre les spams : reCAPTCHA v3/invisible sur les formulaires, honeypots, limitations de fréquence. - RGPD : informer sur les cookies, offrir des préférences, obtenir un consentement explicite pour la newsletter et les communications marketing. Fournir un formulaire de demande de suppression/d’anonymisation des données. - Backups réguliers de la base de données et des médias, en utilisant des snapshots et un plan de restauration (disaster recovery). Strapi supporte un système de révision pour les contenus.
+7.4 DevOps et CI/CD
+    • Gestion du code sur GitHub. Mise en place d’un branching model (main, develop, feature/, hotfix/). Utilisation de commit conventions (Conventional Commits) et de PR automatiques (GitHub Actions).
+    • Tests automatiques : lint (ESLint), tests unitaires (Jest), tests d’intégration (Testing Library), tests E2E (Playwright) dans la chaîne CI. Utilisation d’un rapport de couverture (Coverage).
+    • Linting et formatage : Prettier configuré pour assurer un style de code uniforme. Stylelint pour CSS (via Tailwind). Husky et lint‑staged pour empêcher les commits non conformes.
+    • Build & déploiement : les builds front‑end s’effectuent sur Vercel avec déploiement automatique en preview et en production. Les builds Strapi se font via GitHub Actions, puis sont déployés sur une machine (Docker) ou un PaaS (Railway, DigitalOcean). Les migrations de base de données sont automatisées.
+    • Observabilité : intégration de Sentry pour la capture d’erreurs front et back‑end. Utilisation de Vercel Analytics et de Grafana/Prometheus pour la surveillance des métriques (CPU, mémoire, latence). Alertes configurées via Slack ou email.
+8. Modèles de données & contenu (Strapi)
+Pour optimiser les modèles de contenu, les entités initialement proposées sont enrichies et structurées en suivant les meilleures pratiques :
+8.1 Modèles principaux
+Collection
+Attributs
+Relations
+Description
+Page
+title, slug, hero (image, titre, sous‑titre, CTA), contentBlocks (liste de blocs modulaires), metaTitle, metaDescription, seoImage, localizations
+localizations (locales)
+Permet de créer des pages sur mesure (à propos, FAQ…) avec un assembleur de blocs (SectionTextImage, SectionGrid, etc.).
+Domaine
+name, slug, color, icon, intro, content, image, projects (relation avec Activity), media (relation avec MediaAsset), meta
+Relations : 1‑N vers Activity, Campaign
+Représente un axe d’intervention.
+Activity
+title, slug, dateStart, dateEnd, location, domain (relation), excerpt, content, gallery (N‑N avec MediaAsset), flyer (media file), status (enum: upcoming, ongoing, completed), meta, localizations
+1‑N vers domain, N‑N vers MediaAsset
+Activités ou événements organisés par l’ONG.
+Article
+title, slug, author, publishedAt, category (relation), tags (N‑N), coverImage, excerpt, content, meta, localizations
+1‑N category, N‑N tags
+Blog posts et actualités.
+Category
+name, slug, description, color, icon
+1‑N with Article, Activity, Campaign
+Catégories génériques pour articles et autres contenus.
+Tag
+name, slug
+N‑N with Article
+Mots‑clés pour affiner la recherche.
+Campaign
+title, slug, startDate, endDate, goalAmount, raisedAmount, excerpt, content, domain (relation), image, progressColor, status (enum: active, completed), meta, localizations
+1‑N domain
+Pages de campagne pour collecter des dons.
+Promise (don)
+fullName, email, phone, amount, message, campaign (relation), status (enum: pending, confirmed)
+1‑N campaign
+Promesses de dons faites par les utilisateurs. Peut évoluer en Don réel lorsque la plateforme de paiement sera intégrée.
+Testimonial
+authorName, authorRole, content, media (photo/vidéo), rating (optionnel), publishedAt, meta, localizations
+—
+Témoignages de bénévoles, bénéficiaires, partenaires.
+VolunteerApplication
+fullName, email, phone, address, experience, interests (enum array), availability (enum array), motivation, status (enum: new, in progress, accepted, rejected), createdAt
+—
+Candidatures des volontaires.
+ContactSubmission
+firstName, lastName, email, subject, message, consent, createdAt
+—
+Messages envoyés via la page de contact.
+MediaAsset
+url, alt, caption, width, height, fileSize, type (image/video/document), credits
+N‑N relations avec Activity, Domaine etc.
+Fichiers médias centralisés, mis en cache et compressés.
+8.2 Blocs modulaires (components Strapi)
+Pour permettre une composition flexible des pages dans Strapi, créer des components réutilisables :
+    • SectionTextImage : deux colonnes (texte et image), orientation configurable, avec option de CTA.
+    • SectionGrid : grille de cartes (n colonnes) avec titre, texte, image et lien.
+    • SectionTimeline : frise chronologique d’événements (par exemple pour l’historique de l’ONG).
+    • SectionStatistics : chiffres clés avec icônes et descriptions.
+    • SectionCallToAction : bandeau coloré avec texte et bouton.
+    • SectionTestimonials : slider ou grille de témoignages.
+    • SectionFAQ : accordéon listant des questions et réponses.
+    • SectionVideo : intégration d’une vidéo YouTube/Vimeo avec description.
+    • SectionHero : variation du hero (image, vidéo de fond, call to action, overlay coloré).
+    • SectionGallery : carrousel ou grille d’images/vidéos.
+Ces composants sont combinables dans le champ contentBlocks de chaque Page afin de créer des mises en page riches sans développement supplémentaire.
+9. Composants React et design pattern
+Voici une liste plus complète de composants React que l’équipe devra développer en utilisant Tailwind et Radix UI ou Headless UI. Chaque composant dispose de props configurables et de variantes pour être réutilisable :
+Composant
+Principales props
+Variantes / options
+Responsabilités
+AppLayout
+children, meta, navigation, footer, language, user
+Mode sans header (landing) ou avec header.
+Structure générale du site : gère la navigation, le footer, le SEO global (balises head).
+NavigationBar
+navLinks, ctaLabel, ctaHref, languageOptions, onLanguageChange
+Modes transparent, coloré, sticky. Burger menu pour mobile.
+Affiche les liens principaux; gère la sélection de langue et l’ouverture du menu mobile.
+Footer
+columns, socialLinks, newsletter, legalLinks
+Variation en 3 ou 4 colonnes.
+Contient la navigation secondaire, les liens de campagne, les informations de contact, l’inscription newsletter et les mentions légales.
+Hero
+title, subtitle, backgroundImage/video, cta (text, href), secondaryCta
+Styles : image seule, vidéo en fond, split image/texte.
+Section d’entrée pour les pages clé, incitant à l’action.
+Card
+title, subtitle, media, excerpt, href, badge, actions
+Variation avec image en haut, image à gauche, borderless.
+Base pour Domaines, Activités, Articles, Campagnes.
+ProgressBar
+value, max, color, size
+Circulaire (pie) ou linéaire; animations.
+Affiche la progression d’une campagne (collecte).
+Carousel
+items, renderItem, autoplay, interval, navigation
+Variation simple (dots), avancée (thumbnails).
+Permet de faire défiler des médias ou des témoignages.
+Modal
+isOpen, onClose, title, children
+Variation full‑screen ou small.
+Utilisé pour la lightbox, les messages de confirmation, etc.
+Accordion
+items (question/réponse), multiOpen
+Variation simple, multiple.
+Pour la FAQ.
+Form
+fields (définition JSON), onSubmit, validate, submitText, resetText, loading, successMessage
+Variation stepper (multi‑étapes).
+Génère des formulaires dynamiques (contact, adhésion, don).
+Alert
+type (success/warning/error/info), message, onClose
+Variation toast (Notification).
+Notifie l’utilisateur d’un événement (ex. soumission réussie).
+Breadcrumbs
+items (label, href)
+Variation simple, incluant des icônes.
+Affiche le fil d’Ariane sur les pages de détail.
+Pagination
+currentPage, totalPages, onPageChange
+Variation numérotée, simple, infinite scroll.
+Naviguer dans les listes d’articles/événements.
+LanguageSwitcher
+languages, currentLanguage, onChange
+Variation flag, texte.
+Permet de changer de langue.
+SearchBar
+placeholder, value, onChange, onSubmit
+Variation minimaliste, avec suggestions.
+Barre de recherche globale pour le blog, les événements.
+Patterns et best practices
+    • Composition : les composants doivent être composables et configurables via des props. Utiliser la propriété children lorsque c’est pertinent (slot pattern).
+    • Stateless vs stateful : privilégier des composants stateless; remonter l’état dans un conteneur (pattern container/presentational). Utiliser React Context ou Zustand pour gérer un état global (panier de promesses de dons, langue).
+    • Accessibilité : s’appuyer sur les primitives accessibles de Radix UI ou Headless UI. Vérifier que les composants custom respectent les rôles ARIA.
+    • TypeScript : définir des types ou interfaces pour chaque composant, éviter any, utiliser les types exportés des modèles Strapi.
+    • Storybook : mettre en place Storybook pour documenter et tester visuellement les composants isolés.
+10. API & intégrations externes
+Le site communiquera principalement avec Strapi via GraphQL, mais des intégrations tierces sont nécessaires :
+10.1 Intégrations sociales
+    • Partage social : utiliser next-share pour ajouter des boutons de partage (Facebook, LinkedIn, WhatsApp, Twitter). Générer dynamiquement les URL (ex. og:image, og:description).
+    • Médias sociaux : afficher un fil Instagram ou Facebook à partir des APIs officielles. Prévoir un module de synchronisation pour récupérer les posts récents de l’ONG.
+10.2 Newsletter & emailing
+Intégrer Mailchimp via son API : créer un segment pour les abonnés du site, envoyer un e‑mail de bienvenue et déclencher des campagnes automatiques. Les formulaires d’inscription incluront une case de consentement et un double opt‑in. Utiliser un adaptateur (ex. @mailchimp/mailchimp_marketing). Prévoir une fallback vers un autre outil open source (MailerLite) si besoin.
+10.3 Gestion des paiements (phase ultérieure)
+L’architecture doit permettre l’intégration future de la solution de paiement en ligne (Stripe, Paystack ou Flutterwave). Les formulaires de don actuels stockent les promesses dans Strapi. Pour la phase de paiement en ligne, il faudra ajouter : - Page de paiement sécurisée, confiée à la plateforme de paiement. - Webhooks pour confirmer la transaction et mettre à jour Strapi (passer une promesse de pending à confirmed). - Page de remerciement (receipt) accessible uniquement via un ID unique.
+10.4 Moteur de recherche
+Indexer les contenus Strapi dans un moteur de recherche (Algolia ou ElasticSearch). Utiliser la recherche instantanée avec suggestions. Permettre la recherche de mots‑clé, par domaine ou par type de contenu (article, activité). Les modifications dans Strapi déclencheront la mise à jour de l’index via un webhook.
+10.5 Service de cartographie
+Intégrer une carte interactive (Leaflet ou Mapbox) sur la page de contact et sur certaines pages d’activités pour localiser les interventions. Les coordonnées pourront être stockées dans Strapi (latitude/longitude) et récupérées via GraphQL.
+10.6 PWA (Progressive Web App)
+Prévoir la conversion du site en PWA : manifest.json, service worker pour la mise en cache offline, notifications push (via OneSignal ou Firebase Cloud Messaging). Cette fonctionnalité peut être activée après la mise en production initiale.
+11. Tests & assurance qualité
+11.1 Tests unitaires et intégration
+    • Utiliser Jest et React Testing Library pour tester les composants et les hooks. Vérifier que les composants se rendent correctement avec différentes props, que les validations fonctionnent et que les événements sont déclenchés. Couvrir les API routes avec des tests (ex. promesse de don, contact).
+11.2 Tests end‑to‑end
+    • Mettre en place Playwright ou Cypress pour simuler les scénarios utilisateur principaux : navigation, soumission de formulaires, recherche, filtrage d’événements, consultation d’un article. Ces tests seront lancés dans la CI et après chaque merge.
+    • Inclure des tests d’accessibilité avec axe-core et un rapport Lighthouse automatique.
+11.3 Tests de performance
+    • Automatiser l’analyse Lighthouse (budget de performance) dans la CI. Fixer des budgets de performance : LCP < 2 s, CLS < 0.1, TBT < 150 ms, FCP < 1 s. Afficher les résultats dans un tableau de bord.
+    • Utiliser WebPageTest ou k6 pour tester la montée en charge des API (promesses de don, newsletter). Prévoir un serveur de test pour Strapi.
+11.4 Gestion des bugs et feedback
+    • Créer un système interne de tickets (Jira, GitHub Issues). Les utilisateurs du site pourront signaler un bug via un formulaire. Les erreurs seront capturées par Sentry et transmises à l’équipe.
+11.5 Recette et validation
+    • Avant chaque mise en production, une campagne de recette sera réalisée sur un environnement staging. Elle inclura un test fonctionnel exhaustif (parcours complet), un test cross‑browser (Chrome, Firefox, Safari), cross‑device (mobile, tablette) et un test en conditions réseau dégradées.
+    • Les pages seront vérifiées par un consultant en accessibilité pour confirmer le respect des critères WCAG.
+12. Backlog & roadmap
+Le backlog complet figure dans le fichier CSV joint. Voici les grandes phases et quelques exemples de tâches révisées :
+    • Phase 0 : Préparation : installation Next.js, Tailwind, ESLint, Prettier; mise en place du dépôt Git; configuration de Strapi; définition des modèles de contenu améliorés; configuration des environnements (dev, staging, prod).
+    • Phase 1 : Core pages : développement des pages statiques (Accueil, Histoire, Domaines, Équipe, FAQ); création des composants de base (Layout, Navbar, Footer, Hero, Card).
+    • Phase 2 : Contenus dynamiques : implémentation du blog, des activités et des campagnes avec ISR; développement des pages d’inscription bénévoles et promesses de dons; intégration des formulaires; test de validation. Mise en place de la recherche.
+    • Phase 3 : Médiathèque & témoignages : intégration du SSR pour la galerie; création du module de témoignages; tests de performances. Ajout des pages de publication (rapports, études).
+    • Phase 4 : Accessibilité et SEO avancé : vérification ARIA, génération des schémas JSON‑LD, adaptation pour le multilingue, amélioration du design system.
+    • Phase 5 : Intégrations externes et PWA : mise en place des push notifications, intégration du chat, mapping. Connexion aux services de paiement (si validé). Activation du PWA.
+    • Phase 6 : Recette finale et déploiement : tests complets, corrections, hardening, migration de contenu depuis l’ancien site, redirections 301, mise en production sur Vercel et Strapi, formation des éditeurs.
+Chaque tâche du backlog inclut une estimation réaliste en heures, des story points (échelle Fibonacci) et des critères d’acceptation détaillés. Les dépendances entre tâches sont précisées pour optimiser la planification.
+13. Critères d’acceptation et checklist de recette finale
+    • Fonctionnalité : toutes les pages répondent en moins de 400 ms côté serveur; les formulaires transmettent correctement les données; le filtrage fonctionne; les éléments dynamiques se mettent à jour via ISR; la navigation est fluide.
+    • Performance : LCP < 2 s, CLS < 0.1, TBT < 150 ms, FCP < 1 s. Les images sont optimisées, le code est splitté intelligemment. Les requêtes vers Strapi sont mises en cache via SWR ou React Query.
+    • Accessibilité : audit axe-core passé sans erreurs critiques; niveau WCAG 2.1 AA confirmé; navigation sans souris possible; contenu accessible en mode lecture d’écran; tests de contraste validés.
+    • SEO : toutes les pages possèdent un <title> unique, une méta description et des link rel="canonical"; plan du site (sitemap.xml) disponible; schémas JSON‑LD corrects; redirections 301 mises en place; absence de duplication.
+    • Sécurité : absence d’injection XSS/CSRF; les formulaires sont protégés contre le spam; la stratégie CSP est respectée; audit OWASP passé.
+    • Qualité du code : 95 % de couverture de tests unitaires; absence d’avertissements ESLint; styles cohérents via Tailwind; documentation des composants (Storybook) complète; API bien typée.
+    • Satisfaction utilisateur : tests utilisateurs valident l’intuitivité du site, la rapidité des actions et l’engagement (NPS > 8/10). Un questionnaire de satisfaction sera mis en place.
+14. Annexes
+Les fichiers fournis accompagnent ce document :
+    • site_analysis.json : description détaillée des pages et de leurs méta‑données.
+    • backlog.csv : backlog des tâches avec estimations.
+    • media_inventory.csv : inventaire des médias identifiés (images, vidéos, alt text, action recommandée).
+    • sitemap.xml : sitemap minimal des pages principales.
+    • robots.txt : proposition de configuration de robots pour permettre l’indexation et bloquer les répertoires sensibles.
+Ces livrables sont destinés à servir de base à l’équipe de développement pour structurer le projet et planifier les travaux. Le cahier des charges peut être ajusté en fonction de l’évolution des besoins et des retours des stakeholders.
+
+[1] Qui sommes nous ? - bininye
+https://bininye.com/qui-sommes-nous/
+[2] Donnons aux Jeunes un Avenir Sain et Épanoui - bininye
+https://bininye.com/campaigns/donnons-aux-jeunes-un-avenir-sain-et-epanoui/
+[3] Nos Domaines - bininye
+https://bininye.com/nos-domaines/
+[4] Equipes - bininye
+https://bininye.com/equipes/
+[5] Nos Activités - bininye
+https://bininye.com/evenements/
+[6] Nous rejoindre - bininye
+https://bininye.com/nous-rejoindre/
+[7] Blog - bininye
+https://bininye.com/blog/
+[8] Photos et Vidéos - bininye
+https://bininye.com/photos-et-videos/
+[9] Témoignages - bininye
+https://bininye.com/temoignages/
+[10] Faq's - bininye
+https://bininye.com/faqs/

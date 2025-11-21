@@ -1,0 +1,74 @@
+############################
+# OS Files
+############################
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+.Spotlight-V100
+.Trashes
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+############################
+# IDE & Editors
+############################
+.vscode/*
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*.swn
+*.swm
+*~
+*.sublime-workspace
+*.sublime-project
+.vim/
+.emacs.d/
+
+############################
+# OS-specific
+############################
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+
+############################
+# Node.js & Package managers
+############################
+node_modules/
+npm-debug.log*
+npm-error.log*
+pnpm-debug.log*
+pnpm-error.log*
+yarn-error.log*
+.pnp
+.pnp.js
+package-lock.json
+pnpm-lock.yaml
+
+############################
+# Build & Distribution
+############################
+dist/
+build/
+*.tsbuildinfo
+
+############################
+# Environment & Secrets
+############################
+.env
+.env.local
+.env.*.local
+.env.production.local
+.env.development.local
+
+############################
+# IDE temp files
+############################
+.eslintcache
+.cache/

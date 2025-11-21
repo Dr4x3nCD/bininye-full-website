@@ -1,0 +1,24 @@
+{
+    "zencoder.mcpServers": {
+        "context7": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@upstash/context7-mcp",
+                "--api-key",
+                "ctx7sk-124c4e09-6554-49ae-b637-c07bd0da9e8e"
+            ]
+        },
+        "strapi-mcp": {
+            "command": "node",
+            "args": [
+                "/home/dr4x3n/Applications/mcp/strapi-mcp/build/index.js"
+            ],
+            "env": {
+                "STRAPI_URL": "http://localhost:1337",
+                "STRAPI_ADMIN_EMAIL": "tobiasdonan@gmail.com",
+                "STRAPI_ADMIN_PASSWORD": "G@nKp@m1n"
+            }
+        }
+    }
+}
