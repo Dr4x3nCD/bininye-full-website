@@ -23,16 +23,21 @@ export default function ContactPage() {
                 <ContactForm />
               </div>
 
-              {/* Right Column: Info, FAQ */}
-              <div className="space-y-12 lg:col-span-5">
+              {/* Right Column: Info */}
+              <div className="lg:col-span-5">
                 <ContactInfo />
-                <ContactFAQ />
               </div>
             </div>
+          </div>
+        </section>
 
-            <div className="mt-20">
-              <ContactMap />
-            </div>
+        {/* FAQ Section - Full Width */}
+        <ContactFAQ />
+
+        {/* Map Section */}
+        <section className="py-12 lg:py-20 bg-muted/20">
+          <div className="container mx-auto px-4 lg:px-8">
+            <ContactMap />
           </div>
         </section>
       </main>

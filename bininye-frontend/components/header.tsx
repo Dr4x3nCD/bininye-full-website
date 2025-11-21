@@ -35,7 +35,7 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:block">
-          <NavigationMenu>
+          <NavigationMenu viewport={false}>
             <NavigationMenuList className="gap-1">
               {menuData.map((item) => (
                 <NavigationMenuItem key={item.title}>
@@ -44,16 +44,16 @@ export function Header() {
                       <NavigationMenuTrigger className="bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground">
                         {item.title}
                       </NavigationMenuTrigger>
-                      <NavigationMenuContent>
-                        <ul className="grid w-[220px] gap-1 p-2">
+                      <NavigationMenuContent className="z-50 bg-popover rounded-md border shadow-md p-2">
+                        <ul className="grid w-auto gap-1">
                           {item.children.map((child) => (
                             <li key={child.title}>
                               <NavigationMenuLink asChild>
                                 <Link
                                   href={child.url}
-                                  className="block select-none rounded-lg p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                  className="block select-none rounded-lg px-4 py-2 leading-none no-underline outline-none transition-colors text-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground"
                                 >
-                                  <div className="text-sm font-medium leading-none">{child.title}</div>
+                                  <div className="text-sm font-medium leading-none whitespace-nowrap">{child.title}</div>
                                 </Link>
                               </NavigationMenuLink>
                             </li>
@@ -81,11 +81,14 @@ export function Header() {
           </div>
 
           <Button
+            asChild
             className="hidden gap-2 rounded-full bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/90 md:flex"
             size="lg"
           >
-            <Heart className="h-4 w-4 fill-current" />
-            <span className="font-semibold">Faire un don</span>
+            <Link href="/contribuer">
+              <Heart className="h-4 w-4 fill-current" />
+              <span className="font-semibold">Faire un don</span>
+            </Link>
           </Button>
 
           {/* Mobile Menu */}
@@ -101,9 +104,11 @@ export function Header() {
                 {menuData.map((item) => (
                   <MobileMenuItem key={item.title} item={item} onClose={() => setIsOpen(false)} />
                 ))}
-                <Button className="mt-4 gap-2 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90">
-                  <Heart className="h-4 w-4 fill-current" />
-                  Faire un don
+                <Button asChild className="mt-4 gap-2 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90">
+                  <Link href="/contribuer" onClick={() => setIsOpen(false)}>
+                    <Heart className="h-4 w-4 fill-current" />
+                    Faire un don
+                  </Link>
                 </Button>
               </nav>
             </SheetContent>

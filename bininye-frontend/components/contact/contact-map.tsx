@@ -10,7 +10,7 @@ export function ContactMap() {
       </div>
 
       <div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-2xl shadow-lg">
-        <div className="aspect-[16/9] w-full bg-muted md:aspect-[21/9] md:h-[500px]">
+        <div className="aspect-[16/9] w-full bg-muted md:aspect-[21/9] md:h-[400px]">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.499814377546!2d-3.998678824247689!3d5.340578634258666!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfc1eb5e636c62d7%3A0x268763716660666!2sCocody%2C%20Abidjan%2C%20C%C3%B4te%20d&#39;Ivoire!5e0!3m2!1sfr!2sfr!4v1716300000000!5m2!1sfr!2sfr"
             width="100%"

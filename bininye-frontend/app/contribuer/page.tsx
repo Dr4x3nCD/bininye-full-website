@@ -14,11 +14,11 @@ import {
   Sprout,
   ShieldCheck,
   FileText,
-  HelpCircle,
+  ChevronDown,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import Image from "next/image"
 import { useState } from "react"
@@ -543,25 +543,30 @@ export default function ContribuerPage() {
 
         {/* 7. FAQ */}
         <section className="py-16 lg:py-24">
-          <div className="container mx-auto max-w-3xl px-4">
+          <div className="container mx-auto px-4 lg:px-8">
             <div className="mb-12 text-center">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <HelpCircle className="h-6 w-6" />
-              </div>
-              <h2 className="mb-4 text-balance text-3xl font-bold md:text-4xl">Questions fréquentes</h2>
-              <p className="text-muted-foreground">
+              <h2 className="font-serif mb-4 text-balance text-3xl font-bold md:text-4xl">
+                Questions Fréquemment Posées
+              </h2>
+              <p className="mx-auto max-w-2xl text-pretty text-muted-foreground">
                 Nous répondons à vos interrogations pour vous permettre de donner en toute confiance.
               </p>
             </div>
 
-            <Accordion type="single" collapsible className="w-full">
+            <div className="mx-auto max-w-3xl space-y-4">
               {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left text-lg font-medium">{faq.question}</AccordionTrigger>
-                  <AccordionContent className="text-base text-muted-foreground">{faq.answer}</AccordionContent>
-                </AccordionItem>
+                <details
+                  key={index}
+                  className="group rounded-2xl bg-card p-6 shadow-md transition-shadow hover:shadow-lg"
+                >
+                  <summary className="flex cursor-pointer items-center justify-between font-semibold">
+                    <span className="text-pretty pr-4">{faq.question}</span>
+                    <ChevronDown className="h-5 w-5 flex-shrink-0 text-primary transition-transform group-open:rotate-180" />
+                  </summary>
+                  <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">{faq.answer}</p>
+                </details>
               ))}
-            </Accordion>
+            </div>
           </div>
         </section>
 

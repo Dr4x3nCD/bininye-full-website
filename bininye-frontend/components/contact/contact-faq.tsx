@@ -1,4 +1,4 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { ChevronDown } from "lucide-react"
 
 const faqs = [
   {
@@ -25,17 +25,31 @@ const faqs = [
 
 export function ContactFAQ() {
   return (
-    <section className="py-12">
-      <div className="mx-auto max-w-3xl text-center">
-        <h3 className="mb-8 text-2xl font-bold">Questions fréquentes</h3>
-        <Accordion type="single" collapsible className="w-full text-left">
+    <section className="py-16 lg:py-24">
+      <div className="container mx-auto px-4 lg:px-8">
+        <div className="mb-12 text-center">
+          <h2 className="font-serif mb-4 text-balance text-3xl font-bold md:text-4xl">
+            Questions Fréquemment Posées
+          </h2>
+          <p className="mx-auto max-w-2xl text-pretty text-muted-foreground">
+            Tout ce que vous devez savoir pour nous contacter
+          </p>
+        </div>
+
+        <div className="mx-auto max-w-3xl space-y-4">
           {faqs.map((faq, index) => (
-            <AccordionItem key={index} value={`item-${index}`}>
-              <AccordionTrigger className="text-left font-medium">{faq.question}</AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
-            </AccordionItem>
+            <details
+              key={index}
+              className="group rounded-2xl bg-card p-6 shadow-md transition-shadow hover:shadow-lg"
+            >
+              <summary className="flex cursor-pointer items-center justify-between font-semibold">
+                <span className="text-pretty pr-4">{faq.question}</span>
+                <ChevronDown className="h-5 w-5 flex-shrink-0 text-primary transition-transform group-open:rotate-180" />
+              </summary>
+              <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">{faq.answer}</p>
+            </details>
           ))}
-        </Accordion>
+        </div>
       </div>
     </section>
   )
