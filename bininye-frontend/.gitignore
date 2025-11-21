@@ -1,0 +1,83 @@
+############################
+# Dependencies
+############################
+
+node_modules/
+.pnp
+.pnp.js
+
+
+############################
+# Build & Distribution
+############################
+
+.next/
+dist/
+build/
+out/
+
+
+############################
+# Environment & Secrets
+############################
+
+.env
+.env.local
+.env.*.local
+.env.production.local
+.env.development.local
+
+
+############################
+# IDE & Editors
+############################
+
+.vscode/*
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*.swn
+*.swm
+*.sublime-workspace
+*.sublime-project
+
+
+############################
+# OS Files
+############################
+
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+
+############################
+# Logs
+############################
+
+npm-debug.log*
+npm-error.log*
+pnpm-debug.log*
+pnpm-error.log*
+yarn-error.log*
+
+
+############################
+# IDE temp & cache
+############################
+
+.eslintcache
+.cache/
+
+
+############################
+# Next.js specific
+############################
+
+.next
+*.tsbuildinfo
+out/
