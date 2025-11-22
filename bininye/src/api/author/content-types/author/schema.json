@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "authors",
+  "info": {
+    "singularName": "author",
+    "pluralName": "authors",
+    "displayName": "Author",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "avatar": {
+      "type": "media"
+    },
+    "bio": {
+      "type": "text"
+    },
+    "name": {
+      "required": true,
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    }
+  }
+}

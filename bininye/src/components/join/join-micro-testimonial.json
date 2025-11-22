@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_join_join_micro_testimonials",
+  "info": {
+    "displayName": "Join Micro Testimonial",
+    "icon": "quote"
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "required": false,
+      "type": "media"
+    },
+    "personName": {
+      "required": true,
+      "type": "string"
+    },
+    "personRole": {
+      "required": true,
+      "type": "string"
+    },
+    "quote": {
+      "required": true,
+      "type": "text"
+    }
+  }
+}

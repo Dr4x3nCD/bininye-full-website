@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "media-items",
+  "info": {
+    "singularName": "media-item",
+    "pluralName": "media-items",
+    "displayName": "Media Item",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "category": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "thumbnail": {
+      "type": "media"
+    },
+    "title": {
+      "required": true,
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "photo",
+        "video"
+      ],
+      "required": true,
+      "type": "enumeration"
+    },
+    "videoUrl": {
+      "type": "string"
+    }
+  }
+}

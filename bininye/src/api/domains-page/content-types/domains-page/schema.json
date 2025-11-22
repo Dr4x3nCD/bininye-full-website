@@ -1,0 +1,29 @@
+{
+  "kind": "singleType",
+  "collectionName": "domains-pages",
+  "info": {
+    "singularName": "domains-page",
+    "pluralName": "domains-pages",
+    "displayName": "Domains Page",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "heroBackground": {
+      "type": "media"
+    },
+    "heroSubtitle": {
+      "type": "text"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "introText": {
+      "type": "text"
+    },
+    "introTitle": {
+      "type": "string"
+    }
+  }
+}

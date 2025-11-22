@@ -1,0 +1,23 @@
+{
+  "kind": "singleType",
+  "collectionName": "gallery-pages",
+  "info": {
+    "singularName": "gallery-page",
+    "pluralName": "gallery-pages",
+    "displayName": "Gallery Page",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "heroBackground": {
+      "type": "media"
+    },
+    "heroSubtitle": {
+      "type": "text"
+    },
+    "heroTitle": {
+      "type": "string"
+    }
+  }
+}

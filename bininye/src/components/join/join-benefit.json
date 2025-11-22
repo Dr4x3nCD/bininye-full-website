@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_join_join_benefits",
+  "info": {
+    "displayName": "Join Benefit",
+    "icon": "smile"
+  },
+  "options": {},
+  "attributes": {
+    "description": {
+      "required": true,
+      "type": "text"
+    },
+    "iconKey": {
+      "required": false,
+      "type": "string"
+    },
+    "title": {
+      "required": true,
+      "type": "string"
+    }
+  }
+}

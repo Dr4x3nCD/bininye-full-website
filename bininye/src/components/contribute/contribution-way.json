@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_contribute_contribution_ways",
+  "info": {
+    "displayName": "Contribution Way",
+    "icon": "heart"
+  },
+  "options": {},
+  "attributes": {
+    "description": {
+      "required": true,
+      "type": "text"
+    },
+    "iconKey": {
+      "required": false,
+      "type": "string"
+    },
+    "title": {
+      "required": true,
+      "type": "string"
+    },
+    "type": {
+      "required": false,
+      "type": "string"
+    }
+  }
+}

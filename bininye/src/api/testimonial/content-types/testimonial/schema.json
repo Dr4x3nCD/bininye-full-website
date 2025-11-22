@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "testimonials",
+  "info": {
+    "singularName": "testimonial",
+    "pluralName": "testimonials",
+    "displayName": "Testimonial",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "image": {
+      "type": "media"
+    },
+    "location": {
+      "type": "string"
+    },
+    "name": {
+      "required": true,
+      "type": "string"
+    },
+    "quote": {
+      "type": "text"
+    },
+    "role": {
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "beneficiary",
+        "volunteer",
+        "partner"
+      ],
+      "type": "enumeration"
+    }
+  }
+}

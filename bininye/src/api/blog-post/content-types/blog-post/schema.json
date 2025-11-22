@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "blog-posts",
+  "info": {
+    "singularName": "blog-post",
+    "pluralName": "blog-posts",
+    "displayName": "Blog Post",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::author.author"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::blog-category.blog-category"
+    },
+    "content": {
+      "type": "richtext"
+    },
+    "date": {
+      "type": "date"
+    },
+    "excerpt": {
+      "type": "text"
+    },
+    "image": {
+      "type": "media"
+    },
+    "isFeatured": {
+      "type": "boolean"
+    },
+    "isMostRead": {
+      "type": "boolean"
+    },
+    "readTime": {
+      "type": "integer"
+    },
+    "rubrics": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::blog-rubric.blog-rubric"
+    },
+    "slug": {
+      "required": true,
+      "targetField": "title",
+      "type": "uid"
+    },
+    "title": {
+      "required": true,
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_contact_contact_infos",
+  "info": {
+    "displayName": "Contact Info",
+    "icon": "map"
+  },
+  "options": {},
+  "attributes": {
+    "address": {
+      "required": true,
+      "type": "text"
+    },
+    "email": {
+      "required": true,
+      "type": "email"
+    },
+    "hours": {
+      "required": false,
+      "type": "text"
+    },
+    "phone": {
+      "required": false,
+      "type": "string"
+    },
+    "whatsapp": {
+      "required": false,
+      "type": "string"
+    }
+  }
+}

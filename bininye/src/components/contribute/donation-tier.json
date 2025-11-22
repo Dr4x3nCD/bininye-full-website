@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_contribute_donation_tiers",
+  "info": {
+    "displayName": "Donation Tier",
+    "icon": "donate"
+  },
+  "options": {},
+  "attributes": {
+    "amountLabel": {
+      "required": true,
+      "type": "string"
+    },
+    "description": {
+      "required": true,
+      "type": "text"
+    },
+    "isPopular": {
+      "required": false,
+      "type": "boolean"
+    },
+    "title": {
+      "required": true,
+      "type": "string"
+    }
+  }
+}

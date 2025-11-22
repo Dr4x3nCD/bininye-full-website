@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "domains",
+  "info": {
+    "singularName": "domain",
+    "pluralName": "domains",
+    "displayName": "Domain",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "description": {
+      "type": "richtext"
+    },
+    "iconKey": {
+      "type": "string"
+    },
+    "impact": {
+      "type": "richtext"
+    },
+    "items": {
+      "component": "domain.domain-action-item",
+      "repeatable": true,
+      "type": "component"
+    },
+    "shortDescription": {
+      "type": "text"
+    },
+    "slug": {
+      "required": true,
+      "targetField": "title",
+      "type": "uid"
+    },
+    "stats": {
+      "component": "shared.stat-item",
+      "repeatable": true,
+      "type": "component"
+    },
+    "themeColor": {
+      "type": "string"
+    },
+    "title": {
+      "required": true,
+      "type": "string"
+    }
+  }
+}

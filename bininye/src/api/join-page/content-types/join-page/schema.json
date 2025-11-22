@@ -1,0 +1,56 @@
+{
+  "kind": "singleType",
+  "collectionName": "join-pages",
+  "info": {
+    "singularName": "join-page",
+    "pluralName": "join-pages",
+    "displayName": "Join Page",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "applicationIntroText": {
+      "type": "text"
+    },
+    "applicationIntroTitle": {
+      "type": "string"
+    },
+    "benefits": {
+      "component": "join.join-benefit",
+      "repeatable": true,
+      "type": "component"
+    },
+    "heroBackground": {
+      "type": "media"
+    },
+    "heroSubtitle": {
+      "type": "text"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "microTestimonial": {
+      "component": "join.join-micro-testimonial",
+      "repeatable": false,
+      "type": "component"
+    },
+    "processSubtitle": {
+      "type": "text"
+    },
+    "processTitle": {
+      "type": "string"
+    },
+    "steps": {
+      "component": "join.join-process-step",
+      "repeatable": true,
+      "type": "component"
+    },
+    "whyJoinIntro": {
+      "type": "text"
+    },
+    "whyJoinTitle": {
+      "type": "string"
+    }
+  }
+}

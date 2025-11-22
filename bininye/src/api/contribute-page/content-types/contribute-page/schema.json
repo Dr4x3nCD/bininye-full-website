@@ -1,0 +1,43 @@
+{
+  "kind": "singleType",
+  "collectionName": "contribute-pages",
+  "info": {
+    "singularName": "contribute-page",
+    "pluralName": "contribute-pages",
+    "displayName": "Contribute Page",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "contributionWays": {
+      "component": "contribute.contribution-way",
+      "repeatable": true,
+      "type": "component"
+    },
+    "donationTiers": {
+      "component": "contribute.donation-tier",
+      "repeatable": true,
+      "type": "component"
+    },
+    "faqs": {
+      "component": "shared.faq-item",
+      "repeatable": true,
+      "type": "component"
+    },
+    "heroBackground": {
+      "type": "media"
+    },
+    "heroSubtitle": {
+      "type": "text"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "impactStats": {
+      "component": "shared.stat-item",
+      "repeatable": true,
+      "type": "component"
+    }
+  }
+}

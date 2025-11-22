@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_domain_domain_action_items",
+  "info": {
+    "displayName": "Domain Action Item",
+    "icon": "check"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "required": true,
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_shared_values",
+  "info": {
+    "displayName": "Value",
+    "icon": "star"
+  },
+  "options": {},
+  "attributes": {
+    "iconKey": {
+      "type": "string"
+    },
+    "title": {
+      "required": true,
+      "type": "string"
+    }
+  }
+}

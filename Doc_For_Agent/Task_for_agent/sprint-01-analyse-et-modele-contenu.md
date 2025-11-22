@@ -464,3 +464,6 @@ Cause : Le timer de nettoyage `cleaningDist…` est lancé plusieurs fois simult
 
 ## 7. Statut d'exécution (agent)
 
+- ✅ 2025-11-22 — Modèle de contenu Strapi validé par l’agent.
+- Couverture vérifiée par rapport à `bininye-frontend` : pages (`app/*`) et données statiques (`lib/activities-data.ts`, `lib/blog-data.tsx`, `lib/domains-data.ts` et tableaux internes des pages comme `qui-sommes-nous`, `equipes`, `photos-et-videos`, `temoignages`, `contribuer`, `contact`).
+- Aucune zone de texte/image/chiffre hardcodée manquante identifiée pour ce sprint ; les Single Types, Collection Types, Components et relations décrits ci-dessus sont cohérents avec l’interface actuelle et serviront de base au Sprint 02 (création concrète dans Strapi via MCP).

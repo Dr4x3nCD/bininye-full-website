@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "blog-rubrics",
+  "info": {
+    "singularName": "blog-rubric",
+    "pluralName": "blog-rubrics",
+    "displayName": "Blog Rubric",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "description": {
+      "type": "text"
+    },
+    "name": {
+      "required": true,
+      "type": "string"
+    },
+    "slug": {
+      "required": true,
+      "targetField": "name",
+      "type": "uid"
+    }
+  }
+}

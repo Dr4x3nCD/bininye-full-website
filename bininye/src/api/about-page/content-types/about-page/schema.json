@@ -1,0 +1,67 @@
+{
+  "kind": "singleType",
+  "collectionName": "about-pages",
+  "info": {
+    "singularName": "about-page",
+    "pluralName": "about-pages",
+    "displayName": "About Page",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "achievementsStats": {
+      "component": "shared.stat-item",
+      "repeatable": true,
+      "type": "component"
+    },
+    "faqs": {
+      "component": "shared.faq-item",
+      "repeatable": true,
+      "type": "component"
+    },
+    "featuredTeamMembers": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::team-member.team-member"
+    },
+    "heroBackground": {
+      "type": "media"
+    },
+    "heroSubtitle": {
+      "type": "text"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "missionText": {
+      "type": "richtext"
+    },
+    "missionTitle": {
+      "type": "string"
+    },
+    "storyImage": {
+      "type": "media"
+    },
+    "storyRichText": {
+      "type": "richtext"
+    },
+    "storyTitle": {
+      "type": "string"
+    },
+    "values": {
+      "component": "shared.value",
+      "repeatable": true,
+      "type": "component"
+    },
+    "valuesTitle": {
+      "type": "string"
+    },
+    "visionText": {
+      "type": "richtext"
+    },
+    "visionTitle": {
+      "type": "string"
+    }
+  }
+}

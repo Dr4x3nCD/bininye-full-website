@@ -1,0 +1,46 @@
+{
+  "kind": "singleType",
+  "collectionName": "teams-pages",
+  "info": {
+    "singularName": "teams-page",
+    "pluralName": "teams-pages",
+    "displayName": "Teams Page",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "heroBackground": {
+      "type": "media"
+    },
+    "heroSubtitle": {
+      "type": "text"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "introText": {
+      "type": "text"
+    },
+    "introTitle": {
+      "type": "string"
+    },
+    "joinCtaButtonLabel": {
+      "type": "string"
+    },
+    "joinCtaButtonUrl": {
+      "type": "string"
+    },
+    "joinCtaText": {
+      "type": "text"
+    },
+    "joinCtaTitle": {
+      "type": "string"
+    },
+    "members": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::team-member.team-member"
+    }
+  }
+}

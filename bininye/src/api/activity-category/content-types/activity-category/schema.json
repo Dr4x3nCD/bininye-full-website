@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "activity-categories",
+  "info": {
+    "singularName": "activity-category",
+    "pluralName": "activity-categories",
+    "displayName": "Activity Category",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "required": true,
+      "type": "string"
+    },
+    "slug": {
+      "required": true,
+      "targetField": "name",
+      "type": "uid"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "volunteer-opportunities",
+  "info": {
+    "singularName": "volunteer-opportunity",
+    "pluralName": "volunteer-opportunities",
+    "displayName": "Volunteer Opportunity",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "description": {
+      "type": "text"
+    },
+    "image": {
+      "type": "media"
+    },
+    "tags": {
+      "component": "shared.tag",
+      "repeatable": true,
+      "type": "component"
+    },
+    "title": {
+      "required": true,
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    }
+  }
+}

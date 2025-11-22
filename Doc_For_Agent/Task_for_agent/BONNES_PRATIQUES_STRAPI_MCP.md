@@ -40,6 +40,7 @@ Créer            Différent ? → OUI → Utiliser update_*
 2. **Attente entre opérations** : Patienter jusqu'à l'arrêt complet avant de relancer
 3. **Arrêt propre** : Utiliser `Ctrl+C` proprement, puis attendre la fin des processus
 4. **Nettoyage manuel** : En cas de blocage, supprimer `.tmp/` et `dist/`
+5. **Avec MCP** : Lors de la création en chaîne de components / content-types via MCP (`create_component`, `create_content_type`, `update_content_type`), laisser un délai fixe (par ex. 5 secondes) entre chaque appel pour éviter les conflits de timers et les erreurs de type `EPIPE` ou `-32603`.
 
 #### Commandes sûres :
 
@@ -141,7 +142,67 @@ npm --prefix bininye run develop
 }
 ```
 
-### 2.3. Draft & Publish
+### 2.3. Pièges fréquents (à partir des retours réels)
+
+#### 2.3.1. Noms d'attributs réservés (`status`, `id`, ...)
+
+- Certains noms sont **réservés** par Strapi et ne peuvent pas être utilisés comme clés d'attributs (par ex. `id`, `status`, `createdAt`, `updatedAt`, `publishedAt`, etc.).
+- Exemple rencontré :
+  - Tentative de champ `status` sur un type `activity` → `400 Bad Request` avec message de validation.
+  - **Solution** : renommer le champ en nom métier explicite non réservé, par ex. :
+    - `activityStatus`,
+    - `publicationStatus`,
+    - `statut`.
+- **Bon réflexe** :
+  - Toujours préférer des noms de champs contextualisés (`activityStatus`) plutôt que des génériques (`status`).
+
+#### 2.3.2. Relations via MCP : valeurs autorisées
+
+- Lors de la création des schémas via MCP, le champ `relation` n'accepte **que** certaines valeurs, typiquement :
+  - `oneToOne`, `oneToMany`, `morphOne`, `morphMany`, `morphToOne`, `morphToMany`.
+- Une tentative d'utiliser `manyToMany` dans la définition JSON d'un attribut renvoie une erreur de validation du type :
+  - `must be one of the following values: oneToOne, oneToMany, morphOne, morphMany, morphToOne, morphToMany`.
+- **Recommandation** :
+  - Modéliser les cas "une page met en avant plusieurs éléments" (ex: `homepage.highlightedEvents`) avec une relation `oneToMany` depuis le Single Type vers la collection cible.
+  - Gérer les besoins de type many-to-many au niveau métier (ex: plusieurs pages qui pointent vers les mêmes entrées) en ajoutant éventuellement des relations inverses côté collection, plutôt qu'en forçant `manyToMany` dans le schéma MCP.
+
+#### 2.3.3. Single Types : `singularName` vs `pluralName`
+
+- Strapi impose que `singularName` et `pluralName` soient **différents**, même pour les *Single Types*.
+- Exemple d'erreur réelle :
+  - `singularName: "global-settings"` et `pluralName: "global-settings"` → `400 Bad Request` avec message :
+    - `contentType: singularName and pluralName should be different`.
+- **Bonnes pratiques** :
+  - Utiliser un nom singulier clair et un pluriel dérivé, par ex. :
+    - `singularName: "global-setting"`, `pluralName: "global-settings"` (displayName: `Global Settings`).
+    - `singularName: "homepage"`, `pluralName: "homepages"`.
+    - `singularName: "about-page"`, `pluralName: "about-pages"`, etc.
+  - Garder le kebab-case pour les deux (`homepage`, `about-page`, `global-setting`, ...).
+
+#### 2.3.4. Erreurs génériques MCP (`-32603: undefined undefined`)
+
+- Lors de certaines créations de content-types via MCP, l'erreur renvoyée peut être très peu parlante, du type :
+  - `MCP error -32603: Failed to create content type: undefined undefined`.
+- Cette erreur signifie en général :
+  - qu'une **erreur interne Strapi** (ou de validation) s'est produite, mais n'a pas été correctement propagée par la couche MCP.
+- **Procédure recommandée** :
+  1. **Toujours vérifier** si le type a été partiellement créé :
+     - `list_content_types` puis chercher un UID du style `api::domains-page.domains-page`.
+     - Si trouvé, inspecter avec `get_content_type_schema`.
+  2. Si le schéma est incohérent / incomplet **et qu'aucune donnée n'existe encore** sur ce type :
+     - Supprimer puis recréer proprement :
+       - `delete_content_type("api::domains-page.domains-page")`
+       - Attendre quelques secondes (5s) pour laisser Strapi nettoyer.
+       - Rejouer `create_content_type` avec un schéma corrigé.
+  3. Si le type n'existe pas du tout dans `list_content_types` :
+     - Rejouer la requête `create_content_type` **après un court délai** (5s), en revérifiant les points suivants :
+       - `singularName` ≠ `pluralName`.
+       - Relations conformes aux valeurs autorisées.
+       - Aucune clé d'attribut réservée.
+  4. En cas de persistance :
+     - Consulter les logs Strapi côté serveur pour récupérer le vrai message d'erreur.
+
+### 2.4. Draft & Publish
 
 **Important** : Le système Draft & Publish affecte la validation `unique`.
 

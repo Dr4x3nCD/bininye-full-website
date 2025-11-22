@@ -1,0 +1,38 @@
+{
+  "kind": "singleType",
+  "collectionName": "global-settings",
+  "info": {
+    "singularName": "global-setting",
+    "pluralName": "global-settings",
+    "displayName": "Global Settings",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "address": {
+      "type": "text"
+    },
+    "contactEmail": {
+      "type": "email"
+    },
+    "contactPhone": {
+      "type": "string"
+    },
+    "footerText": {
+      "type": "text"
+    },
+    "logo": {
+      "type": "media"
+    },
+    "primaryNavigation": {
+      "component": "navigation.navigation-link",
+      "repeatable": true,
+      "type": "component"
+    },
+    "siteName": {
+      "required": true,
+      "type": "string"
+    }
+  }
+}

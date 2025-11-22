@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "team-members",
+  "info": {
+    "singularName": "team-member",
+    "pluralName": "team-members",
+    "displayName": "Team Member",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "bio": {
+      "type": "text"
+    },
+    "email": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media"
+    },
+    "isFeatured": {
+      "type": "boolean"
+    },
+    "linkedinUrl": {
+      "type": "string"
+    },
+    "name": {
+      "required": true,
+      "type": "string"
+    },
+    "order": {
+      "type": "integer"
+    },
+    "role": {
+      "type": "string"
+    }
+  }
+}

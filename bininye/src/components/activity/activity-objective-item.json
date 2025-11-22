@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_activity_activity_objective_items",
+  "info": {
+    "displayName": "Activity Objective Item",
+    "icon": "dot-circle"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "required": true,
+      "type": "string"
+    }
+  }
+}

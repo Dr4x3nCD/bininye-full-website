@@ -1,0 +1,90 @@
+{
+  "kind": "singleType",
+  "collectionName": "homepages",
+  "info": {
+    "singularName": "homepage",
+    "pluralName": "homepages",
+    "displayName": "Homepage",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "aboutIntro": {
+      "type": "richtext"
+    },
+    "aboutMainStats": {
+      "component": "shared.stat-item",
+      "repeatable": true,
+      "type": "component"
+    },
+    "aboutTitle": {
+      "type": "string"
+    },
+    "eventsSubtitle": {
+      "type": "string"
+    },
+    "eventsTitle": {
+      "type": "string"
+    },
+    "galleryHighlightMedia": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::media-item.media-item"
+    },
+    "gallerySubtitle": {
+      "type": "string"
+    },
+    "galleryTitle": {
+      "type": "string"
+    },
+    "heroBackground": {
+      "type": "media"
+    },
+    "heroPrimaryCtaLabel": {
+      "type": "string"
+    },
+    "heroPrimaryCtaUrl": {
+      "type": "string"
+    },
+    "heroSecondaryCtaLabel": {
+      "type": "string"
+    },
+    "heroSecondaryCtaUrl": {
+      "type": "string"
+    },
+    "heroSubtitle": {
+      "type": "text"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "highlightedEvents": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::activity.activity"
+    },
+    "highlightedPartners": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::partner.partner"
+    },
+    "partnersSubtitle": {
+      "type": "string"
+    },
+    "partnersTitle": {
+      "type": "string"
+    },
+    "values": {
+      "component": "shared.value",
+      "repeatable": true,
+      "type": "component"
+    },
+    "valuesIntro": {
+      "type": "text"
+    },
+    "valuesTitle": {
+      "type": "string"
+    }
+  }
+}

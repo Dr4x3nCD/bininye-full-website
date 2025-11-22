@@ -1,0 +1,7 @@
+/**
+ * domains-page router
+ */
+
+import { factories } from '@strapi/strapi';
+
+export default factories.createCoreRouter('api::domains-page.domains-page');

@@ -196,3 +196,23 @@ Pour chacun :
 - Au moins quelques **entrées de test** pour chaque type clé (activities, blog, domains, testimonies, etc.).
 
 Le sprint suivant (Sprint 03) consistera à **migrer le contenu existant** du frontend (arrays et libs) vers Strapi (création des vraies entrées + upload des médias).
+
+---
+
+## 7. Statut d'exécution (agent)
+
+- ✅ Components : tous les components prévus dans le Sprint 01 ont été créés via MCP (`shared.*`, `navigation.link`, `contact.*`, `activity.*`, `join.*`, `contribute.*`, `domain.*`), après vérification préalable de leur absence.
+- ✅ Collection Types : toutes les collections listées (activity, activity-category, blog-post, blog-category, blog-rubric, author, team-member, testimonial, media-item, domain, volunteer-opportunity, volunteer-story, partner) ont été créées via MCP, en évitant les noms réservés (ex. `status` → `activityStatus`).
+- ✅ Single Types : tous les single types (global-setting, homepage, about-page, teams-page, domains-page, join-page, gallery-page, testimonials-page, contact-page, contribute-page) ont été créés via MCP, en corrigeant :
+  - les relations (`manyToMany` remplacé par `oneToMany` côté MCP lorsque nécessaire),
+  - les erreurs de `singularName`/`pluralName` identiques,
+  - les erreurs génériques `-32603 undefined undefined` en appliquant la procédure documentée (vérification, éventuelle suppression puis recréation après délai).
+- ✅ Entrées de test minimales créées via MCP (après vérification avec `get_entries` et délai de 5s entre chaque création), par exemple :
+  - `activity-category` : `Catégorie test activité` (`slug: categorie-test-activite`).
+  - `activity` : `Activité test 1` (`slug: activite-test-1`, `activityStatus: upcoming`).
+  - `blog-category` : `Catégorie blog test` (`slug: categorie-blog-test`).
+  - `blog-post` : `Article test agent` (`slug: article-test-agent`, contenu de test).
+  - `team-member` : `Membre test agent` (isFeatured, order=1).
+  - D'autres types pourront être peuplés plus largement au Sprint 03 lors de la migration des données du frontend.
+- ✅ Documentation : les erreurs rencontrées (noms d'attributs réservés, relations `manyToMany` non acceptées via MCP, `singularName`/`pluralName` identiques, erreurs génériques `-32603`) ont été intégrées dans `BONNES_PRATIQUES_STRAPI_MCP.md` avec des procédures concrètes.
+- ⚠️ Permissions & API Token : la configuration recommandée (rôle Public en lecture seule, API Token read-only dédié au frontend, CORS via `CORS_ORIGIN`) est décrite dans la section 5 ci-dessus et doit être appliquée manuellement dans l'admin Strapi et les fichiers de config.

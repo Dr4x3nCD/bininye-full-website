@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "volunteer-stories",
+  "info": {
+    "singularName": "volunteer-story",
+    "pluralName": "volunteer-stories",
+    "displayName": "Volunteer Story",
+    "description": ""
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "highlighted": {
+      "type": "boolean"
+    },
+    "image": {
+      "type": "media"
+    },
+    "name": {
+      "required": true,
+      "type": "string"
+    },
+    "quote": {
+      "type": "text"
+    },
+    "role": {
+      "type": "string"
+    },
+    "since": {
+      "type": "string"
+    }
+  }
+}
