@@ -2,10 +2,10 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Calendar, Clock, ArrowRight, User } from "lucide-react"
 import Link from "next/link"
-import type { blogPosts } from "@/lib/blog-data"
+import type { BlogPostSummary } from "@/lib/blog-types"
 
 interface FeaturedPostProps {
-  post: (typeof blogPosts)[0]
+  post: BlogPostSummary
 }
 
 export function FeaturedPost({ post }: FeaturedPostProps) {
@@ -15,7 +15,7 @@ export function FeaturedPost({ post }: FeaturedPostProps) {
         <div className="group relative overflow-hidden rounded-3xl bg-card shadow-xl transition-all hover:shadow-2xl">
           <div className="grid gap-0 lg:grid-cols-2">
             <div className="relative min-h-[300px] overflow-hidden lg:min-h-[500px]">
-              <Link href={`/blog/${post.id}`}>
+              <Link href={`/blog/${post.slug}`}>
                 <img
                   src={post.image || "/placeholder.svg"}
                   alt={post.title}
@@ -33,7 +33,7 @@ export function FeaturedPost({ post }: FeaturedPostProps) {
                 </span>
               </div>
 
-              <Link href={`/blog/${post.id}`}>
+              <Link href={`/blog/${post.slug}`}>
                 <h2 className="mb-4 text-balance text-3xl font-bold leading-tight tracking-tight hover:text-primary transition-colors md:text-4xl lg:text-5xl">
                   {post.title}
                 </h2>
@@ -57,7 +57,7 @@ export function FeaturedPost({ post }: FeaturedPostProps) {
                     <Calendar className="h-4 w-4" />
                     {post.date}
                   </span>
-                  <Link href={`/blog/${post.id}`}>
+                  <Link href={`/blog/${post.slug}`}>
                     <Button variant="outline" className="group/btn hidden sm:flex bg-transparent">
                       Lire l'article
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />

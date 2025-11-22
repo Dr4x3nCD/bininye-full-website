@@ -1,9 +1,9 @@
 import { ArrowUpRight } from "lucide-react"
 import Link from "next/link"
-import type { mostRead } from "@/lib/blog-data"
+import type { MostReadItem } from "@/lib/blog-types"
 
 interface MostReadSectionProps {
-  posts: typeof mostRead
+  posts: MostReadItem[]
 }
 
 export function MostReadSection({ posts }: MostReadSectionProps) {
@@ -19,7 +19,7 @@ export function MostReadSection({ posts }: MostReadSectionProps) {
           <div className="grid gap-6 sm:grid-cols-2 lg:w-2/3 lg:grid-cols-3">
             {posts.map((post, index) => (
               <Link
-                href={`/blog/${post.id}`}
+                href={`/blog/${post.slug}`}
                 key={post.id}
                 className="group flex flex-col gap-2 rounded-xl border p-4 transition-colors hover:bg-muted/50"
               >

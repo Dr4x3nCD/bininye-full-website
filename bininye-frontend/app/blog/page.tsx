@@ -6,19 +6,56 @@ import { BlogFilters } from "@/components/blog/blog-filters"
 import { ArticleGrid } from "@/components/blog/article-grid"
 import { RubricsSection } from "@/components/blog/rubrics-section"
 import { MostReadSection } from "@/components/blog/most-read-section"
-import { blogPosts, blogCategories, rubrics, mostRead } from "@/lib/blog-data"
+import { strapiClient } from "@/lib/strapi-client"
+import type { BlogPostSummary } from "@/lib/blog-types"
+import {
+  mapBlogPosts,
+  mapMostRead,
+  mapRubrics,
+  type StrapiBlogCategory,
+  type StrapiBlogRubric,
+  type StrapiBlogPost,
+  type StrapiListResponse,
+} from "@/lib/strapi-blog"
 
-export default function BlogPage() {
+async function getBlogData() {
+  const [postsRes, categoriesRes, rubricsRes] = await Promise.all([
+    (await strapiClient.collection("blog-posts").find({
+      sort: "date:desc",
+      populate: ["author", "category", "image"],
+    })) as StrapiListResponse<StrapiBlogPost>,
+    (await strapiClient.collection("blog-categories").find()) as StrapiListResponse<StrapiBlogCategory>,
+    (await strapiClient.collection("blog-rubrics").find()) as StrapiListResponse<StrapiBlogRubric>,
+  ])
+
+  const posts = mapBlogPosts(postsRes)
+  const featured = posts.find((p) => p.featured) ?? posts[0]
+  const otherPosts = featured ? posts.filter((p) => p.id !== featured.id) : posts
+
+  const categories = [
+    "Tous",
+    ...Array.from(new Set(categoriesRes.data.map((c) => c.name))).sort(),
+  ]
+
+  const rubricItems = mapRubrics(rubricsRes)
+  const mostReadItems = mapMostRead(posts)
+
+  return { featured, otherPosts, categories, rubricItems, mostReadItems }
+}
+
+export default async function BlogPage() {
+  const { featured, otherPosts, categories, rubricItems, mostReadItems } = await getBlogData()
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1">
         <HeroBlog />
-        <FeaturedPost post={blogPosts[0]} />
-        <BlogFilters categories={blogCategories} />
-        <ArticleGrid posts={blogPosts.slice(1)} />
-        <RubricsSection items={rubrics} />
-        <MostReadSection posts={mostRead} />
+        {featured && <FeaturedPost post={featured} />}
+        <BlogFilters categories={categories} />
+        <ArticleGrid posts={otherPosts} />
+        <RubricsSection items={rubricItems} />
+        <MostReadSection posts={mostReadItems} />
       </main>
       <Footer />
     </div>

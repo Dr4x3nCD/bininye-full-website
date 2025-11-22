@@ -3,25 +3,55 @@ import { Footer } from "@/components/footer"
 import { Calendar, MapPin, Users, Tag, ArrowLeft, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { activities } from "@/lib/activities-data"
 import { notFound } from "next/navigation"
+import { strapiClient } from "@/lib/strapi-client"
+import {
+  mapSingleActivity,
+  mapStrapiActivities,
+  type StrapiActivityEntity,
+  type StrapiListResponse,
+} from "@/lib/strapi-activities"
 
-export function generateStaticParams() {
-  return activities.map((activity) => ({
-    id: activity.id.toString(),
-  }))
+export async function generateStaticParams() {
+  const res = (await strapiClient.collection("activities").find({
+    fields: ["slug"],
+  })) as StrapiListResponse<StrapiActivityEntity>
+
+  return res.data.map((activity) => ({ id: activity.slug }))
 }
 
-export default function ActivityDetailPage({ params }: { params: { id: string } }) {
-  const activity = activities.find((a) => a.id.toString() === params.id)
+export default async function ActivityDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  const slug = id
 
-  if (!activity) {
+  const res = (await strapiClient.collection("activities").find({
+    filters: { slug: { $eq: slug } },
+    populate: ["image", "category", "tags"],
+  })) as StrapiListResponse<StrapiActivityEntity>
+
+  if (!res.data.length) {
     notFound()
   }
 
-  const relatedActivities = activities
-    .filter((a) => a.id !== activity.id && (a.category === activity.category || a.location === activity.location))
-    .slice(0, 3)
+  const activity = mapSingleActivity(res.data[0])
+
+  const relatedRes = (await strapiClient.collection("activities").find({
+    filters: {
+      slug: { $ne: slug },
+      $or: [
+        { category: { name: { $eq: activity.category } } },
+        { location: { $eq: activity.location } },
+      ],
+    },
+    populate: ["image", "category"],
+    sort: "date:desc",
+  })) as StrapiListResponse<StrapiActivityEntity>
+
+  const relatedActivities = mapStrapiActivities(relatedRes).slice(0, 3)
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -217,7 +247,7 @@ export default function ActivityDetailPage({ params }: { params: { id: string } 
                 {relatedActivities.map((relatedActivity) => (
                   <Link
                     key={relatedActivity.id}
-                    href={`/activites/${relatedActivity.id}`}
+                    href={`/activites/${relatedActivity.slug}`}
                     className="group overflow-hidden rounded-3xl bg-card shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
                   >
                     <div className="relative h-48 overflow-hidden">

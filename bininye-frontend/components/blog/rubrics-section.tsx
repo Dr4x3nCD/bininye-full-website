@@ -1,8 +1,8 @@
 import { ArrowRight } from "lucide-react"
-import type { rubrics } from "@/lib/blog-data"
+import type { BlogRubricItem } from "@/lib/blog-types"
 
 interface RubricsSectionProps {
-  items: typeof rubrics
+  items: BlogRubricItem[]
 }
 
 export function RubricsSection({ items }: RubricsSectionProps) {

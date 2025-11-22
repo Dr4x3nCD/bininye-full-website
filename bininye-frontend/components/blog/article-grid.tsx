@@ -2,10 +2,10 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Calendar, Clock, ArrowRight, User } from "lucide-react"
 import Link from "next/link"
-import type { blogPosts } from "@/lib/blog-data"
+import type { BlogPostSummary } from "@/lib/blog-types"
 
 interface ArticleGridProps {
-  posts: typeof blogPosts
+  posts: BlogPostSummary[]
 }
 
 export function ArticleGrid({ posts }: ArticleGridProps) {
@@ -14,7 +14,7 @@ export function ArticleGrid({ posts }: ArticleGridProps) {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
-            <Link key={post.id} href={`/blog/${post.id}`} className="group flex flex-col">
+            <Link key={post.id} href={`/blog/${post.slug}`} className="group flex flex-col">
               <article className="flex h-full flex-col">
                 <div className="relative mb-6 aspect-[4/3] overflow-hidden rounded-2xl bg-muted">
                   <img

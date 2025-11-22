@@ -4,47 +4,67 @@ import { Footer } from "@/components/footer"
 import { BlogPostHero } from "@/components/blog/blog-post-hero"
 import { BlogPostContent } from "@/components/blog/blog-post-content"
 import { BlogPostShare } from "@/components/blog/blog-post-share"
-import { blogPosts } from "@/lib/blog-data"
-import { ArticleGrid } from "@/components/blog/article-grid" // Reusing grid for "read also"
+import { ArticleGrid } from "@/components/blog/article-grid"
+import { strapiClient } from "@/lib/strapi-client"
+import type { BlogPostSummary } from "@/lib/blog-types"
+import {
+  mapBlogPosts,
+  mapSingleBlogPost,
+  type StrapiBlogPost,
+  type StrapiListResponse,
+} from "@/lib/strapi-blog"
 
 interface BlogPostPageProps {
-  params: {
-    id: string
-  }
+  params: Promise<{
+    id: string // segment de l'URL, utilisé comme slug pour le SEO
+  }>
 }
 
-// Generate static params for all known blog posts to optimize build
 export async function generateStaticParams() {
-  return blogPosts.map((post) => ({
-    id: post.id.toString(),
-  }))
+  const res = (await strapiClient.collection("blog-posts").find({
+    fields: ["slug"],
+  })) as StrapiListResponse<StrapiBlogPost>
+
+  return res.data.map((post) => ({ id: post.slug }))
 }
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-  // Find the post
-  const post = blogPosts.find((p) => p.id.toString() === params.id)
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { id } = await params
+  const slug = id
 
-  if (!post) {
+  const postRes = (await strapiClient.collection("blog-posts").find({
+    filters: { slug: { $eq: slug } },
+    populate: ["author", "category", "image"],
+  })) as StrapiListResponse<StrapiBlogPost>
+
+  if (!postRes.data.length) {
     notFound()
   }
 
-  // Find related posts (just exclude current one and take 3)
-  const relatedPosts = blogPosts.filter((p) => p.id !== post.id).slice(0, 3)
+  const postSummary: BlogPostSummary = mapSingleBlogPost(postRes.data[0])
+
+  const relatedRes = (await strapiClient.collection("blog-posts").find({
+    filters: { slug: { $ne: slug } },
+    sort: "date:desc",
+    populate: ["author", "category", "image"],
+  })) as StrapiListResponse<StrapiBlogPost>
+
+  const relatedPosts = mapBlogPosts(relatedRes).slice(0, 3)
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex-1">
         <BlogPostHero
-          title={post.title}
-          category={post.category}
-          image={post.image}
-          author={post.author}
-          date={post.date}
-          readTime={post.readTime}
+          title={postSummary.title}
+          category={postSummary.category}
+          image={postSummary.image}
+          author={postSummary.author}
+          date={postSummary.date}
+          readTime={postSummary.readTime}
         />
 
-        <BlogPostContent content={post.content || ""} author={post.author} role={post.role} />
+        <BlogPostContent content={postSummary.content || ""} author={postSummary.author} role={postSummary.role} />
 
         <BlogPostShare />
 

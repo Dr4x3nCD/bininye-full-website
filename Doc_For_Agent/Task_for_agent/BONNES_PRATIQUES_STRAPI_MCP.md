@@ -181,6 +181,9 @@ npm --prefix bininye run develop
 
 #### 2.3.4. Erreurs génériques MCP (`-32603: undefined undefined`)
 
+- **Toujours analyser les messages de retour MCP** : les erreurs détaillées (validation des attributs, valeurs interdites, `singularName`/`pluralName`, relations, etc.) sont la source de vérité pour corriger le schéma.
+- En cas d'erreur, ne pas relancer la même requête à l'aveugle ; adapter le payload (renommer le champ, changer `relation`, corriger les noms) avant de réessayer.
+
 - Lors de certaines créations de content-types via MCP, l'erreur renvoyée peut être très peu parlante, du type :
   - `MCP error -32603: Failed to create content type: undefined undefined`.
 - Cette erreur signifie en général :
@@ -707,3 +710,41 @@ npm --prefix bininye run console
 3. 🔒 **Sécuriser les permissions** (read-only public, create limité aux formulaires)
 
 En suivant ces bonnes pratiques, vous minimiserez les erreurs et assurerez une configuration stable et sécurisée de votre instance Strapi.
+
+---
+
+## 13. Leçons tirées du Sprint 03 (relations & vérifications MCP)
+
+### 13.1. Relations sur les Single Types : prudence avec MCP
+
+- Les appels MCP de type `connect_relation` / `update_entry` peuvent **répondre "succès"** tout en ne reflétant pas immédiatement les relations dans les réponses `get_entries` (compteurs à `count: 0`).
+- Ce problème est particulièrement visible sur les **Single Types** (`homepage`, `about-page`, `teams-page`) lorsque l’on tente de lier des collections (`highlightedEvents`, `highlightedPartners`, `featuredTeamMembers`, `members`, `galleryHighlightMedia`).
+
+**Bonnes pratiques supplémentaires :**
+
+1. **Toujours vérifier les relations après un `connect_relation` ou `update_entry`** :
+   - Lire à nouveau le Single Type et vérifier que les champs relationnels ont bien un `count > 0` ou que les IDs attendus sont présents.
+   - Si les `count` restent à `0` malgré un message de succès, considérer que la relation n’est pas réellement prise en compte.
+
+2. **Ne pas multiplier les tentatives aveugles** :
+   - Si après 1–2 tentatives raisonnables via MCP la relation reste vide, **ne pas insister à l’aveugle**.
+   - Préférer documenter le cas et terminer le câblage directement dans l’admin Strapi (plus fiable pour les Single Types sensibles).
+
+3. **Toujours distinguer données et relations** dans le statut de sprint :
+   - Considérer le sprint comme **terminé sur la partie données** dès que toutes les entrées sont créées et cohérentes.
+   - Documenter clairement les relations qui doivent éventuellement être **vérifiées ou finalisées manuellement** dans l’admin.
+
+### 13.2. Vérifier les relations côté API (et accepter les limites MCP)
+
+- Les options `populate` passées au MCP `get_entry` peuvent ne pas être supportées (retour `null`), ce qui oblige à s’appuyer sur :
+  - `get_entries` sans `populate` pour vérifier au moins les `count` de relations.
+  - Des tests manuels via l’admin ou des appels REST/GraphQL externes pour une validation fine.
+
+**Recommandation :**
+
+- Utiliser MCP pour **90% du travail** (création types, components, données) et accepter que **les 10% restants** (relations complexes sur Single Types, validation visuelle) soient finalisés dans l’admin.
+- Toujours **documenter explicitement** dans les fichiers de sprint quelles relations ont été :
+  - Ciblées via MCP,
+  - Et lesquelles doivent être revues/cliquées dans l’interface Strapi.
+
+Ces leçons permettent d’éviter de perdre du temps à déboguer des cas où le problème vient des limites de la couche MCP, et non du modèle de données lui-même.
