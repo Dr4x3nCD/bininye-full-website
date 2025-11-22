@@ -33,18 +33,32 @@ $RECYCLE.BIN/
 
 
 ############################
-# IDE & Editors
+# Packages
 ############################
 
-.idea
-.vscode/*
-!.vscode/settings.json
-*.swp
+*.7z
+*.csv
+*.dat
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.seed
+*.so
 *.swo
+*.swp
 *.swn
 *.swm
-*.sublime-workspace
-*.sublime-project
+*.out
+*.pid
 
 
 ############################
@@ -64,29 +78,29 @@ $RECYCLE.BIN/
 
 *#
 ssl
+.idea
 nbproject
-coverage
-license.txt
-exports
-.node_history
+public/uploads/*
+!public/uploads/.gitkeep
+.tsbuildinfo
 .eslintcache
 
-
 ############################
-# Node.js & Package managers
+# Node.js
 ############################
 
-node_modules
 lib-cov
 lcov.info
 pids
 logs
 results
-npm-debug.log*
-npm-error.log*
-pnpm-debug.log*
-pnpm-error.log*
-yarn-error.log
+node_modules
+.node_history
+
+############################
+# Package managers
+############################
+
 .yarn/*
 !.yarn/cache
 !.yarn/unplugged
@@ -95,33 +109,23 @@ yarn-error.log
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
-
-
-############################
-# Build & Distribution
-############################
-
-dist
-build
-.tsbuildinfo
-
+yarn-error.log
 
 ############################
-# Environment & Secrets
+# Tests
+############################
+
+coverage
+
+############################
+# Strapi
 ############################
 
 .env
-.env.local
-.env.*.local
-
-
-############################
-# Strapi specific
-############################
-
+license.txt
+exports
 .strapi
+dist
+build
 .strapi-updater.json
 .strapi-cloud.json
-
-public/uploads/*
-!public/uploads/.gitkeep
