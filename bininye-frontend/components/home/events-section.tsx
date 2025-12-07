@@ -47,9 +47,10 @@ export function EventsSection({
         {hasEvents ? (
           <div className="grid gap-8 lg:grid-cols-2">
             {events.slice(0, 4).map((event, index) => (
-              <article
+              <Link
                 key={event.documentId}
-                className="group overflow-hidden rounded-3xl bg-card shadow-lg transition-all hover:shadow-2xl"
+                href={`/activites/${event.slug}`}
+                className="group overflow-hidden rounded-3xl bg-card shadow-lg transition-all hover:shadow-2xl block"
               >
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <img
@@ -77,9 +78,9 @@ export function EventsSection({
                       </div>
                     )}
                   </div>
-                  <h3 className="text-balance text-xl font-bold leading-tight md:text-2xl">{event.title}</h3>
+                  <h3 className="text-balance text-xl font-bold leading-tight md:text-2xl group-hover:text-primary transition-colors">{event.title}</h3>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         ) : (

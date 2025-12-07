@@ -85,7 +85,7 @@ export function ContributeSection({
               <Button
                 asChild
                 size="lg"
-                className="h-14 rounded-full bg-accent px-8 text-base font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-accent/90 hover:shadow-xl"
+                className="h-14 rounded-full bg-white px-8 text-base font-semibold text-primary shadow-lg transition-all hover:scale-105 hover:bg-white/90 hover:shadow-xl"
               >
                 <Link href={primaryCtaUrl}>
                   <Heart className="mr-2 h-5 w-5" />

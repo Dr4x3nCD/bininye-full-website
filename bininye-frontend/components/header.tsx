@@ -24,8 +24,8 @@ export function Header() {
       <div className="container mx-auto flex h-20 items-center justify-between px-4 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary shadow-sm">
-            <span className="text-xl font-bold text-primary-foreground">BY</span>
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-md border border-border/50">
+            <span className="text-xl font-bold text-primary">BY</span>
           </div>
           <div className="hidden flex-col sm:flex">
             <span className="text-base font-bold leading-tight text-foreground">BININ YE</span>

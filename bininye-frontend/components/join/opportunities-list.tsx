@@ -24,14 +24,9 @@ export function OpportunitiesList({ data }: OpportunitiesListProps) {
   return (
     <section id="opportunites" className="bg-muted/30 py-20 lg:py-28">
       <div className="container mx-auto px-4">
-        <div className="mb-12 flex flex-col items-center justify-between gap-4 md:flex-row">
-          <div>
-            <h2 className="text-3xl font-bold md:text-4xl">{data.title}</h2>
-            <p className="mt-2 text-muted-foreground">{data.subtitle}</p>
-          </div>
-          <Button variant="outline" className="hidden md:flex bg-transparent">
-            Voir toutes les offres <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+        <div className="mb-12 text-center md:text-left">
+          <h2 className="text-3xl font-bold md:text-4xl">{data.title}</h2>
+          <p className="mt-2 text-muted-foreground">{data.subtitle}</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -66,12 +61,6 @@ export function OpportunitiesList({ data }: OpportunitiesListProps) {
               </CardFooter>
             </Card>
           ))}
-        </div>
-
-        <div className="mt-8 text-center md:hidden">
-          <Button variant="outline">
-            Voir toutes les offres <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
         </div>
       </div>
     </section>

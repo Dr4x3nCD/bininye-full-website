@@ -298,12 +298,14 @@ export function ActivitiesPageClient({ activities }: ActivitiesPageClientProps) 
                             {activity.status === "à venir" ? "À venir" : "Passé"}
                           </span>
                         </div>
-                        {/* Badge domaine */}
-                        <div className="absolute bottom-4 left-4 z-20">
-                          <span className="rounded-full bg-secondary px-3 py-1 text-xs font-bold text-secondary-foreground shadow-sm">
-                            {activity.domainTitle || "[Domaine non défini]"}
-                          </span>
-                        </div>
+                        {/* Badge domaine - affiché seulement si défini */}
+                        {activity.domainTitle && (
+                          <div className="absolute bottom-4 left-4 z-20">
+                            <span className="rounded-full bg-secondary px-3 py-1 text-xs font-bold text-secondary-foreground shadow-sm">
+                              {activity.domainTitle}
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       {/* Contenu */}
