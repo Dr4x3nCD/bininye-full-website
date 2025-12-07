@@ -32,6 +32,9 @@
       "type": "text",
       "required": true
     },
+    "organization": {
+      "type": "string"
+    },
     "sourcePage": {
       "type": "string"
     }

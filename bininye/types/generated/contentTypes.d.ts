@@ -729,6 +729,7 @@ export interface ApiContactMessageContactMessage
     > &
       Schema.Attribute.Private;
     message: Schema.Attribute.Text & Schema.Attribute.Required;
+    organization: Schema.Attribute.String;
     phone: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     sourcePage: Schema.Attribute.String;
@@ -1006,7 +1007,7 @@ export interface ApiGalleryPageGalleryPage extends Struct.SingleTypeSchema {
 export interface ApiGlobalSettingGlobalSetting extends Struct.SingleTypeSchema {
   collectionName: 'global-settings';
   info: {
-    description: '';
+    description: 'Param\u00E8tres globaux du site (logo, contacts, r\u00E9seaux sociaux)';
     displayName: 'Global Settings';
     pluralName: 'global-settings';
     singularName: 'global-setting';
@@ -1018,26 +1019,35 @@ export interface ApiGlobalSettingGlobalSetting extends Struct.SingleTypeSchema {
     address: Schema.Attribute.Text;
     contactEmail: Schema.Attribute.Email;
     contactPhone: Schema.Attribute.String;
+    copyrightText: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    facebookUrl: Schema.Attribute.String;
     footerText: Schema.Attribute.Text;
+    instagramUrl: Schema.Attribute.String;
+    linkedinUrl: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::global-setting.global-setting'
     > &
       Schema.Attribute.Private;
-    logo: Schema.Attribute.Media;
+    logo: Schema.Attribute.Media<'images'>;
+    logoAlt: Schema.Attribute.String;
     primaryNavigation: Schema.Attribute.Component<
       'navigation.navigation-link',
       true
     >;
     publishedAt: Schema.Attribute.DateTime;
+    siteDescription: Schema.Attribute.Text;
     siteName: Schema.Attribute.String & Schema.Attribute.Required;
+    siteTagline: Schema.Attribute.String;
+    twitterUrl: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    youtubeUrl: Schema.Attribute.String;
   };
 }
 

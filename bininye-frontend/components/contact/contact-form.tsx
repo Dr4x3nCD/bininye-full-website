@@ -37,6 +37,7 @@ export function ContactForm() {
       phone: formData.get("phone")?.toString() ?? "",
       subject: subject || formData.get("subject")?.toString() || null,
       message: formData.get("message")?.toString() ?? "",
+      organization: formData.get("organization")?.toString() || null,
       sourcePage: "/contact",
     }
 
@@ -195,14 +196,14 @@ export function ContactForm() {
                 )}
               </Button>
             </div>
-          {status === "success" && (
-            <p className="mt-4 text-sm font-medium text-green-600">
-              Votre message a bien été envoyé. Merci pour votre confiance.
-            </p>
-          )}
-          {status === "error" && errorMessage && (
-            <p className="mt-4 text-sm font-medium text-red-600">{errorMessage}</p>
-          )}
+            {status === "success" && (
+              <p className="mt-4 text-sm font-medium text-green-600">
+                Votre message a bien été envoyé. Merci pour votre confiance.
+              </p>
+            )}
+            {status === "error" && errorMessage && (
+              <p className="mt-4 text-sm font-medium text-red-600">{errorMessage}</p>
+            )}
           </form>
         </CardContent>
       </Card>

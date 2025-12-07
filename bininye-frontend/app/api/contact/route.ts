@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
       phone: body.phone ?? null,
       subject: body.subject ?? null,
       message: body.message ?? "",
+      organization: body.organization ?? null,
       sourcePage: body.sourcePage ?? "/contact",
     }
 

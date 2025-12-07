@@ -5,10 +5,16 @@ const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
 // Attention : ce token doit être utilisé uniquement côté serveur (Server Components, route handlers, etc.)
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
-// Client Strapi officiel, centralisé pour tout le frontend
+// Client Strapi officiel avec authentification (pour les données protégées)
 export const strapiClient = createStrapiClient({
   baseURL: `${STRAPI_URL.replace(/\/$/, "")}/api`,
   auth: STRAPI_API_TOKEN,
+});
+
+// Client Strapi public sans authentification (pour les formulaires publics)
+// Utilise les permissions du rôle "Public" configurées dans Strapi
+export const strapiPublicClient = createStrapiClient({
+  baseURL: `${STRAPI_URL.replace(/\/$/, "")}/api`,
 });
 
 export type StrapiFetchOptions = RequestInit & {

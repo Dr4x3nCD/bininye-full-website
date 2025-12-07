@@ -5,6 +5,7 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { Playfair_Display } from "next/font/google"
+import { CookieConsent } from "@/components/cookie-consent"
 import "./globals.css"
 
 const playfair = Playfair_Display({
@@ -29,6 +30,7 @@ export default function RootLayout({
     <html lang="fr">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} ${playfair.variable} antialiased`}>
         <Suspense fallback={null}>{children}</Suspense>
+        <CookieConsent />
         <Analytics />
       </body>
     </html>

@@ -28,12 +28,14 @@ export function MostReadSection({ posts }: MostReadSectionProps) {
                   <span>{post.date}</span>
                 </div>
                 <h3 className="font-semibold leading-snug group-hover:text-primary transition-colors">{post.title}</h3>
-                <div className="mt-auto pt-2">
-                  <span className="inline-flex items-center text-xs font-medium text-muted-foreground group-hover:text-primary">
-                    {post.category}
-                    <ArrowUpRight className="ml-1 h-3 w-3" />
-                  </span>
-                </div>
+                {post.category && (
+                  <div className="mt-auto pt-2">
+                    <span className="inline-flex items-center text-xs font-medium text-muted-foreground group-hover:text-primary">
+                      {post.category}
+                      <ArrowUpRight className="ml-1 h-3 w-3" />
+                    </span>
+                  </div>
+                )}
               </Link>
             ))}
           </div>

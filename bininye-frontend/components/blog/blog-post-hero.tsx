@@ -34,25 +34,29 @@ export function BlogPostHero({ title, category, image, author, date, readTime }:
             Retour aux articles
           </Link>
 
-          <div className="mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <Badge className="bg-primary hover:bg-primary/90 text-white border-none px-4 py-1 text-sm rounded-full">
-              {category}
-            </Badge>
-          </div>
+          {category && (
+            <div className="mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <Badge className="bg-primary hover:bg-primary/90 text-white border-none px-4 py-1 text-sm rounded-full">
+                {category}
+              </Badge>
+            </div>
+          )}
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight drop-shadow-lg animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100 text-balance">
             {title}
           </h1>
 
           <div className="flex flex-wrap items-center justify-center gap-6 text-white/90 text-sm md:text-base animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
-            <div className="flex items-center gap-2">
-              <div className="bg-white/20 p-1.5 rounded-full backdrop-blur-sm">
-                <User className="w-4 h-4" />
+            {author && (
+              <div className="flex items-center gap-2">
+                <div className="bg-white/20 p-1.5 rounded-full backdrop-blur-sm">
+                  <User className="w-4 h-4" />
+                </div>
+                <span className="font-medium">{author}</span>
               </div>
-              <span className="font-medium">{author}</span>
-            </div>
+            )}
 
-            <div className="hidden md:block w-1.5 h-1.5 bg-white/40 rounded-full" />
+            {author && <div className="hidden md:block w-1.5 h-1.5 bg-white/40 rounded-full" />}
 
             <div className="flex items-center gap-2">
               <div className="bg-white/20 p-1.5 rounded-full backdrop-blur-sm">

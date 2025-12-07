@@ -412,11 +412,7 @@ export default function ContribuerPageClient({ data }: ContribuerPageClientProps
                                     })}
                                 </div>
 
-                                <Button variant="outline" className="gap-2 bg-transparent" asChild>
-                                    <Link href={data.transparencyCtaUrl}>
-                                        {data.transparencyCtaLabel} <ArrowRight className="h-4 w-4" />
-                                    </Link>
-                                </Button>
+
                             </div>
                         </div>
                     </div>

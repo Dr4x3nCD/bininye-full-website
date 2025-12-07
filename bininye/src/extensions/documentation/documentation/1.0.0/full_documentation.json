@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2025-12-07T17:44:10.365Z"
+    "x-generation-date": "2025-12-07T23:36:37.442Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -19778,6 +19778,9 @@
               "message": {
                 "type": "string"
               },
+              "organization": {
+                "type": "string"
+              },
               "sourcePage": {
                 "type": "string"
               },
@@ -19869,6 +19872,9 @@
             "type": "string"
           },
           "message": {
+            "type": "string"
+          },
+          "organization": {
             "type": "string"
           },
           "sourcePage": {
@@ -20191,6 +20197,9 @@
                   "type": "string"
                 },
                 "message": {
+                  "type": "string"
+                },
+                "organization": {
                   "type": "string"
                 },
                 "sourcePage": {
@@ -27549,17 +27558,13 @@
             ],
             "type": "object",
             "properties": {
-              "address": {
+              "siteName": {
                 "type": "string"
               },
-              "contactEmail": {
-                "type": "string",
-                "format": "email"
-              },
-              "contactPhone": {
+              "siteTagline": {
                 "type": "string"
               },
-              "footerText": {
+              "siteDescription": {
                 "type": "string"
               },
               "logo": {
@@ -27573,14 +27578,45 @@
                 ],
                 "example": "string or id"
               },
+              "logoAlt": {
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              },
+              "contactEmail": {
+                "type": "string",
+                "format": "email"
+              },
+              "contactPhone": {
+                "type": "string"
+              },
+              "facebookUrl": {
+                "type": "string"
+              },
+              "twitterUrl": {
+                "type": "string"
+              },
+              "instagramUrl": {
+                "type": "string"
+              },
+              "linkedinUrl": {
+                "type": "string"
+              },
+              "youtubeUrl": {
+                "type": "string"
+              },
+              "footerText": {
+                "type": "string"
+              },
+              "copyrightText": {
+                "type": "string"
+              },
               "primaryNavigation": {
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/NavigationNavigationLinkComponent"
                 }
-              },
-              "siteName": {
-                "type": "string"
               },
               "locale": {
                 "type": "string"
@@ -27650,17 +27686,13 @@
           "documentId": {
             "type": "string"
           },
-          "address": {
+          "siteName": {
             "type": "string"
           },
-          "contactEmail": {
-            "type": "string",
-            "format": "email"
-          },
-          "contactPhone": {
+          "siteTagline": {
             "type": "string"
           },
-          "footerText": {
+          "siteDescription": {
             "type": "string"
           },
           "logo": {
@@ -28261,14 +28293,45 @@
               }
             }
           },
+          "logoAlt": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "contactEmail": {
+            "type": "string",
+            "format": "email"
+          },
+          "contactPhone": {
+            "type": "string"
+          },
+          "facebookUrl": {
+            "type": "string"
+          },
+          "twitterUrl": {
+            "type": "string"
+          },
+          "instagramUrl": {
+            "type": "string"
+          },
+          "linkedinUrl": {
+            "type": "string"
+          },
+          "youtubeUrl": {
+            "type": "string"
+          },
+          "footerText": {
+            "type": "string"
+          },
+          "copyrightText": {
+            "type": "string"
+          },
           "primaryNavigation": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/NavigationNavigationLinkComponent"
             }
-          },
-          "siteName": {
-            "type": "string"
           },
           "createdAt": {
             "type": "string",
@@ -28318,17 +28381,13 @@
                 "documentId": {
                   "type": "string"
                 },
-                "address": {
+                "siteName": {
                   "type": "string"
                 },
-                "contactEmail": {
-                  "type": "string",
-                  "format": "email"
-                },
-                "contactPhone": {
+                "siteTagline": {
                   "type": "string"
                 },
-                "footerText": {
+                "siteDescription": {
                   "type": "string"
                 },
                 "logo": {
@@ -28460,14 +28519,45 @@
                     }
                   }
                 },
+                "logoAlt": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "contactEmail": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "contactPhone": {
+                  "type": "string"
+                },
+                "facebookUrl": {
+                  "type": "string"
+                },
+                "twitterUrl": {
+                  "type": "string"
+                },
+                "instagramUrl": {
+                  "type": "string"
+                },
+                "linkedinUrl": {
+                  "type": "string"
+                },
+                "youtubeUrl": {
+                  "type": "string"
+                },
+                "footerText": {
+                  "type": "string"
+                },
+                "copyrightText": {
+                  "type": "string"
+                },
                 "primaryNavigation": {
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/NavigationNavigationLinkComponent"
                   }
-                },
-                "siteName": {
-                  "type": "string"
                 },
                 "createdAt": {
                   "type": "string",

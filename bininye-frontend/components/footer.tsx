@@ -1,7 +1,16 @@
 import Link from "next/link"
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from "lucide-react"
+import Image from "next/image"
+import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin } from "lucide-react"
+import { getGlobalSettings, type GlobalSettings } from "@/lib/strapi-global-settings"
 
-export function Footer() {
+interface FooterProps {
+  settings?: GlobalSettings
+}
+
+export async function Footer({ settings: propSettings }: FooterProps) {
+  // Fetch settings if not provided
+  const settings = propSettings ?? await getGlobalSettings()
+
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-16 lg:px-8">
@@ -9,39 +18,84 @@ export function Footer() {
           {/* À propos */}
           <div>
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary">
-                <span className="text-lg font-bold text-secondary-foreground">BY</span>
-              </div>
-              <span className="text-lg font-bold">BININ YE</span>
+              {settings.logoUrl ? (
+                <Image
+                  src={settings.logoUrl}
+                  alt={settings.logoAlt || settings.siteName}
+                  width={40}
+                  height={40}
+                  className="h-10 w-10 rounded-lg object-contain bg-white"
+                />
+              ) : (
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary">
+                  <span className="text-lg font-bold text-secondary-foreground">BY</span>
+                </div>
+              )}
+              <span className="text-lg font-bold">{settings.siteName}</span>
             </div>
             <p className="text-sm leading-relaxed text-primary-foreground/80">
-              Une Organisation Non Gouvernementale engagée dans la création d'un avenir durable pour tous.
+              {settings.footerText || settings.siteDescription || "[Description non récupérée]"}
             </p>
             <div className="mt-6 flex gap-3">
-              <Link
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-transform hover:scale-110"
-              >
-                <Facebook className="h-4 w-4" />
-              </Link>
-              <Link
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-transform hover:scale-110"
-              >
-                <Twitter className="h-4 w-4" />
-              </Link>
-              <Link
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-transform hover:scale-110"
-              >
-                <Instagram className="h-4 w-4" />
-              </Link>
-              <Link
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-transform hover:scale-110"
-              >
-                <Linkedin className="h-4 w-4" />
-              </Link>
+              {settings.facebookUrl && (
+                <Link
+                  href={settings.facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-transform hover:scale-110"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="h-4 w-4" />
+                </Link>
+              )}
+              {settings.twitterUrl && (
+                <Link
+                  href={settings.twitterUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-transform hover:scale-110"
+                  aria-label="Twitter"
+                >
+                  <Twitter className="h-4 w-4" />
+                </Link>
+              )}
+              {settings.instagramUrl && (
+                <Link
+                  href={settings.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-transform hover:scale-110"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="h-4 w-4" />
+                </Link>
+              )}
+              {settings.linkedinUrl && (
+                <Link
+                  href={settings.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-transform hover:scale-110"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="h-4 w-4" />
+                </Link>
+              )}
+              {settings.youtubeUrl && (
+                <Link
+                  href={settings.youtubeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-transform hover:scale-110"
+                  aria-label="YouTube"
+                >
+                  <Youtube className="h-4 w-4" />
+                </Link>
+              )}
+              {/* Fallback si aucun réseau social */}
+              {!settings.facebookUrl && !settings.twitterUrl && !settings.instagramUrl && !settings.linkedinUrl && !settings.youtubeUrl && (
+                <span className="text-sm text-primary-foreground/50">[Réseaux sociaux non configurés]</span>
+              )}
             </div>
           </div>
 
@@ -110,23 +164,40 @@ export function Footer() {
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-3">
                 <MapPin className="mt-0.5 h-5 w-5 flex-shrink-0 text-secondary" />
-                <span className="text-primary-foreground/90">Abidjan, Côte d'Ivoire</span>
+                <span className="text-primary-foreground/90">
+                  {settings.address || "[Adresse non récupérée]"}
+                </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 flex-shrink-0 text-secondary" />
-                <span className="text-primary-foreground/90">+225 07 02 03 97</span>
+                <span className="text-primary-foreground/90">
+                  {settings.contactPhone || "[Téléphone non récupéré]"}
+                </span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 flex-shrink-0 text-secondary" />
-                <span className="text-primary-foreground/90">contact@bininye.com</span>
+                <span className="text-primary-foreground/90">
+                  {settings.contactEmail || "[Email non récupéré]"}
+                </span>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 border-t border-primary-foreground/20 pt-8 text-center text-sm text-primary-foreground/70">
-          <p>&copy; {new Date().getFullYear()} ONG Binin Ye. Tous droits réservés.</p>
+        <div className="mt-12 border-t border-primary-foreground/20 pt-8">
+          <div className="flex flex-col items-center justify-between gap-4 text-sm text-primary-foreground/70 sm:flex-row">
+            <p>&copy; {new Date().getFullYear()} {settings.copyrightText || settings.siteName}</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link href="/politique-confidentialite" className="transition-colors hover:text-secondary">
+                Politique de confidentialité
+              </Link>
+              <span className="hidden sm:inline">•</span>
+              <Link href="/politique-protection-donnees" className="transition-colors hover:text-secondary">
+                Protection des données
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

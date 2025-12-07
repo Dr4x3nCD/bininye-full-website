@@ -26,7 +26,9 @@ export function FeaturedPost({ post }: FeaturedPostProps) {
             </div>
             <div className="flex flex-col justify-center p-8 lg:p-12">
               <div className="mb-6 flex items-center gap-3">
-                <Badge className="bg-primary text-primary-foreground hover:bg-primary/90">{post.category}</Badge>
+                {post.category && (
+                  <Badge className="bg-primary text-primary-foreground hover:bg-primary/90">{post.category}</Badge>
+                )}
                 <span className="flex items-center gap-1 text-sm text-muted-foreground">
                   <Clock className="h-3.5 w-3.5" />
                   {post.readTime} de lecture
@@ -42,15 +44,17 @@ export function FeaturedPost({ post }: FeaturedPostProps) {
               <p className="mb-8 text-pretty text-lg leading-relaxed text-muted-foreground">{post.excerpt}</p>
 
               <div className="mt-auto flex flex-wrap items-center justify-between gap-6 border-t pt-6">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                    <User className="h-5 w-5 text-muted-foreground" />
+                {post.author && (
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                      <User className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">{post.author}</span>
+                      {post.role && <span className="text-xs text-muted-foreground">{post.role}</span>}
+                    </div>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium">{post.author}</span>
-                    <span className="text-xs text-muted-foreground">{post.role}</span>
-                  </div>
-                </div>
+                )}
 
                 <div className="flex items-center gap-4">
                   <span className="flex items-center gap-1.5 text-sm text-muted-foreground">

@@ -5,11 +5,30 @@
     "singularName": "global-setting",
     "pluralName": "global-settings",
     "displayName": "Global Settings",
-    "description": ""
+    "description": "Paramètres globaux du site (logo, contacts, réseaux sociaux)"
   },
   "options": {},
   "pluginOptions": {},
   "attributes": {
+    "siteName": {
+      "required": true,
+      "type": "string"
+    },
+    "siteTagline": {
+      "type": "string"
+    },
+    "siteDescription": {
+      "type": "text"
+    },
+    "logo": {
+      "type": "media",
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "logoAlt": {
+      "type": "string"
+    },
     "address": {
       "type": "text"
     },
@@ -19,20 +38,31 @@
     "contactPhone": {
       "type": "string"
     },
+    "facebookUrl": {
+      "type": "string"
+    },
+    "twitterUrl": {
+      "type": "string"
+    },
+    "instagramUrl": {
+      "type": "string"
+    },
+    "linkedinUrl": {
+      "type": "string"
+    },
+    "youtubeUrl": {
+      "type": "string"
+    },
     "footerText": {
       "type": "text"
     },
-    "logo": {
-      "type": "media"
+    "copyrightText": {
+      "type": "string"
     },
     "primaryNavigation": {
       "component": "navigation.navigation-link",
       "repeatable": true,
       "type": "component"
-    },
-    "siteName": {
-      "required": true,
-      "type": "string"
     }
   }
 }

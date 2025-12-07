@@ -161,14 +161,16 @@ export function BlogPageClient({
                                                     alt={post.title}
                                                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                                                 />
-                                                <div className="absolute left-4 top-4">
-                                                    <Badge
-                                                        variant="secondary"
-                                                        className="bg-background/90 text-foreground backdrop-blur-sm hover:bg-background/100"
-                                                    >
-                                                        {post.category}
-                                                    </Badge>
-                                                </div>
+                                                {post.category && (
+                                                    <div className="absolute left-4 top-4">
+                                                        <Badge
+                                                            variant="secondary"
+                                                            className="bg-background/90 text-foreground backdrop-blur-sm hover:bg-background/100"
+                                                        >
+                                                            {post.category}
+                                                        </Badge>
+                                                    </div>
+                                                )}
                                             </div>
 
                                             <div className="flex flex-1 flex-col">
@@ -193,12 +195,14 @@ export function BlogPageClient({
                                                 </p>
 
                                                 <div className="mt-auto flex items-center justify-between border-t pt-4">
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted/50">
-                                                            <User className="h-4 w-4 text-muted-foreground" />
+                                                    {post.author && (
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted/50">
+                                                                <User className="h-4 w-4 text-muted-foreground" />
+                                                            </div>
+                                                            <span className="text-xs font-medium text-muted-foreground">{post.author}</span>
                                                         </div>
-                                                        <span className="text-xs font-medium text-muted-foreground">{post.author}</span>
-                                                    </div>
+                                                    )}
 
                                                     <Button
                                                         variant="ghost"
@@ -241,8 +245,8 @@ export function BlogPageClient({
                                                     key={page}
                                                     onClick={() => handlePageChange(page as number)}
                                                     className={`h-10 w-10 rounded-full text-sm font-medium transition-colors ${currentPage === page
-                                                            ? "bg-primary text-primary-foreground"
-                                                            : "bg-muted text-foreground hover:bg-muted/80"
+                                                        ? "bg-primary text-primary-foreground"
+                                                        : "bg-muted text-foreground hover:bg-muted/80"
                                                         }`}
                                                 >
                                                     {page}
