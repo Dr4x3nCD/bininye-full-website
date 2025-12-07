@@ -1,0 +1,29 @@
+{
+    "collectionName": "components_join_opportunities",
+    "info": {
+        "displayName": "Join Opportunity",
+        "icon": "briefcase"
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "required": true,
+            "type": "string"
+        },
+        "type": {
+            "type": "string"
+        },
+        "tags": {
+            "type": "text"
+        },
+        "image": {
+            "type": "media"
+        },
+        "description": {
+            "type": "text"
+        },
+        "points": {
+            "type": "text"
+        }
+    }
+}

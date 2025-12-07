@@ -1,0 +1,53 @@
+{
+  "kind": "collectionType",
+  "collectionName": "donation-intents",
+  "info": {
+    "singularName": "donation-intent",
+    "pluralName": "donation-intents",
+    "displayName": "Donation Intent",
+    "description": "Soumissions du modal d'intention de don (financier, matériel ou contact)."
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "firstName": {
+      "type": "string",
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": ["financial", "material", "contact"],
+      "required": true
+    },
+    "amountLabel": {
+      "type": "string"
+    },
+    "amountValue": {
+      "type": "float"
+    },
+    "materialCategory": {
+      "type": "string"
+    },
+    "materialDescription": {
+      "type": "text"
+    },
+    "message": {
+      "type": "text"
+    },
+    "sourcePage": {
+      "type": "string"
+    }
+  }
+}

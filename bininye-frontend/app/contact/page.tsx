@@ -6,14 +6,21 @@ import { ContactForm } from "@/components/contact/contact-form"
 import { ContactInfo } from "@/components/contact/contact-info"
 import { ContactMap } from "@/components/contact/contact-map"
 import { ContactFAQ } from "@/components/contact/contact-faq"
+import { fetchContactPage } from "@/lib/strapi-contact-page"
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const data = await fetchContactPage()
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1">
-        <HeroContact />
-        <ContactOptions />
+        <HeroContact data={{
+          title: data.heroTitle,
+          subtitle: data.heroSubtitle,
+          backgroundUrl: data.heroBackgroundUrl,
+        }} />
+        <ContactOptions data={{ options: data.options }} />
 
         <section className="py-12 lg:py-20">
           <div className="container mx-auto px-4 lg:px-8">
@@ -25,19 +32,19 @@ export default function ContactPage() {
 
               {/* Right Column: Info */}
               <div className="lg:col-span-5">
-                <ContactInfo />
+                <ContactInfo data={{ contactInfo: data.contactInfo }} />
               </div>
             </div>
           </div>
         </section>
 
         {/* FAQ Section - Full Width */}
-        <ContactFAQ />
+        <ContactFAQ data={{ faq: data.faq }} />
 
         {/* Map Section */}
         <section className="py-12 lg:py-20 bg-muted/20">
           <div className="container mx-auto px-4 lg:px-8">
-            <ContactMap />
+            <ContactMap data={{ mapEmbedUrl: data.mapEmbedUrl }} />
           </div>
         </section>
       </main>

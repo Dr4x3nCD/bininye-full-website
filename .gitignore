@@ -48,8 +48,6 @@ pnpm-error.log*
 yarn-error.log*
 .pnp
 .pnp.js
-package-lock.json
-pnpm-lock.yaml
 
 ############################
 # Build & Distribution
@@ -57,6 +55,8 @@ pnpm-lock.yaml
 dist/
 build/
 *.tsbuildinfo
+.next/
+out/
 
 ############################
 # Environment & Secrets
@@ -72,3 +72,26 @@ build/
 ############################
 .eslintcache
 .cache/
+
+############################
+# Strapi
+############################
+bininye/.tmp/
+bininye/.strapi/
+bininye/public/uploads/
+bininye/.cache/
+*.db
+*.sqlite
+
+############################
+# Next.js
+############################
+bininye-frontend/.next/
+bininye-frontend/out/
+bininye-frontend/.vercel/
+
+############################
+# Logs
+############################
+*.log
+logs/

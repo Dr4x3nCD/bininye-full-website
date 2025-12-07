@@ -29,7 +29,7 @@ Brancher `bininye-frontend` sur Strapi pour que **toutes les pages consomment le
 
 ## 2. Pages basées sur des listes (phase 1)
 
-### 2.1. Activités (`/activites` et `/activites/[id]`)
+### 2.1. Activités (`/activites` et `/activites/[slug]`)
 
 1. Dans `app/activites/page.tsx` :
    - Remplacer l’import `activities, categories, locations, statuses` (depuis `@/lib/activities-data`) par un fetch Strapi dans un **Server Component** ou via `getServerSideProps`/`fetch` côté serveur (App Router).
@@ -39,7 +39,7 @@ Brancher `bininye-frontend` sur Strapi pour que **toutes les pages consomment le
      - Les locations (peuvent venir d’un champ `location` distinct ou d’un type dédié plus tard).
      - Les statuts à partir d’un enum local (frontend) ou d’une liste dérivée des données.
 
-2. Dans `app/activites/[id]/page.tsx` :
+2. Dans `app/activites/[slug]/page.tsx` :
    - Remplacer `activities` par un fetch Strapi :
      - `GET /api/activities/:id?populate=deep` **ou** par slug si vous préférez (`:slug`).
    - Mettre à jour `generateStaticParams` pour utiliser :

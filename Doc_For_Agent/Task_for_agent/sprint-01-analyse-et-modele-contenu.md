@@ -417,25 +417,13 @@ Recommandation :
 - Une **liste claire de Single Types, Collection Types, Components et Relations** (ci-dessus) à implémenter dans le sprint 02.
 - Une première ébauche des **endpoints REST** à utiliser par Next.js.
 
-Le sprint suivant (Sprint 02) consistera à **créer concrètement ces content-types et components dans Strapi** via le MCP (ou l'admin Strapi), puis à configurer les permissions et tokens API.
+Le sprint suivant (Sprint 02) consistera à **créer concrètement ces content-types et components dans Strapi** 
 
----
-
-## 6. Précautions techniques importantes
-
-:::tip Guide complet de bonnes pratiques
-Pour une référence complète sur les bonnes pratiques Strapi avec MCP, consultez le document **BONNES_PRATIQUES_STRAPI_MCP.md** dans le dossier Task_for_agent.
-:::
 
 ### 6.1. Vérification d'existence avant création
 
 **IMPORTANT** : Avant de créer tout content-type, component ou entrée :
-1. **Vérifier systématiquement** si l'élément existe déjà dans Strapi (via MCP `list_content_types`, `list_components`, ou `get_entries`).
-2. Ne créer l'élément que s'il n'existe pas déjà.
-3. Si l'élément existe, évaluer s'il faut :
-   - Le réutiliser tel quel,
-   - Le mettre à jour (`update_content_type`, `update_component`, `update_entry`),
-   - Le recréer (supprimer puis recréer uniquement si nécessaire).
+1. **Vérifier systématiquement** si l'élément existe déjà dans Strapi 
 
 Cette pratique évite :
 - Les doublons dans la base de données,
@@ -466,4 +454,4 @@ Cause : Le timer de nettoyage `cleaningDist…` est lancé plusieurs fois simult
 
 - ✅ 2025-11-22 — Modèle de contenu Strapi validé par l’agent.
 - Couverture vérifiée par rapport à `bininye-frontend` : pages (`app/*`) et données statiques (`lib/activities-data.ts`, `lib/blog-data.tsx`, `lib/domains-data.ts` et tableaux internes des pages comme `qui-sommes-nous`, `equipes`, `photos-et-videos`, `temoignages`, `contribuer`, `contact`).
-- Aucune zone de texte/image/chiffre hardcodée manquante identifiée pour ce sprint ; les Single Types, Collection Types, Components et relations décrits ci-dessus sont cohérents avec l’interface actuelle et serviront de base au Sprint 02 (création concrète dans Strapi via MCP).
+- Aucune zone de texte/image/chiffre hardcodée manquante identifiée pour ce sprint ; les Single Types, Collection Types, Components et relations décrits ci-dessus sont cohérents avec l’interface actuelle et serviront de base au Sprint 02 (création concrète dans Strapi ).

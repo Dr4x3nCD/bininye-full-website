@@ -1,6 +1,16 @@
 import { Badge } from "@/components/ui/badge"
 
-export function HeroContact() {
+interface HeroContactProps {
+  data: {
+    title: string;
+    subtitle: string;
+    backgroundUrl: string | null;
+  }
+}
+
+export function HeroContact({ data }: HeroContactProps) {
+  const heroImage = data.backgroundUrl || "/placeholder.svg?height=600&width=800"
+
   return (
     <section className="relative overflow-hidden bg-muted/30 py-20 lg:py-32">
       <div className="container mx-auto px-4 lg:px-8">
@@ -10,17 +20,16 @@ export function HeroContact() {
               Contactez-nous
             </Badge>
             <h1 className="font-serif mb-6 text-balance text-5xl font-bold leading-tight text-foreground md:text-6xl">
-              Nous sommes à votre écoute.
+              {data.title}
             </h1>
             <p className="text-pretty text-xl leading-relaxed text-muted-foreground md:text-2xl">
-              Que vous souhaitiez poser une question, collaborer avec nous ou rejoindre notre mission, notre équipe est
-              disponible pour vous répondre.
+              {data.subtitle}
             </p>
           </div>
           <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
             <div className="relative aspect-[4/3] overflow-hidden rounded-3xl shadow-2xl">
               <img
-                src="/office-meeting-africa.jpg"
+                src={heroImage}
                 alt="Notre équipe à votre écoute"
                 className="h-full w-full object-cover"
               />

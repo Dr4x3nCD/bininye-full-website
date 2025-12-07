@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "volunteer-applications",
+  "info": {
+    "singularName": "volunteer-application",
+    "pluralName": "volunteer-applications",
+    "displayName": "Volunteer Application",
+    "description": "Soumissions du formulaire de candidature bénévole / nous rejoindre."
+  },
+  "options": {},
+  "pluginOptions": {},
+  "attributes": {
+    "firstName": {
+      "type": "string",
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "opportunityType": {
+      "type": "string"
+    },
+    "motivation": {
+      "type": "text",
+      "required": true
+    },
+    "sourcePage": {
+      "type": "string"
+    }
+  }
+}

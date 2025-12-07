@@ -87,7 +87,7 @@ export function Header() {
           >
             <Link href="/contribuer">
               <Heart className="h-4 w-4 fill-current" />
-              <span className="font-semibold">Faire un don</span>
+              <span className="font-semibold">Contribuer</span>
             </Link>
           </Button>
 
@@ -107,7 +107,7 @@ export function Header() {
                 <Button asChild className="mt-4 gap-2 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90">
                   <Link href="/contribuer" onClick={() => setIsOpen(false)}>
                     <Heart className="h-4 w-4 fill-current" />
-                    Faire un don
+                    Contribuer
                   </Link>
                 </Button>
               </nav>

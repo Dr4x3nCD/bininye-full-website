@@ -1,0 +1,18 @@
+{
+    "collectionName": "components_activity_activity_program_items",
+    "info": {
+        "displayName": "Activity Program Item",
+        "icon": "clock"
+    },
+    "options": {},
+    "attributes": {
+        "time": {
+            "required": true,
+            "type": "string"
+        },
+        "title": {
+            "required": true,
+            "type": "string"
+        }
+    }
+}

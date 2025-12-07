@@ -10,43 +10,37 @@
   "options": {},
   "pluginOptions": {},
   "attributes": {
-    "achievementsStats": {
-      "component": "shared.stat-item",
-      "repeatable": true,
-      "type": "component"
-    },
-    "faqs": {
-      "component": "shared.faq-item",
-      "repeatable": true,
-      "type": "component"
-    },
-    "featuredTeamMembers": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::team-member.team-member"
-    },
-    "heroBackground": {
-      "type": "media"
+    "heroTitle": {
+      "type": "string"
     },
     "heroSubtitle": {
       "type": "text"
     },
-    "heroTitle": {
+    "heroBackground": {
+      "type": "media"
+    },
+    "storyTitle": {
+      "type": "string"
+    },
+    "storyRichText": {
+      "type": "richtext"
+    },
+    "storyImage": {
+      "type": "media"
+    },
+    "missionTitle": {
       "type": "string"
     },
     "missionText": {
       "type": "richtext"
     },
-    "missionTitle": {
+    "visionTitle": {
       "type": "string"
     },
-    "storyImage": {
-      "type": "media"
-    },
-    "storyRichText": {
+    "visionText": {
       "type": "richtext"
     },
-    "storyTitle": {
+    "valuesTitle": {
       "type": "string"
     },
     "values": {
@@ -54,14 +48,38 @@
       "repeatable": true,
       "type": "component"
     },
-    "valuesTitle": {
+    "achievementsTitle": {
       "type": "string"
     },
-    "visionText": {
-      "type": "richtext"
+    "achievementsSubtitle": {
+      "type": "text"
     },
-    "visionTitle": {
+    "achievementsStats": {
+      "component": "shared.stat-item",
+      "repeatable": true,
+      "type": "component"
+    },
+    "teamSectionTitle": {
       "type": "string"
+    },
+    "teamSectionSubtitle": {
+      "type": "text"
+    },
+    "featuredTeamMembers": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::team-member.team-member"
+    },
+    "faqSectionTitle": {
+      "type": "string"
+    },
+    "faqSectionSubtitle": {
+      "type": "text"
+    },
+    "faqs": {
+      "component": "shared.faq-item",
+      "repeatable": true,
+      "type": "component"
     }
   }
 }

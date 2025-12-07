@@ -8,16 +8,13 @@ Implémenter dans Strapi **tous les Single Types, Collection Types et Components
 
 ## 1. Création des components Strapi
 
-> À faire dans l'admin Strapi ou via MCP (`create_component`) en suivant le modèle du sprint 01.
+> À faire dans l'admin Strapi via le **Content-Type Builder** en suivant le modèle du sprint 01.
 
 **IMPORTANT - Vérification avant création** :
-- Avant de créer chaque component, utiliser `list_components` ou `get_component_schema` pour vérifier s'il existe déjà.
-- Si le component existe déjà :
-  - Vérifier son schéma avec `get_component_schema`.
-  - Utiliser `update_component` pour le mettre à jour si nécessaire.
-  - Ne le recréer que si absolument nécessaire (supprimer puis recréer).
+- Avant de créer chaque component, vérifier dans l'admin s'il existe déjà.
+- Si le component existe déjà, le modifier ou le supprimer/recréer si nécessaire.
 
-**Note** : Respecter les namespaces logiques (`shared`, `contact`, `activity`, etc.) et le format `namespace.component-name`. Voir section 3 du guide BONNES_PRATIQUES_STRAPI_MCP.md.
+**Note** : Respecter les namespaces logiques (`shared`, `contact`, `activity`, etc.) et le format `namespace.component-name`.
 
 1. Créer les components du namespace `shared` :
    - `shared.value` (title, iconKey)
@@ -52,16 +49,13 @@ Implémenter dans Strapi **tous les Single Types, Collection Types et Components
 
 ## 2. Création des Collection Types
 
-> Utiliser l'admin Strapi ou MCP `create_content_type`. Respecter les types simples (string, text, richtext, media, relation, enum).
+> Utiliser l'admin Strapi via le **Content-Type Builder**. Respecter les types simples (string, text, richtext, media, relation, enum).
 
 **IMPORTANT - Vérification avant création** :
-- Avant de créer chaque collection, utiliser `list_content_types` pour vérifier si elle existe déjà.
-- Si le content-type existe déjà :
-  - Vérifier son schéma avec `get_content_type_schema`.
-  - Utiliser `update_content_type` pour ajouter ou modifier des attributs.
-  - Ne le supprimer/recréer que si le schéma est irrécupérable.
+- Avant de créer chaque collection, vérifier dans l'admin s'il existe déjà.
+- Si le content-type existe déjà, le modifier ou le supprimer/recréer si nécessaire.
 
-**Note critique** : Toujours utiliser le format kebab-case pour `singularName` et `pluralName`. Définir `pluginOptions.content-manager.visible = true` et `pluginOptions.content-type-builder.visible = true` pour rendre le content-type visible dans l'admin. Voir section 2 du guide BONNES_PRATIQUES_STRAPI_MCP.md.
+**Note critique** : Toujours utiliser le format kebab-case pour `singularName` et `pluralName`. Définir `pluginOptions.content-manager.visible = true` et `pluginOptions.content-type-builder.visible = true` pour rendre le content-type visible dans l'admin.
 
 Créer les collections suivantes :
 
@@ -163,7 +157,7 @@ Pour chacun :
 ## 6. Sanity checks
 
 **IMPORTANT - Vérification avant création d'entrées** :
-- Avant de créer des entrées de test, utiliser `get_entries` pour vérifier si des entrées existent déjà.
+- Avant de créer des entrées de test, vérifier dans le Content Manager si des entrées existent déjà.
 - Ne créer que les entrées manquantes pour éviter les doublons.
 
 1. Depuis l'onglet **Content Manager**, créer **au moins 1 entrée de test** dans :
@@ -199,20 +193,15 @@ Le sprint suivant (Sprint 03) consistera à **migrer le contenu existant** du fr
 
 ---
 
-## 7. Statut d'exécution (agent)
+## 7. Statut d'exécution
 
-- ✅ Components : tous les components prévus dans le Sprint 01 ont été créés via MCP (`shared.*`, `navigation.link`, `contact.*`, `activity.*`, `join.*`, `contribute.*`, `domain.*`), après vérification préalable de leur absence.
-- ✅ Collection Types : toutes les collections listées (activity, activity-category, blog-post, blog-category, blog-rubric, author, team-member, testimonial, media-item, domain, volunteer-opportunity, volunteer-story, partner) ont été créées via MCP, en évitant les noms réservés (ex. `status` → `activityStatus`).
-- ✅ Single Types : tous les single types (global-setting, homepage, about-page, teams-page, domains-page, join-page, gallery-page, testimonials-page, contact-page, contribute-page) ont été créés via MCP, en corrigeant :
-  - les relations (`manyToMany` remplacé par `oneToMany` côté MCP lorsque nécessaire),
-  - les erreurs de `singularName`/`pluralName` identiques,
-  - les erreurs génériques `-32603 undefined undefined` en appliquant la procédure documentée (vérification, éventuelle suppression puis recréation après délai).
-- ✅ Entrées de test minimales créées via MCP (après vérification avec `get_entries` et délai de 5s entre chaque création), par exemple :
+- ✅ Components : tous les components prévus dans le Sprint 01 ont été créés (`shared.*`, `navigation.link`, `contact.*`, `activity.*`, `join.*`, `contribute.*`, `domain.*`).
+- ✅ Collection Types : toutes les collections listées (activity, activity-category, blog-post, blog-category, blog-rubric, author, team-member, testimonial, media-item, domain, volunteer-opportunity, volunteer-story, partner) ont été créées, en évitant les noms réservés (ex. `status` → `activityStatus`).
+- ✅ Single Types : tous les single types (global-setting, homepage, about-page, teams-page, domains-page, join-page, gallery-page, testimonials-page, contact-page, contribute-page) ont été créés.
+- ✅ Entrées de test minimales créées, par exemple :
   - `activity-category` : `Catégorie test activité` (`slug: categorie-test-activite`).
   - `activity` : `Activité test 1` (`slug: activite-test-1`, `activityStatus: upcoming`).
   - `blog-category` : `Catégorie blog test` (`slug: categorie-blog-test`).
   - `blog-post` : `Article test agent` (`slug: article-test-agent`, contenu de test).
   - `team-member` : `Membre test agent` (isFeatured, order=1).
-  - D'autres types pourront être peuplés plus largement au Sprint 03 lors de la migration des données du frontend.
-- ✅ Documentation : les erreurs rencontrées (noms d'attributs réservés, relations `manyToMany` non acceptées via MCP, `singularName`/`pluralName` identiques, erreurs génériques `-32603`) ont été intégrées dans `BONNES_PRATIQUES_STRAPI_MCP.md` avec des procédures concrètes.
 - ⚠️ Permissions & API Token : la configuration recommandée (rôle Public en lecture seule, API Token read-only dédié au frontend, CORS via `CORS_ORIGIN`) est décrite dans la section 5 ci-dessus et doit être appliquée manuellement dans l'admin Strapi et les fichiers de config.

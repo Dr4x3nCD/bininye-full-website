@@ -8,9 +8,9 @@ import {
 
 export default async function ActivitesPage() {
   const res = (await strapiClient.collection("activities").find({
-    populate: ["image", "category", "tags"],
+    populate: ["image", "domain", "category", "tags"],
     sort: "date:desc",
-  })) as StrapiListResponse<StrapiActivityEntity>
+  })) as unknown as StrapiListResponse<StrapiActivityEntity>
 
   const activities = mapStrapiActivities(res)
 

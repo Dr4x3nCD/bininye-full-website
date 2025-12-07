@@ -2,8 +2,7 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { HeroBlog } from "@/components/blog/hero-blog"
 import { FeaturedPost } from "@/components/blog/featured-post"
-import { BlogFilters } from "@/components/blog/blog-filters"
-import { ArticleGrid } from "@/components/blog/article-grid"
+import { BlogPageClient } from "@/components/blog/blog-page-client"
 import { RubricsSection } from "@/components/blog/rubrics-section"
 import { MostReadSection } from "@/components/blog/most-read-section"
 import { strapiClient } from "@/lib/strapi-client"
@@ -52,8 +51,11 @@ export default async function BlogPage() {
       <main className="flex-1">
         <HeroBlog />
         {featured && <FeaturedPost post={featured} />}
-        <BlogFilters categories={categories} />
-        <ArticleGrid posts={otherPosts} />
+        <BlogPageClient
+          posts={otherPosts}
+          categories={categories}
+          rubrics={rubricItems}
+        />
         <RubricsSection items={rubricItems} />
         <MostReadSection posts={mostReadItems} />
       </main>

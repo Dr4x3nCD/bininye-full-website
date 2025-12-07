@@ -13,6 +13,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export function ContactForm() {
   const searchParams = useSearchParams()
   const [subject, setSubject] = useState("")
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   useEffect(() => {
     const param = searchParams.get("subject")
@@ -20,24 +22,75 @@ export function ContactForm() {
     else if (param === "general") setSubject("general")
   }, [searchParams])
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setStatus("loading")
+    setErrorMessage(null)
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+
+    const payload = {
+      firstName: formData.get("firstName")?.toString() ?? "",
+      lastName: formData.get("lastName")?.toString() ?? "",
+      email: formData.get("email")?.toString() ?? "",
+      phone: formData.get("phone")?.toString() ?? "",
+      subject: subject || formData.get("subject")?.toString() || null,
+      message: formData.get("message")?.toString() ?? "",
+      sourcePage: "/contact",
+    }
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`)
+      }
+
+      setStatus("success")
+      form.reset()
+      setSubject("")
+    } catch (error) {
+      console.error("[ContactForm] submit failed", error)
+      setStatus("error")
+      setErrorMessage("Une erreur est survenue lors de l'envoi du message. Merci de réessayer.")
+    }
+  }
+
   return (
     <div id="contact-form" className="scroll-mt-24">
       <h2 className="font-serif mb-8 text-balance text-3xl font-bold md:text-4xl">Envoyez-nous un message</h2>
       <Card className="border-2 shadow-lg">
         <CardContent className="p-6 sm:p-8">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="grid gap-6 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="firstName" className="text-base font-semibold">
                   Prénom
                 </Label>
-                <Input id="firstName" placeholder="Votre prénom" className="h-12 rounded-xl bg-muted/30" />
+                <Input
+                  id="firstName"
+                  name="firstName"
+                  placeholder="Votre prénom"
+                  className="h-12 rounded-xl bg-muted/30"
+                  required
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastName" className="text-base font-semibold">
                   Nom
                 </Label>
-                <Input id="lastName" placeholder="Votre nom" className="h-12 rounded-xl bg-muted/30" />
+                <Input
+                  id="lastName"
+                  name="lastName"
+                  placeholder="Votre nom"
+                  className="h-12 rounded-xl bg-muted/30"
+                  required
+                />
               </div>
             </div>
 
@@ -47,9 +100,11 @@ export function ContactForm() {
               </Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="votre.email@exemple.com"
                 className="h-12 rounded-xl bg-muted/30"
+                required
               />
             </div>
 
@@ -58,13 +113,24 @@ export function ContactForm() {
                 <Label htmlFor="phone" className="text-base font-semibold">
                   Téléphone
                 </Label>
-                <Input id="phone" type="tel" placeholder="+225 XX XX XX XX" className="h-12 rounded-xl bg-muted/30" />
+                <Input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  placeholder="+225 XX XX XX XX"
+                  className="h-12 rounded-xl bg-muted/30"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="organization" className="text-base font-semibold">
                   Entreprise / Organisation (Optionnel)
                 </Label>
-                <Input id="organization" placeholder="Nom de votre structure" className="h-12 rounded-xl bg-muted/30" />
+                <Input
+                  id="organization"
+                  name="organization"
+                  placeholder="Nom de votre structure"
+                  className="h-12 rounded-xl bg-muted/30"
+                />
               </div>
             </div>
 
@@ -91,9 +157,11 @@ export function ContactForm() {
               </Label>
               <Textarea
                 id="message"
+                name="message"
                 placeholder="Votre message..."
                 rows={6}
                 className="resize-none rounded-xl bg-muted/30"
+                required
               />
             </div>
 
@@ -111,12 +179,30 @@ export function ContactForm() {
               <Button
                 type="submit"
                 size="lg"
-                className="h-12 rounded-full bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90"
+                disabled={status === "loading"}
+                className="h-12 rounded-full bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 disabled:opacity-70"
               >
-                <Send className="mr-2 h-4 w-4" />
-                Envoyer
+                {status === "loading" ? (
+                  <span className="flex items-center gap-2">
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    Envoi en cours...
+                  </span>
+                ) : (
+                  <>
+                    <Send className="mr-2 h-4 w-4" />
+                    Envoyer
+                  </>
+                )}
               </Button>
             </div>
+          {status === "success" && (
+            <p className="mt-4 text-sm font-medium text-green-600">
+              Votre message a bien été envoyé. Merci pour votre confiance.
+            </p>
+          )}
+          {status === "error" && errorMessage && (
+            <p className="mt-4 text-sm font-medium text-red-600">{errorMessage}</p>
+          )}
           </form>
         </CardContent>
       </Card>

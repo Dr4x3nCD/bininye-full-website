@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -8,7 +9,57 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CheckCircle2, Send } from "lucide-react"
 
-export function ApplicationForm() {
+interface ApplicationFormProps {
+  data: {
+    title: string;
+    text: string;
+  }
+}
+
+export function ApplicationForm({ data }: ApplicationFormProps) {
+  const [opportunityType, setOpportunityType] = useState("")
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setStatus("loading")
+    setErrorMessage(null)
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+
+    const payload = {
+      firstName: formData.get("firstName")?.toString() ?? "",
+      lastName: formData.get("lastName")?.toString() ?? "",
+      email: formData.get("email")?.toString() ?? "",
+      phone: formData.get("phone")?.toString() ?? "",
+      opportunityType: opportunityType || formData.get("opportunity")?.toString() || null,
+      motivation: formData.get("motivation")?.toString() ?? "",
+      sourcePage: "/nous-rejoindre",
+    }
+
+    try {
+      const res = await fetch("/api/volunteer-application", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`)
+      }
+
+      setStatus("success")
+      form.reset()
+      setOpportunityType("")
+    } catch (error) {
+      console.error("[ApplicationForm] submit failed", error)
+      setStatus("error")
+      setErrorMessage("Une erreur est survenue lors de l'envoi de votre candidature. Merci de réessayer.")
+    }
+  }
+
   return (
     <section id="candidature" className="py-20 lg:py-28">
       <div className="container mx-auto px-4">
@@ -16,10 +67,9 @@ export function ApplicationForm() {
           <div className="grid gap-12 lg:grid-cols-5">
             {/* Left Column: Motivation */}
             <div className="lg:col-span-2">
-              <h2 className="mb-6 text-3xl font-bold md:text-4xl">Rejoignez l'aventure</h2>
+              <h2 className="mb-6 text-3xl font-bold md:text-4xl">{data.title}</h2>
               <p className="mb-8 text-lg text-muted-foreground">
-                Plus de 150 bénévoles nous ont déjà rejoints. Pourquoi pas vous ? Remplissez ce formulaire, nous vous
-                répondrons sous 48h.
+                {data.text}
               </p>
 
               <div className="space-y-6">
@@ -57,38 +107,38 @@ export function ApplicationForm() {
             <div className="lg:col-span-3">
               <Card className="border-none shadow-2xl">
                 <CardContent className="p-6 sm:p-8">
-                  <form className="space-y-6">
+                  <form className="space-y-6" onSubmit={handleSubmit}>
                     <div className="grid gap-6 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label htmlFor="firstName">Prénom</Label>
-                        <Input id="firstName" placeholder="Ex: Jean" className="h-12" />
+                        <Input id="firstName" name="firstName" placeholder="Ex: Jean" className="h-12" required />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="lastName">Nom</Label>
-                        <Input id="lastName" placeholder="Ex: Kouassi" className="h-12" />
+                        <Input id="lastName" name="lastName" placeholder="Ex: Kouassi" className="h-12" required />
                       </div>
                     </div>
 
                     <div className="grid gap-6 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" placeholder="jean@exemple.com" className="h-12" />
+                        <Input id="email" name="email" type="email" placeholder="jean@exemple.com" className="h-12" required />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="phone">Téléphone</Label>
-                        <Input id="phone" type="tel" placeholder="+225 07 XX XX XX XX" className="h-12" />
+                        <Input id="phone" name="phone" type="tel" placeholder="+225 07 XX XX XX XX" className="h-12" required />
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="opportunity">Type d'opportunité souhaitée</Label>
-                      <Select>
+                      <Label htmlFor="opportunity">Type d&apos;opportunité souhaitée</Label>
+                      <Select value={opportunityType} onValueChange={setOpportunityType}>
                         <SelectTrigger className="h-12">
                           <SelectValue placeholder="Sélectionnez une option" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="terrain">Bénévolat sur le terrain</SelectItem>
-                          <SelectItem value="emploi">Opportunités d'emploi</SelectItem>
+                          <SelectItem value="emploi">Opportunités d&apos;emploi</SelectItem>
                           <SelectItem value="stage">Stages et formations</SelectItem>
                           <SelectItem value="competences">Bénévolat de compétences</SelectItem>
                           <SelectItem value="autre">Autre / Je ne sais pas encore</SelectItem>
@@ -100,14 +150,39 @@ export function ApplicationForm() {
                       <Label htmlFor="message">Pourquoi souhaitez-vous nous rejoindre ?</Label>
                       <Textarea
                         id="message"
+                        name="motivation"
                         placeholder="Racontez-nous brièvement votre parcours et ce qui vous motive..."
                         className="min-h-[150px] resize-y"
+                        required
                       />
                     </div>
 
-                    <Button type="submit" size="lg" className="h-14 w-full text-lg">
-                      Envoyer ma candidature <Send className="ml-2 h-5 w-5" />
+                    <Button
+                      type="submit"
+                      size="lg"
+                      disabled={status === "loading"}
+                      className="h-14 w-full text-lg disabled:opacity-70"
+                    >
+                      {status === "loading" ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                          Envoi en cours...
+                        </span>
+                      ) : (
+                        <>
+                          Envoyer ma candidature <Send className="ml-2 h-5 w-5" />
+                        </>
+                      )}
                     </Button>
+
+                    {status === "success" && (
+                      <p className="text-center text-sm font-medium text-green-600">
+                        Votre candidature a bien été envoyée. Merci pour votre engagement.
+                      </p>
+                    )}
+                    {status === "error" && errorMessage && (
+                      <p className="text-center text-sm font-medium text-red-600">{errorMessage}</p>
+                    )}
 
                     <p className="text-center text-xs text-muted-foreground">
                       En envoyant ce formulaire, vous acceptez notre politique de confidentialité.

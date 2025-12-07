@@ -1,0 +1,21 @@
+{
+    "collectionName": "components_contribute_achievement_items",
+    "info": {
+        "displayName": "Achievement Item",
+        "icon": "check-circle"
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "required": true,
+            "type": "string"
+        },
+        "description": {
+            "required": true,
+            "type": "text"
+        },
+        "image": {
+            "type": "media"
+        }
+    }
+}

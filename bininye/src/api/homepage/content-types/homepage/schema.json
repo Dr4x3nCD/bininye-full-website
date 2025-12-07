@@ -10,36 +10,14 @@
   "options": {},
   "pluginOptions": {},
   "attributes": {
-    "aboutIntro": {
-      "type": "richtext"
-    },
-    "aboutMainStats": {
-      "component": "shared.stat-item",
-      "repeatable": true,
-      "type": "component"
-    },
-    "aboutTitle": {
+    "heroTitle": {
       "type": "string"
     },
-    "eventsSubtitle": {
-      "type": "string"
+    "heroSubtitle": {
+      "type": "text"
     },
-    "eventsTitle": {
-      "type": "string"
-    },
-    "galleryHighlightMedia": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::media-item.media-item"
-    },
-    "gallerySubtitle": {
-      "type": "string"
-    },
-    "galleryTitle": {
-      "type": "string"
-    },
-    "heroBackground": {
-      "type": "media"
+    "heroDescription": {
+      "type": "text"
     },
     "heroPrimaryCtaLabel": {
       "type": "string"
@@ -53,10 +31,81 @@
     "heroSecondaryCtaUrl": {
       "type": "string"
     },
-    "heroSubtitle": {
+    "heroBackground": {
+      "type": "media"
+    },
+    "valuesTitle": {
+      "type": "string"
+    },
+    "valuesIntro": {
       "type": "text"
     },
-    "heroTitle": {
+    "values": {
+      "component": "shared.value",
+      "repeatable": true,
+      "type": "component"
+    },
+    "aboutTitle": {
+      "type": "string"
+    },
+    "aboutIntro": {
+      "type": "richtext"
+    },
+    "aboutMissionTitle": {
+      "type": "string"
+    },
+    "aboutMissionDescription": {
+      "type": "text"
+    },
+    "aboutMissions": {
+      "component": "shared.value",
+      "repeatable": true,
+      "type": "component"
+    },
+    "aboutMainStats": {
+      "component": "shared.stat-item",
+      "repeatable": true,
+      "type": "component"
+    },
+    "aboutImage1": {
+      "type": "media"
+    },
+    "aboutImage2": {
+      "type": "media"
+    },
+    "aboutCtaLabel": {
+      "type": "string"
+    },
+    "aboutCtaUrl": {
+      "type": "string"
+    },
+    "domainsTitle": {
+      "type": "string"
+    },
+    "domainsSubtitle": {
+      "type": "text"
+    },
+    "domainsDescription": {
+      "type": "text"
+    },
+    "domainsImage": {
+      "type": "media"
+    },
+    "highlightedDomains": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::domain.domain"
+    },
+    "domainsCtaLabel": {
+      "type": "string"
+    },
+    "domainsCtaUrl": {
+      "type": "string"
+    },
+    "eventsTitle": {
+      "type": "string"
+    },
+    "eventsSubtitle": {
       "type": "string"
     },
     "highlightedEvents": {
@@ -64,27 +113,53 @@
       "relation": "oneToMany",
       "target": "api::activity.activity"
     },
-    "highlightedPartners": {
+    "contributeTitle": {
+      "type": "string"
+    },
+    "contributeSubtitle": {
+      "type": "string"
+    },
+    "contributeDescription": {
+      "type": "text"
+    },
+    "contributeStats": {
+      "component": "shared.stat-item",
+      "repeatable": true,
+      "type": "component"
+    },
+    "contributePrimaryCtaLabel": {
+      "type": "string"
+    },
+    "contributePrimaryCtaUrl": {
+      "type": "string"
+    },
+    "contributeSecondaryCtaLabel": {
+      "type": "string"
+    },
+    "contributeSecondaryCtaUrl": {
+      "type": "string"
+    },
+    "galleryTitle": {
+      "type": "string"
+    },
+    "gallerySubtitle": {
+      "type": "string"
+    },
+    "galleryHighlightMedia": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::partner.partner"
-    },
-    "partnersSubtitle": {
-      "type": "string"
+      "target": "api::media-item.media-item"
     },
     "partnersTitle": {
       "type": "string"
     },
-    "values": {
-      "component": "shared.value",
-      "repeatable": true,
-      "type": "component"
-    },
-    "valuesIntro": {
-      "type": "text"
-    },
-    "valuesTitle": {
+    "partnersSubtitle": {
       "type": "string"
+    },
+    "highlightedPartners": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::partner.partner"
     }
   }
 }

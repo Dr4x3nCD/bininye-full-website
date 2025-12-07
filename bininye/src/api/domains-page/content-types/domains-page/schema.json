@@ -10,19 +10,37 @@
   "options": {},
   "pluginOptions": {},
   "attributes": {
-    "heroBackground": {
-      "type": "media"
+    "heroTitle": {
+      "type": "string"
     },
     "heroSubtitle": {
       "type": "text"
     },
-    "heroTitle": {
+    "heroBackground": {
+      "type": "media"
+    },
+    "introTitle": {
       "type": "string"
     },
     "introText": {
       "type": "text"
     },
-    "introTitle": {
+    "ctaTitle": {
+      "type": "string"
+    },
+    "ctaText": {
+      "type": "text"
+    },
+    "ctaPrimaryLabel": {
+      "type": "string"
+    },
+    "ctaPrimaryUrl": {
+      "type": "string"
+    },
+    "ctaSecondaryLabel": {
+      "type": "string"
+    },
+    "ctaSecondaryUrl": {
       "type": "string"
     }
   }

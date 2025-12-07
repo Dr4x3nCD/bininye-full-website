@@ -2,49 +2,78 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 
-export function HeroSection() {
+interface HeroSectionProps {
+  title?: string
+  subtitle?: string
+  description?: string
+  primaryCtaLabel?: string
+  primaryCtaUrl?: string
+  secondaryCtaLabel?: string
+  secondaryCtaUrl?: string
+  backgroundImageUrl?: string | null
+}
+
+export function HeroSection({
+  title,
+  subtitle,
+  description,
+  primaryCtaLabel,
+  primaryCtaUrl,
+  secondaryCtaLabel,
+  secondaryCtaUrl,
+  backgroundImageUrl,
+}: HeroSectionProps) {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <div className="container relative mx-auto px-4 py-20 lg:px-8 lg:py-32">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="space-y-8 text-center lg:text-left">
-            <div className="inline-block">
-              <p className="font-serif text-xl italic text-secondary md:text-2xl">Pour la joie</p>
-            </div>
+            {subtitle && (
+              <div className="inline-block">
+                <p className="font-serif text-xl italic text-secondary md:text-2xl">{subtitle}</p>
+              </div>
+            )}
             <h1 className="font-serif text-balance text-5xl font-bold leading-[1.1] tracking-tight text-foreground md:text-6xl lg:text-7xl">
-              Bienvenue à l'ONG{" "}
-              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Binin Ye</span>
+              {title || "[Donnée non récupérée: heroTitle]"}
             </h1>
             <p className="text-pretty text-lg leading-relaxed text-muted-foreground md:text-xl lg:text-2xl">
-              Une Organisation Non Gouvernementale engagée dans la création d'un avenir durable pour tous.
+              {description || "[Donnée non récupérée: heroDescription]"}
             </p>
             <div className="flex flex-wrap justify-center gap-4 lg:justify-start">
-              <Button
-                asChild
-                size="lg"
-                className="h-14 rounded-full bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90"
-              >
-                <Link href="/qui-sommes-nous">
-                  En Savoir Plus
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="h-14 rounded-full border-2 px-8 text-base font-semibold bg-transparent"
-              >
-                <Link href="/contribuer">Contribuer</Link>
-              </Button>
+              {primaryCtaLabel && primaryCtaUrl ? (
+                <Button
+                  asChild
+                  size="lg"
+                  className="h-14 rounded-full bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90"
+                >
+                  <Link href={primaryCtaUrl}>
+                    {primaryCtaLabel}
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+              ) : (
+                <Button disabled className="h-14 rounded-full px-8 text-base font-semibold opacity-50">
+                  [CTA non configuré]
+                </Button>
+              )}
+              {secondaryCtaLabel && secondaryCtaUrl && (
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="h-14 rounded-full border-2 px-8 text-base font-semibold bg-transparent"
+                >
+                  <Link href={secondaryCtaUrl}>{secondaryCtaLabel}</Link>
+                </Button>
+              )}
             </div>
           </div>
 
           <div className="relative">
             <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-2xl">
               <img
-                src="/happy-african-people-smiling-community-success-sto.jpg"
-                alt="Femme et enfant souriants"
+                src={backgroundImageUrl || "/placeholder.svg"}
+                alt="Image Hero"
                 className="h-full w-full object-cover"
               />
               {/* Overlay gradient subtil */}

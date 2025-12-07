@@ -443,10 +443,14 @@ export interface ApiAboutPageAboutPage extends Struct.SingleTypeSchema {
   };
   attributes: {
     achievementsStats: Schema.Attribute.Component<'shared.stat-item', true>;
+    achievementsSubtitle: Schema.Attribute.Text;
+    achievementsTitle: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     faqs: Schema.Attribute.Component<'shared.faq-item', true>;
+    faqSectionSubtitle: Schema.Attribute.Text;
+    faqSectionTitle: Schema.Attribute.String;
     featuredTeamMembers: Schema.Attribute.Relation<
       'oneToMany',
       'api::team-member.team-member'
@@ -466,6 +470,8 @@ export interface ApiAboutPageAboutPage extends Struct.SingleTypeSchema {
     storyImage: Schema.Attribute.Media;
     storyRichText: Schema.Attribute.RichText;
     storyTitle: Schema.Attribute.String;
+    teamSectionSubtitle: Schema.Attribute.Text;
+    teamSectionTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -529,6 +535,7 @@ export interface ApiActivityActivity extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     date: Schema.Attribute.Date;
     description: Schema.Attribute.RichText;
+    domain: Schema.Attribute.Relation<'manyToOne', 'api::domain.domain'>;
     image: Schema.Attribute.Media;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -542,6 +549,10 @@ export interface ApiActivityActivity extends Struct.CollectionTypeSchema {
       true
     >;
     participantsLabel: Schema.Attribute.String;
+    programItems: Schema.Attribute.Component<
+      'activity.activity-program-item',
+      true
+    >;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     tags: Schema.Attribute.Component<'shared.tag', true>;
@@ -692,6 +703,42 @@ export interface ApiBlogRubricBlogRubric extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiContactMessageContactMessage
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'contact-messages';
+  info: {
+    description: 'Soumissions du formulaire de contact du site.';
+    displayName: 'Contact Message';
+    pluralName: 'contact-messages';
+    singularName: 'contact-message';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    firstName: Schema.Attribute.String & Schema.Attribute.Required;
+    lastName: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact-message.contact-message'
+    > &
+      Schema.Attribute.Private;
+    message: Schema.Attribute.Text & Schema.Attribute.Required;
+    phone: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    sourcePage: Schema.Attribute.String;
+    subject: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiContactPageContactPage extends Struct.SingleTypeSchema {
   collectionName: 'contact-pages';
   info: {
@@ -740,16 +787,35 @@ export interface ApiContributePageContributePage
     draftAndPublish: false;
   };
   attributes: {
+    achievementsSectionSubtitle: Schema.Attribute.Text;
+    achievementsSectionTitle: Schema.Attribute.String;
     contributionWays: Schema.Attribute.Component<
       'contribute.contribution-way',
       true
     >;
+    contributionWaysSectionSubtitle: Schema.Attribute.Text;
+    contributionWaysSectionTitle: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    donationSectionSubtitle: Schema.Attribute.Text;
+    donationSectionTitle: Schema.Attribute.String;
     donationTiers: Schema.Attribute.Component<'contribute.donation-tier', true>;
     faqs: Schema.Attribute.Component<'shared.faq-item', true>;
+    faqSectionSubtitle: Schema.Attribute.Text;
+    faqSectionTitle: Schema.Attribute.String;
+    featuredActivities: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::activity.activity'
+    >;
+    fundAllocations: Schema.Attribute.Component<
+      'contribute.fund-allocation',
+      true
+    >;
     heroBackground: Schema.Attribute.Media;
+    heroBadges: Schema.Attribute.Text;
+    heroPrimaryCtaLabel: Schema.Attribute.String;
+    heroSecondaryCtaLabel: Schema.Attribute.String;
     heroSubtitle: Schema.Attribute.Text;
     heroTitle: Schema.Attribute.String;
     impactStats: Schema.Attribute.Component<'shared.stat-item', true>;
@@ -759,7 +825,25 @@ export interface ApiContributePageContributePage
       'api::contribute-page.contribute-page'
     > &
       Schema.Attribute.Private;
+    paymentMethods: Schema.Attribute.Component<
+      'contribute.payment-method',
+      true
+    >;
+    paymentSectionSubtitle: Schema.Attribute.Text;
+    paymentSectionTitle: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    storyImages: Schema.Attribute.Media<undefined, true>;
+    storyText: Schema.Attribute.Text;
+    storyTitle: Schema.Attribute.String;
+    transparencyBadgeLabel: Schema.Attribute.String;
+    transparencyCtaLabel: Schema.Attribute.String;
+    transparencyCtaUrl: Schema.Attribute.String;
+    transparencyItems: Schema.Attribute.Component<
+      'contribute.transparency-item',
+      true
+    >;
+    transparencyText: Schema.Attribute.Text;
+    transparencyTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -778,11 +862,16 @@ export interface ApiDomainDomain extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    activities: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::activity.activity'
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.RichText;
     iconKey: Schema.Attribute.String;
+    image: Schema.Attribute.Media;
     impact: Schema.Attribute.RichText;
     items: Schema.Attribute.Component<'domain.domain-action-item', true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -818,6 +907,12 @@ export interface ApiDomainsPageDomainsPage extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    ctaPrimaryLabel: Schema.Attribute.String;
+    ctaPrimaryUrl: Schema.Attribute.String;
+    ctaSecondaryLabel: Schema.Attribute.String;
+    ctaSecondaryUrl: Schema.Attribute.String;
+    ctaText: Schema.Attribute.Text;
+    ctaTitle: Schema.Attribute.String;
     heroBackground: Schema.Attribute.Media;
     heroSubtitle: Schema.Attribute.Text;
     heroTitle: Schema.Attribute.String;
@@ -830,6 +925,47 @@ export interface ApiDomainsPageDomainsPage extends Struct.SingleTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiDonationIntentDonationIntent
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'donation-intents';
+  info: {
+    description: "Soumissions du modal d'intention de don (financier, mat\u00E9riel ou contact).";
+    displayName: 'Donation Intent';
+    pluralName: 'donation-intents';
+    singularName: 'donation-intent';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    amountLabel: Schema.Attribute.String;
+    amountValue: Schema.Attribute.Float;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    firstName: Schema.Attribute.String & Schema.Attribute.Required;
+    lastName: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::donation-intent.donation-intent'
+    > &
+      Schema.Attribute.Private;
+    materialCategory: Schema.Attribute.String;
+    materialDescription: Schema.Attribute.Text;
+    message: Schema.Attribute.Text;
+    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    sourcePage: Schema.Attribute.String;
+    type: Schema.Attribute.Enumeration<['financial', 'material', 'contact']> &
+      Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -917,12 +1053,33 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    aboutCtaLabel: Schema.Attribute.String;
+    aboutCtaUrl: Schema.Attribute.String;
+    aboutImage1: Schema.Attribute.Media;
+    aboutImage2: Schema.Attribute.Media;
     aboutIntro: Schema.Attribute.RichText;
     aboutMainStats: Schema.Attribute.Component<'shared.stat-item', true>;
+    aboutMissionDescription: Schema.Attribute.Text;
+    aboutMissions: Schema.Attribute.Component<'shared.value', true>;
+    aboutMissionTitle: Schema.Attribute.String;
     aboutTitle: Schema.Attribute.String;
+    contributeDescription: Schema.Attribute.Text;
+    contributePrimaryCtaLabel: Schema.Attribute.String;
+    contributePrimaryCtaUrl: Schema.Attribute.String;
+    contributeSecondaryCtaLabel: Schema.Attribute.String;
+    contributeSecondaryCtaUrl: Schema.Attribute.String;
+    contributeStats: Schema.Attribute.Component<'shared.stat-item', true>;
+    contributeSubtitle: Schema.Attribute.String;
+    contributeTitle: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    domainsCtaLabel: Schema.Attribute.String;
+    domainsCtaUrl: Schema.Attribute.String;
+    domainsDescription: Schema.Attribute.Text;
+    domainsImage: Schema.Attribute.Media;
+    domainsSubtitle: Schema.Attribute.Text;
+    domainsTitle: Schema.Attribute.String;
     eventsSubtitle: Schema.Attribute.String;
     eventsTitle: Schema.Attribute.String;
     galleryHighlightMedia: Schema.Attribute.Relation<
@@ -932,12 +1089,17 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
     gallerySubtitle: Schema.Attribute.String;
     galleryTitle: Schema.Attribute.String;
     heroBackground: Schema.Attribute.Media;
+    heroDescription: Schema.Attribute.Text;
     heroPrimaryCtaLabel: Schema.Attribute.String;
     heroPrimaryCtaUrl: Schema.Attribute.String;
     heroSecondaryCtaLabel: Schema.Attribute.String;
     heroSecondaryCtaUrl: Schema.Attribute.String;
     heroSubtitle: Schema.Attribute.Text;
     heroTitle: Schema.Attribute.String;
+    highlightedDomains: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::domain.domain'
+    >;
     highlightedEvents: Schema.Attribute.Relation<
       'oneToMany',
       'api::activity.activity'
@@ -982,7 +1144,15 @@ export interface ApiJoinPageJoinPage extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    featuredVolunteers: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::team-member.team-member'
+    >;
     heroBackground: Schema.Attribute.Media;
+    heroBadgeText: Schema.Attribute.String;
+    heroPrimaryCtaLabel: Schema.Attribute.String;
+    heroSecondaryCtaLabel: Schema.Attribute.String;
+    heroStats: Schema.Attribute.Component<'shared.stat-item', true>;
     heroSubtitle: Schema.Attribute.Text;
     heroTitle: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -995,6 +1165,12 @@ export interface ApiJoinPageJoinPage extends Struct.SingleTypeSchema {
       'join.join-micro-testimonial',
       false
     >;
+    opportunities: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::volunteer-opportunity.volunteer-opportunity'
+    >;
+    opportunitiesSectionSubtitle: Schema.Attribute.Text;
+    opportunitiesSectionTitle: Schema.Attribute.String;
     processSubtitle: Schema.Attribute.Text;
     processTitle: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
@@ -1002,6 +1178,8 @@ export interface ApiJoinPageJoinPage extends Struct.SingleTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    volunteersSectionSubtitle: Schema.Attribute.Text;
+    volunteersSectionTitle: Schema.Attribute.String;
     whyJoinIntro: Schema.Attribute.Text;
     whyJoinTitle: Schema.Attribute.String;
   };
@@ -1216,6 +1394,42 @@ export interface ApiTestimonialsPageTestimonialsPage
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiVolunteerApplicationVolunteerApplication
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'volunteer-applications';
+  info: {
+    description: 'Soumissions du formulaire de candidature b\u00E9n\u00E9vole / nous rejoindre.';
+    displayName: 'Volunteer Application';
+    pluralName: 'volunteer-applications';
+    singularName: 'volunteer-application';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    firstName: Schema.Attribute.String & Schema.Attribute.Required;
+    lastName: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::volunteer-application.volunteer-application'
+    > &
+      Schema.Attribute.Private;
+    motivation: Schema.Attribute.Text & Schema.Attribute.Required;
+    opportunityType: Schema.Attribute.String;
+    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    sourcePage: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1808,10 +2022,12 @@ declare module '@strapi/strapi' {
       'api::blog-category.blog-category': ApiBlogCategoryBlogCategory;
       'api::blog-post.blog-post': ApiBlogPostBlogPost;
       'api::blog-rubric.blog-rubric': ApiBlogRubricBlogRubric;
+      'api::contact-message.contact-message': ApiContactMessageContactMessage;
       'api::contact-page.contact-page': ApiContactPageContactPage;
       'api::contribute-page.contribute-page': ApiContributePageContributePage;
       'api::domain.domain': ApiDomainDomain;
       'api::domains-page.domains-page': ApiDomainsPageDomainsPage;
+      'api::donation-intent.donation-intent': ApiDonationIntentDonationIntent;
       'api::gallery-page.gallery-page': ApiGalleryPageGalleryPage;
       'api::global-setting.global-setting': ApiGlobalSettingGlobalSetting;
       'api::homepage.homepage': ApiHomepageHomepage;
@@ -1822,6 +2038,7 @@ declare module '@strapi/strapi' {
       'api::teams-page.teams-page': ApiTeamsPageTeamsPage;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'api::testimonials-page.testimonials-page': ApiTestimonialsPageTestimonialsPage;
+      'api::volunteer-application.volunteer-application': ApiVolunteerApplicationVolunteerApplication;
       'api::volunteer-opportunity.volunteer-opportunity': ApiVolunteerOpportunityVolunteerOpportunity;
       'api::volunteer-story.volunteer-story': ApiVolunteerStoryVolunteerStory;
       'plugin::content-releases.release': PluginContentReleasesRelease;

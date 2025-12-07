@@ -10,32 +10,116 @@
   "options": {},
   "pluginOptions": {},
   "attributes": {
-    "contributionWays": {
-      "component": "contribute.contribution-way",
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroSubtitle": {
+      "type": "text"
+    },
+    "heroBackground": {
+      "type": "media"
+    },
+    "heroPrimaryCtaLabel": {
+      "type": "string"
+    },
+    "heroSecondaryCtaLabel": {
+      "type": "string"
+    },
+    "heroBadges": {
+      "type": "text"
+    },
+    "storyTitle": {
+      "type": "string"
+    },
+    "storyText": {
+      "type": "text"
+    },
+    "storyImages": {
+      "type": "media",
+      "multiple": true
+    },
+    "impactStats": {
+      "component": "shared.stat-item",
       "repeatable": true,
       "type": "component"
+    },
+    "donationSectionTitle": {
+      "type": "string"
+    },
+    "donationSectionSubtitle": {
+      "type": "text"
     },
     "donationTiers": {
       "component": "contribute.donation-tier",
       "repeatable": true,
       "type": "component"
     },
-    "faqs": {
-      "component": "shared.faq-item",
+    "achievementsSectionTitle": {
+      "type": "string"
+    },
+    "achievementsSectionSubtitle": {
+      "type": "text"
+    },
+    "featuredActivities": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::activity.activity"
+    },
+    "contributionWaysSectionTitle": {
+      "type": "string"
+    },
+    "contributionWaysSectionSubtitle": {
+      "type": "text"
+    },
+    "contributionWays": {
+      "component": "contribute.contribution-way",
       "repeatable": true,
       "type": "component"
     },
-    "heroBackground": {
-      "type": "media"
-    },
-    "heroSubtitle": {
-      "type": "text"
-    },
-    "heroTitle": {
+    "transparencyBadgeLabel": {
       "type": "string"
     },
-    "impactStats": {
-      "component": "shared.stat-item",
+    "transparencyTitle": {
+      "type": "string"
+    },
+    "transparencyText": {
+      "type": "text"
+    },
+    "transparencyItems": {
+      "component": "contribute.transparency-item",
+      "repeatable": true,
+      "type": "component"
+    },
+    "transparencyCtaLabel": {
+      "type": "string"
+    },
+    "transparencyCtaUrl": {
+      "type": "string"
+    },
+    "fundAllocations": {
+      "component": "contribute.fund-allocation",
+      "repeatable": true,
+      "type": "component"
+    },
+    "paymentSectionTitle": {
+      "type": "string"
+    },
+    "paymentSectionSubtitle": {
+      "type": "text"
+    },
+    "paymentMethods": {
+      "component": "contribute.payment-method",
+      "repeatable": true,
+      "type": "component"
+    },
+    "faqSectionTitle": {
+      "type": "string"
+    },
+    "faqSectionSubtitle": {
+      "type": "text"
+    },
+    "faqs": {
+      "component": "shared.faq-item",
       "repeatable": true,
       "type": "component"
     }

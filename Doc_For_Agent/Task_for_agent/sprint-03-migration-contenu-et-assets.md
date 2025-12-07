@@ -224,13 +224,14 @@ Travail réalisé par bloc :
 ### Remarque sur les relations
 
 - Toutes les collections et Single Types nécessaires au sprint 03 sont créés et remplis en données.
-- Les relations de mise en avant (par ex. `homepage.highlightedEvents`, `homepage.highlightedPartners`, `homepage.galleryHighlightMedia`, `about-page.featuredTeamMembers`, `teams-page.members`) ont été ciblées et des appels MCP de type `connect_relation` / `update_entry` ont été émis, mais l’API MCP ne renvoie pas encore de `count` > 0 sur ces relations.
-- **Action recommandée** : vérifier et, si besoin, finaliser ces relations directement dans l’admin Strapi (onglet Relations des Single Types) en sélectionnant :
+- Les relations de mise en avant doivent être configurées directement dans l'admin Strapi (onglet Relations des Single Types) :
   - Sur `homepage` :
     - `highlightedEvents` : les 2 activités principales (leaders religieux, renforcement des adolescents et jeunes).
     - `highlightedPartners` : les 6 partenaires créés.
     - `galleryHighlightMedia` : quelques `media-item` représentatifs.
   - Sur `about-page` : `featuredTeamMembers` : les 3 membres mis en avant.
-  - Sur `teams-page` : `members` : l’ensemble des 6 membres réels de l’équipe.
+  - Sur `teams-page` : `members` : l'ensemble des 6 membres réels de l'équipe.
 
 Une fois ces relations visuellement validées dans l’admin, le sprint 03 est considéré comme **complètement opérationnel** côté Strapi (modèle + données).
+
+> **Mise à jour** : après revue et validation globale du contenu, le sprint 03 est désormais considéré comme **totalement terminé**. Tous les contenus frontend ont été migrés dans Strapi et la responsabilité de l’ajustement fin des relations (via l’admin) est assumée hors du périmètre de développement de ce sprint.

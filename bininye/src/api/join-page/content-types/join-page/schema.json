@@ -10,47 +10,83 @@
   "options": {},
   "pluginOptions": {},
   "attributes": {
-    "applicationIntroText": {
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroSubtitle": {
       "type": "text"
     },
-    "applicationIntroTitle": {
+    "heroBackground": {
+      "type": "media"
+    },
+    "heroPrimaryCtaLabel": {
       "type": "string"
+    },
+    "heroSecondaryCtaLabel": {
+      "type": "string"
+    },
+    "heroBadgeText": {
+      "type": "string"
+    },
+    "heroStats": {
+      "component": "shared.stat-item",
+      "repeatable": true,
+      "type": "component"
+    },
+    "whyJoinTitle": {
+      "type": "string"
+    },
+    "whyJoinIntro": {
+      "type": "text"
     },
     "benefits": {
       "component": "join.join-benefit",
       "repeatable": true,
       "type": "component"
     },
-    "heroBackground": {
-      "type": "media"
-    },
-    "heroSubtitle": {
-      "type": "text"
-    },
-    "heroTitle": {
-      "type": "string"
-    },
     "microTestimonial": {
       "component": "join.join-micro-testimonial",
       "repeatable": false,
       "type": "component"
     },
-    "processSubtitle": {
+    "opportunitiesSectionTitle": {
+      "type": "string"
+    },
+    "opportunitiesSectionSubtitle": {
       "type": "text"
+    },
+    "opportunities": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::volunteer-opportunity.volunteer-opportunity"
+    },
+    "volunteersSectionTitle": {
+      "type": "string"
+    },
+    "volunteersSectionSubtitle": {
+      "type": "text"
+    },
+    "featuredVolunteers": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::team-member.team-member"
     },
     "processTitle": {
       "type": "string"
+    },
+    "processSubtitle": {
+      "type": "text"
     },
     "steps": {
       "component": "join.join-process-step",
       "repeatable": true,
       "type": "component"
     },
-    "whyJoinIntro": {
-      "type": "text"
-    },
-    "whyJoinTitle": {
+    "applicationIntroTitle": {
       "type": "string"
+    },
+    "applicationIntroText": {
+      "type": "text"
     }
   }
 }

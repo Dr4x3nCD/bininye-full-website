@@ -1,0 +1,17 @@
+{
+    "collectionName": "components_contribute_payment_methods",
+    "info": {
+        "displayName": "Payment Method",
+        "icon": "credit-card"
+    },
+    "options": {},
+    "attributes": {
+        "name": {
+            "required": true,
+            "type": "string"
+        },
+        "image": {
+            "type": "media"
+        }
+    }
+}

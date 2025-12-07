@@ -23,14 +23,13 @@ export const menuData: MenuItem[] = [
     url: "/activites",
   },
   {
-    title: "Contribuer",
-    url: "/contribuer",
+    title: "Blog",
+    url: "/blog",
   },
   {
     title: "Ressources",
     url: "#",
     children: [
-      { title: "Blog", url: "/blog" },
       { title: "Médiathèque", url: "/photos-et-videos" },
       { title: "Nous rejoindre", url: "/nous-rejoindre" },
       { title: "Témoignages", url: "/temoignages" },

@@ -2,14 +2,44 @@ import { Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
-const missions = [
-  "Promouvoir l'égalité des genres",
-  "Renforcer les compétences de vie",
-  "Accroître la coopération",
-  "Promouvoir un environnement sain",
-]
+interface Stat {
+  number: string
+  label: string
+}
 
-export function AboutSection() {
+interface Mission {
+  title: string
+  iconKey?: string
+}
+
+interface AboutSectionProps {
+  title?: string
+  intro?: string
+  missionTitle?: string
+  missionDescription?: string
+  missions?: Mission[]
+  stats?: Stat[]
+  image1Url?: string | null
+  image2Url?: string | null
+  ctaLabel?: string
+  ctaUrl?: string
+}
+
+export function AboutSection({
+  title,
+  intro,
+  missionTitle,
+  missionDescription,
+  missions,
+  stats,
+  image1Url,
+  image2Url,
+  ctaLabel,
+  ctaUrl,
+}: AboutSectionProps) {
+  const hasMissions = missions && missions.length > 0
+  const hasStats = stats && stats.length > 0
+
   return (
     <section className="bg-accent/30 py-16 lg:py-24">
       <div className="container mx-auto px-4 lg:px-8">
@@ -19,8 +49,8 @@ export function AboutSection() {
               <div className="space-y-6">
                 <div className="overflow-hidden rounded-3xl shadow-lg">
                   <img
-                    src="/african-woman-portrait.jpg"
-                    alt="Femme africaine souriante"
+                    src={image1Url || "/placeholder.svg"}
+                    alt="Image À propos 1"
                     className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                   />
                 </div>
@@ -28,8 +58,8 @@ export function AboutSection() {
               <div className="space-y-6 pt-12">
                 <div className="overflow-hidden rounded-3xl shadow-lg">
                   <img
-                    src="/students-learning.jpg"
-                    alt="Enfant étudiant"
+                    src={image2Url || "/placeholder.svg"}
+                    alt="Image À propos 2"
                     className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                   />
                 </div>
@@ -46,48 +76,68 @@ export function AboutSection() {
             </div>
 
             <h2 className="font-serif text-balance text-4xl font-bold leading-tight md:text-5xl">
-              Nous sommes une ONG engagée
+              {title || "[Donnée non récupérée: aboutTitle]"}
             </h2>
 
             <p className="text-pretty text-lg leading-relaxed text-muted-foreground">
-              Dédiée à l'amélioration durable des conditions de vie des communautés, particulièrement des femmes et des
-              enfants.
+              {intro || "[Donnée non récupérée: aboutIntro]"}
             </p>
 
             <div className="space-y-5">
-              <h3 className="text-2xl font-bold">Notre mission</h3>
+              <h3 className="text-2xl font-bold">
+                {missionTitle || "[Donnée non récupérée: aboutMissionTitle]"}
+              </h3>
               <p className="text-pretty text-lg leading-relaxed text-muted-foreground">
-                Promouvoir le bien-être de l'Homme et la préservation de la nature en plaçant les besoins des
-                populations au cœur de toutes nos actions.
+                {missionDescription || "[Donnée non récupérée: aboutMissionDescription]"}
               </p>
 
-              <ul className="space-y-4">
-                {missions.map((mission) => (
-                  <li key={mission} className="flex items-start gap-3">
-                    <div className="mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
-                      <Check className="h-4 w-4 text-primary" />
-                    </div>
-                    <span className="text-lg leading-relaxed">{mission}</span>
-                  </li>
-                ))}
-              </ul>
+              {hasMissions ? (
+                <ul className="space-y-4">
+                  {missions.map((mission) => (
+                    <li key={mission.title} className="flex items-start gap-3">
+                      <div className="mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                        <Check className="h-4 w-4 text-primary" />
+                      </div>
+                      <span className="text-lg leading-relaxed">{mission.title}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="text-muted-foreground italic">
+                  [Donnée non récupérée: aboutMissions]
+                </div>
+              )}
             </div>
 
-            <div className="inline-flex items-center gap-6 rounded-2xl bg-gradient-to-br from-primary to-primary/80 px-8 py-6 text-primary-foreground shadow-lg">
-              <div className="text-center">
-                <div className="font-serif text-5xl font-bold">60+</div>
-                <div className="mt-1 text-sm font-medium">Personnes aidées</div>
+            {hasStats ? (
+              <div className="flex flex-wrap justify-center gap-4 md:gap-6 rounded-2xl bg-gradient-to-br from-primary to-primary/80 px-4 py-6 md:px-8 text-primary-foreground shadow-lg">
+                {stats.map((stat, index) => (
+                  <div key={index} className="text-center min-w-[80px]">
+                    <div className="font-serif text-3xl md:text-5xl font-bold">{stat.number}</div>
+                    <div className="mt-1 text-xs md:text-sm font-medium">{stat.label}</div>
+                  </div>
+                ))}
               </div>
-            </div>
+            ) : (
+              <div className="text-muted-foreground italic">
+                [Donnée non récupérée: aboutMainStats]
+              </div>
+            )}
 
             <div className="pt-4">
-              <Button
-                asChild
-                size="lg"
-                className="h-12 rounded-full bg-secondary px-8 font-semibold text-secondary-foreground hover:bg-secondary/90"
-              >
-                <Link href="/qui-sommes-nous">Découvrir notre histoire</Link>
-              </Button>
+              {ctaLabel && ctaUrl ? (
+                <Button
+                  asChild
+                  size="lg"
+                  className="h-12 rounded-full bg-secondary px-8 font-semibold text-secondary-foreground hover:bg-secondary/90"
+                >
+                  <Link href={ctaUrl}>{ctaLabel}</Link>
+                </Button>
+              ) : (
+                <Button disabled className="h-12 rounded-full px-8 font-semibold opacity-50">
+                  [CTA non configuré]
+                </Button>
+              )}
             </div>
           </div>
         </div>

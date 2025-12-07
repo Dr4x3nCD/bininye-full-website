@@ -1,0 +1,17 @@
+{
+    "collectionName": "components_contribute_transparency_items",
+    "info": {
+        "displayName": "Transparency Item",
+        "icon": "shield-check"
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "required": true,
+            "type": "string"
+        },
+        "iconKey": {
+            "type": "string"
+        }
+    }
+}

@@ -1,6 +1,8 @@
 import type { BlogPostSummary, BlogRubricItem, MostReadItem } from "@/lib/blog-types"
 import { getStrapiMediaUrl } from "@/lib/strapi-client"
 
+const PLACEHOLDER_TEXT = (field: string) => `[Donnée non récupérée: ${field}]`
+
 export interface StrapiListResponse<T> {
   data: T[]
 }
@@ -46,9 +48,10 @@ export interface StrapiBlogPostAttributes {
   readTime: number | null
   isFeatured: boolean | null
   isMostRead: boolean | null
-  category: StrapiRelationSingle<StrapiBlogCategoryAttributes> | null
-  author: StrapiRelationSingle<StrapiAuthorAttributes> | null
-  image: StrapiRelationSingle<StrapiImageAttributes> | null
+  // Strapi 5: relations retournées directement (pas de wrapper {data: ...})
+  category: { name: string; slug: string } | null
+  author: { name: string; role?: string | null } | null
+  image: { url: string } | null
 }
 
 export interface StrapiBlogPost extends StrapiBlogPostAttributes {
@@ -67,10 +70,11 @@ function formatDateFr(dateStr: string): string {
 
 export function mapBlogPosts(res: StrapiListResponse<StrapiBlogPost>): BlogPostSummary[] {
   return res.data.map(({ id, ...attributes }) => {
-    const categoryName = attributes.category?.data?.name ?? "Autre"
-    const authorName = attributes.author?.data?.name ?? "Binin Ye"
-    const authorRole = attributes.author?.data?.role ?? ""
-    const imageUrl = attributes.image?.data?.url
+    // Strapi 5: relations directes
+    const categoryName = attributes.category?.name || PLACEHOLDER_TEXT("category")
+    const authorName = attributes.author?.name || PLACEHOLDER_TEXT("author")
+    const authorRole = attributes.author?.role || ""
+    const imageUrl = attributes.image?.url
 
     return {
       id,
@@ -99,7 +103,7 @@ export function mapRubrics(res: StrapiListResponse<StrapiBlogRubric>): BlogRubri
     title: name,
     description,
     image: "/placeholder.svg",
-    link: `#rubrique-${slug}`,
+    link: `/blog?rubrique=${slug}`,
   }))
 }
 

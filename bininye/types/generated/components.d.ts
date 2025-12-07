@@ -11,6 +11,18 @@ export interface ActivityActivityObjectiveItem extends Struct.ComponentSchema {
   };
 }
 
+export interface ActivityActivityProgramItem extends Struct.ComponentSchema {
+  collectionName: 'components_activity_activity_program_items';
+  info: {
+    displayName: 'Activity Program Item';
+    icon: 'clock';
+  };
+  attributes: {
+    time: Schema.Attribute.String & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface ContactContactInfo extends Struct.ComponentSchema {
   collectionName: 'components_contact_contact_infos';
   info: {
@@ -41,6 +53,19 @@ export interface ContactContactOption extends Struct.ComponentSchema {
   };
 }
 
+export interface ContributeAchievementItem extends Struct.ComponentSchema {
+  collectionName: 'components_contribute_achievement_items';
+  info: {
+    displayName: 'Achievement Item';
+    icon: 'check-circle';
+  };
+  attributes: {
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
+    image: Schema.Attribute.Media;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface ContributeContributionWay extends Struct.ComponentSchema {
   collectionName: 'components_contribute_contribution_ways';
   info: {
@@ -65,6 +90,54 @@ export interface ContributeDonationTier extends Struct.ComponentSchema {
     amountLabel: Schema.Attribute.String & Schema.Attribute.Required;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
     isPopular: Schema.Attribute.Boolean;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface ContributeFundAllocation extends Struct.ComponentSchema {
+  collectionName: 'components_contribute_fund_allocations';
+  info: {
+    description: "\u00C9l\u00E9ment du graphique circulaire montrant l'allocation des fonds";
+    displayName: 'Fund Allocation';
+    icon: 'pie-chart';
+  };
+  attributes: {
+    color: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'#10b981'>;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    percentage: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 100;
+          min: 0;
+        },
+        number
+      >;
+  };
+}
+
+export interface ContributePaymentMethod extends Struct.ComponentSchema {
+  collectionName: 'components_contribute_payment_methods';
+  info: {
+    displayName: 'Payment Method';
+    icon: 'credit-card';
+  };
+  attributes: {
+    image: Schema.Attribute.Media;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface ContributeTransparencyItem extends Struct.ComponentSchema {
+  collectionName: 'components_contribute_transparency_items';
+  info: {
+    displayName: 'Transparency Item';
+    icon: 'shield-check';
+  };
+  attributes: {
+    iconKey: Schema.Attribute.String;
     title: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
@@ -104,6 +177,22 @@ export interface JoinJoinMicroTestimonial extends Struct.ComponentSchema {
     personName: Schema.Attribute.String & Schema.Attribute.Required;
     personRole: Schema.Attribute.String & Schema.Attribute.Required;
     quote: Schema.Attribute.Text & Schema.Attribute.Required;
+  };
+}
+
+export interface JoinJoinOpportunity extends Struct.ComponentSchema {
+  collectionName: 'components_join_opportunities';
+  info: {
+    displayName: 'Join Opportunity';
+    icon: 'briefcase';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    image: Schema.Attribute.Media;
+    points: Schema.Attribute.Text;
+    tags: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    type: Schema.Attribute.String;
   };
 }
 
@@ -185,13 +274,19 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'activity.activity-objective-item': ActivityActivityObjectiveItem;
+      'activity.activity-program-item': ActivityActivityProgramItem;
       'contact.contact-info': ContactContactInfo;
       'contact.contact-option': ContactContactOption;
+      'contribute.achievement-item': ContributeAchievementItem;
       'contribute.contribution-way': ContributeContributionWay;
       'contribute.donation-tier': ContributeDonationTier;
+      'contribute.fund-allocation': ContributeFundAllocation;
+      'contribute.payment-method': ContributePaymentMethod;
+      'contribute.transparency-item': ContributeTransparencyItem;
       'domain.domain-action-item': DomainDomainActionItem;
       'join.join-benefit': JoinJoinBenefit;
       'join.join-micro-testimonial': JoinJoinMicroTestimonial;
+      'join.join-opportunity': JoinJoinOpportunity;
       'join.join-process-step': JoinJoinProcessStep;
       'navigation.navigation-link': NavigationNavigationLink;
       'shared.faq-item': SharedFaqItem;

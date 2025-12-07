@@ -1,7 +1,8 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { Calendar, MapPin, Users, Search, RotateCcw, Filter, ChevronDown } from "lucide-react"
 
 import { Header } from "@/components/header"
@@ -18,6 +19,8 @@ export interface Activity {
   dateObj: Date
   location: string
   category: string
+  domain: string | null
+  domainTitle: string | null
   participants: number
   image: string
   description: string
@@ -30,16 +33,28 @@ interface ActivitiesPageClientProps {
 }
 
 export function ActivitiesPageClient({ activities }: ActivitiesPageClientProps) {
+  const searchParams = useSearchParams()
+  const urlDomain = searchParams.get("domain")
+
   const [searchQuery, setSearchQuery] = useState("")
+  const [selectedDomain, setSelectedDomain] = useState("Tous")
   const [selectedCategory, setSelectedCategory] = useState("Toutes")
-  const [selectedLocation, setSelectedLocation] = useState("Toutes")
   const [selectedStatus, setSelectedStatus] = useState("Tous")
   const [visibleCount, setVisibleCount] = useState(9)
 
   // Statuts disponibles (fixes)
   const statuses = ["Tous", "À venir", "Passés"]
 
-  // Catégories & localisations dérivées des données Strapi
+  // Domaines dérivés des données Strapi
+  const domains = useMemo(() => {
+    const set = new Set<string>()
+    activities.forEach((a) => {
+      if (a.domainTitle) set.add(a.domainTitle)
+    })
+    return ["Tous", ...Array.from(set).sort()]
+  }, [activities])
+
+  // Catégories dérivées des données Strapi
   const categories = useMemo(() => {
     const set = new Set<string>()
     activities.forEach((a) => {
@@ -48,25 +63,28 @@ export function ActivitiesPageClient({ activities }: ActivitiesPageClientProps) 
     return ["Toutes", ...Array.from(set).sort()]
   }, [activities])
 
-  const locations = useMemo(() => {
-    const set = new Set<string>()
-    activities.forEach((a) => {
-      if (a.location) set.add(a.location)
-    })
-    return ["Toutes", ...Array.from(set).sort()]
-  }, [activities])
+  // Initialiser le filtre domain depuis l'URL
+  useEffect(() => {
+    if (urlDomain) {
+      // Trouver le domainTitle correspondant au slug
+      const matchingActivity = activities.find(a => a.domain === urlDomain)
+      if (matchingActivity?.domainTitle) {
+        setSelectedDomain(matchingActivity.domainTitle)
+      }
+    }
+  }, [urlDomain, activities])
 
   const resetFilters = () => {
     setSearchQuery("")
+    setSelectedDomain("Tous")
     setSelectedCategory("Toutes")
-    setSelectedLocation("Toutes")
     setSelectedStatus("Tous")
     setVisibleCount(9)
   }
 
   useMemo(() => {
     setVisibleCount(9)
-  }, [searchQuery, selectedCategory, selectedLocation, selectedStatus])
+  }, [searchQuery, selectedDomain, selectedCategory, selectedStatus])
 
   const filteredActivities = useMemo(() => {
     return activities.filter((activity) => {
@@ -75,18 +93,18 @@ export function ActivitiesPageClient({ activities }: ActivitiesPageClientProps) 
         activity.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         activity.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
 
-      const matchesCategory = selectedCategory === "Toutes" || activity.category === selectedCategory
+      const matchesDomain = selectedDomain === "Tous" || activity.domainTitle === selectedDomain
 
-      const matchesLocation = selectedLocation === "Toutes" || activity.location === selectedLocation
+      const matchesCategory = selectedCategory === "Toutes" || activity.category === selectedCategory
 
       const matchesStatus =
         selectedStatus === "Tous" ||
         (selectedStatus === "À venir" && activity.status === "à venir") ||
         (selectedStatus === "Passés" && activity.status === "passé")
 
-      return matchesSearch && matchesCategory && matchesLocation && matchesStatus
+      return matchesSearch && matchesDomain && matchesCategory && matchesStatus
     })
-  }, [activities, searchQuery, selectedCategory, selectedLocation, selectedStatus])
+  }, [activities, searchQuery, selectedDomain, selectedCategory, selectedStatus])
 
   const displayedActivities = filteredActivities.slice(0, visibleCount)
 
@@ -166,13 +184,31 @@ export function ActivitiesPageClient({ activities }: ActivitiesPageClientProps) 
                         <button
                           key={status}
                           onClick={() => setSelectedStatus(status)}
-                          className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                            selectedStatus === status
-                              ? "bg-primary text-primary-foreground shadow-md hover:bg-primary/90"
-                              : "bg-muted text-foreground hover:bg-muted/80 hover:shadow-sm"
-                          }`}
+                          className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${selectedStatus === status
+                            ? "bg-primary text-primary-foreground shadow-md hover:bg-primary/90"
+                            : "bg-muted text-foreground hover:bg-muted/80 hover:shadow-sm"
+                            }`}
                         >
                           {status}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Filtre Domaine */}
+                  <div className="space-y-4">
+                    <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Domaine</p>
+                    <div className="flex flex-wrap gap-2">
+                      {domains.map((domain) => (
+                        <button
+                          key={domain}
+                          onClick={() => setSelectedDomain(domain)}
+                          className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${selectedDomain === domain
+                            ? "bg-secondary text-secondary-foreground shadow-md hover:bg-secondary/90"
+                            : "bg-muted text-foreground hover:bg-muted/80 hover:shadow-sm"
+                            }`}
+                        >
+                          {domain}
                         </button>
                       ))}
                     </div>
@@ -186,33 +222,12 @@ export function ActivitiesPageClient({ activities }: ActivitiesPageClientProps) 
                         <button
                           key={category}
                           onClick={() => setSelectedCategory(category)}
-                          className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                            selectedCategory === category
-                              ? "bg-secondary text-secondary-foreground shadow-md hover:bg-secondary/90"
-                              : "bg-muted text-foreground hover:bg-muted/80 hover:shadow-sm"
-                          }`}
+                          className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${selectedCategory === category
+                            ? "bg-primary text-primary-foreground shadow-md hover:bg-primary/90"
+                            : "bg-muted text-foreground hover:bg-muted/80 hover:shadow-sm"
+                            }`}
                         >
                           {category}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Filtre Localisation */}
-                  <div className="space-y-4">
-                    <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Localisation</p>
-                    <div className="flex flex-wrap gap-2">
-                      {locations.map((location) => (
-                        <button
-                          key={location}
-                          onClick={() => setSelectedLocation(location)}
-                          className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                            selectedLocation === location
-                              ? "bg-primary text-primary-foreground shadow-md hover:bg-primary/90"
-                              : "bg-muted text-foreground hover:bg-muted/80 hover:shadow-sm"
-                          }`}
-                        >
-                          {location}
                         </button>
                       ))}
                     </div>
@@ -221,20 +236,20 @@ export function ActivitiesPageClient({ activities }: ActivitiesPageClientProps) 
 
                 {/* Bouton Réinitialiser */}
                 {(searchQuery ||
+                  selectedDomain !== "Tous" ||
                   selectedCategory !== "Toutes" ||
-                  selectedLocation !== "Toutes" ||
                   selectedStatus !== "Tous") && (
-                  <div className="flex justify-center pt-4">
-                    <Button
-                      variant="ghost"
-                      onClick={resetFilters}
-                      className="text-muted-foreground hover:text-foreground hover:bg-muted/50 gap-2"
-                    >
-                      <RotateCcw className="h-4 w-4" />
-                      Réinitialiser les filtres
-                    </Button>
-                  </div>
-                )}
+                    <div className="flex justify-center pt-4">
+                      <Button
+                        variant="ghost"
+                        onClick={resetFilters}
+                        className="text-muted-foreground hover:text-foreground hover:bg-muted/50 gap-2"
+                      >
+                        <RotateCcw className="h-4 w-4" />
+                        Réinitialiser les filtres
+                      </Button>
+                    </div>
+                  )}
               </div>
             </div>
           </div>
@@ -277,17 +292,16 @@ export function ActivitiesPageClient({ activities }: ActivitiesPageClientProps) 
                         {/* Badge statut */}
                         <div className="absolute right-4 top-4 z-20">
                           <span
-                            className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide shadow-sm ${
-                              activity.status === "à venir" ? "bg-white text-primary" : "bg-gray-200 text-gray-600"
-                            }`}
+                            className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide shadow-sm ${activity.status === "à venir" ? "bg-white text-primary" : "bg-gray-200 text-gray-600"
+                              }`}
                           >
                             {activity.status === "à venir" ? "À venir" : "Passé"}
                           </span>
                         </div>
-                        {/* Badge catégorie */}
+                        {/* Badge domaine */}
                         <div className="absolute bottom-4 left-4 z-20">
                           <span className="rounded-full bg-secondary px-3 py-1 text-xs font-bold text-secondary-foreground shadow-sm">
-                            {activity.category}
+                            {activity.domainTitle || "[Domaine non défini]"}
                           </span>
                         </div>
                       </div>

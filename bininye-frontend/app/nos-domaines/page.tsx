@@ -4,16 +4,25 @@ import { NutritionIcon, GovernanceIcon, SanteIcon, LeadershipIcon } from "@/comp
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
-import { domains } from "@/lib/domains-data"
+import { fetchAllDomains, type DomainView } from "@/lib/strapi-domains"
+import { fetchDomainsPage } from "@/lib/strapi-domains-page"
 
-const iconMap = {
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   "nutrition-communautaire": NutritionIcon,
   "gouvernance-locale": GovernanceIcon,
   "droit-et-sante": SanteIcon,
   "leadership-et-empowerment": LeadershipIcon,
 }
 
-export default function NosDomainesPage() {
+export default async function NosDomainesPage() {
+  const [domains, pageData] = await Promise.all([
+    fetchAllDomains(),
+    fetchDomainsPage(),
+  ])
+
+  const heroBackground = pageData.heroBackgroundUrl || "/placeholder.svg"
+  const hasDomains = domains && domains.length > 0
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -23,7 +32,7 @@ export default function NosDomainesPage() {
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <img
-              src="/sustainable-development-agriculture-education-heal.jpg"
+              src={heroBackground}
               alt="Nos domaines background"
               className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
             />
@@ -33,11 +42,10 @@ export default function NosDomainesPage() {
           <div className="container relative z-10 mx-auto px-4 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
               <h1 className="font-serif mb-6 text-balance text-4xl font-bold text-white drop-shadow-lg md:text-5xl lg:text-6xl">
-                Nos Domaines d'Intervention
+                {pageData.heroTitle || "[Donnée non récupérée: heroTitle]"}
               </h1>
               <p className="text-pretty text-lg leading-relaxed text-white/90 drop-shadow-md md:text-xl">
-                Découvrez les différents secteurs dans lesquels nous intervenons pour créer un impact durable dans les
-                communautés.
+                {pageData.heroSubtitle || "[Donnée non récupérée: heroSubtitle]"}
               </p>
             </div>
           </div>
@@ -48,12 +56,10 @@ export default function NosDomainesPage() {
           <div className="container mx-auto px-4 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
               <h2 className="font-serif mb-6 text-balance text-3xl font-bold md:text-4xl">
-                Une approche holistique du développement
+                {pageData.introTitle || "[Donnée non récupérée: introTitle]"}
               </h2>
               <p className="text-pretty leading-relaxed text-muted-foreground">
-                Nos interventions couvrent quatre domaines clés qui se complètent pour créer un impact durable et
-                mesurable dans les communautés. Chaque domaine répond à des besoins spécifiques tout en contribuant à
-                notre vision globale d'un développement équitable et durable.
+                {pageData.introText || "[Donnée non récupérée: introText]"}
               </p>
             </div>
           </div>
@@ -62,61 +68,71 @@ export default function NosDomainesPage() {
         {/* Domaines Grid */}
         <section className="bg-muted/30 py-16 lg:py-24">
           <div className="container mx-auto px-4 lg:px-8">
-            <div className="grid gap-8 md:grid-cols-2">
-              {domains.map((domain) => {
-                const Icon = iconMap[domain.id as keyof typeof iconMap]
-                return (
-                  <Link
-                    key={domain.id}
-                    href={`/nos-domaines/${domain.id}`}
-                    className="group relative overflow-hidden rounded-3xl bg-card shadow-lg transition-all hover:shadow-2xl"
-                  >
-                    {/* Image de fond */}
-                    <div className="relative h-64 overflow-hidden">
-                      <img
-                        src={`/.jpg?height=400&width=600&query=${domain.title}`}
-                        alt={domain.title}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            {hasDomains ? (
+              <div className="grid gap-8 md:grid-cols-2">
+                {domains.map((domain) => {
+                  const Icon = iconMap[domain.iconKey || "nutrition-communautaire"] ?? NutritionIcon
+                  return (
+                    <Link
+                      key={domain.id}
+                      href={`/nos-domaines/${domain.slug}`}
+                      className="group relative overflow-hidden rounded-3xl bg-card shadow-lg transition-all hover:shadow-2xl"
+                    >
+                      {/* Image de fond */}
+                      <div className="relative h-64 overflow-hidden">
+                        <img
+                          src={domain.imageUrl || "/placeholder.svg"}
+                          alt={domain.title}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-                      {/* Icône et titre sur l'image */}
-                      <div className="absolute bottom-6 left-6 right-6">
-                        <div
-                          className={`mb-3 inline-flex h-12 w-12 items-center justify-center rounded-xl ${domain.color} text-white shadow-lg`}
-                        >
-                          <Icon className="h-6 w-6" />
-                        </div>
-                        <h3 className="font-serif text-2xl font-bold text-white">{domain.title}</h3>
-                      </div>
-                    </div>
-
-                    {/* Contenu */}
-                    <div className="p-6">
-                      <p className="mb-4 text-pretty leading-relaxed text-muted-foreground">
-                        {domain.shortDescription}
-                      </p>
-
-                      <div className="mb-4 space-y-2">
-                        {domain.items.slice(0, 3).map((item) => (
-                          <div key={item} className="flex items-start gap-2">
-                            <span className={`mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full ${domain.color}`} />
-                            <span className="text-sm text-muted-foreground">{item}</span>
+                        {/* Icône et titre sur l'image */}
+                        <div className="absolute bottom-6 left-6 right-6">
+                          <div
+                            className={`mb-3 inline-flex h-12 w-12 items-center justify-center rounded-xl ${domain.themeColor} text-white shadow-lg`}
+                          >
+                            <Icon className="h-6 w-6" />
                           </div>
-                        ))}
+                          <h3 className="font-serif text-2xl font-bold text-white">{domain.title}</h3>
+                        </div>
                       </div>
 
-                      <div
-                        className={`flex items-center gap-2 font-semibold ${domain.textColor} transition-gap group-hover:gap-3`}
-                      >
-                        <span>En savoir plus</span>
-                        <ArrowRight className="h-4 w-4" />
+                      {/* Contenu */}
+                      <div className="p-6">
+                        <p className="mb-4 text-pretty leading-relaxed text-muted-foreground">
+                          {domain.shortDescription}
+                        </p>
+
+                        {domain.items && domain.items.length > 0 && (
+                          <div className="mb-4 space-y-2">
+                            {domain.items.slice(0, 3).map((item) => (
+                              <div key={item} className="flex items-start gap-2">
+                                <span
+                                  className={`mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full ${domain.themeColor}`}
+                                />
+                                <span className="text-sm text-muted-foreground">{item}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        <div
+                          className={`flex items-center gap-2 font-semibold ${domain.textColor} transition-gap group-hover:gap-3`}
+                        >
+                          <span>En savoir plus</span>
+                          <ArrowRight className="h-4 w-4" />
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
+                    </Link>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className="text-center py-16 border-2 border-dashed border-muted-foreground/30 rounded-xl">
+                <p className="text-muted-foreground text-lg">[Donnée non récupérée: domains]</p>
+              </div>
+            )}
           </div>
         </section>
 
@@ -125,15 +141,16 @@ export default function NosDomainesPage() {
           <div className="container mx-auto px-4 lg:px-8">
             <div className="mx-auto max-w-3xl rounded-3xl bg-primary p-8 text-center text-primary-foreground lg:p-12">
               <h2 className="font-serif mb-4 text-balance text-3xl font-bold md:text-4xl">
-                Soutenez nos actions sur le terrain
+                {pageData.ctaTitle || "[Donnée non récupérée: ctaTitle]"}
               </h2>
               <p className="mb-8 text-pretty leading-relaxed">
-                Votre contribution nous permet de continuer à intervenir dans ces domaines essentiels et de créer un
-                impact durable dans les communautés.
+                {pageData.ctaText || "[Donnée non récupérée: ctaText]"}
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Button asChild size="lg" variant="secondary" className="rounded-full">
-                  <Link href="/contribuer">Faire un don</Link>
+                  <Link href={pageData.ctaPrimaryUrl || "/contribuer"}>
+                    {pageData.ctaPrimaryLabel || "[CTA Primaire]"}
+                  </Link>
                 </Button>
                 <Button
                   asChild
@@ -141,7 +158,9 @@ export default function NosDomainesPage() {
                   variant="outline"
                   className="rounded-full border-2 border-white bg-transparent text-white hover:bg-white hover:text-primary"
                 >
-                  <Link href="/contact">Nous contacter</Link>
+                  <Link href={pageData.ctaSecondaryUrl || "/contact"}>
+                    {pageData.ctaSecondaryLabel || "[CTA Secondaire]"}
+                  </Link>
                 </Button>
               </div>
             </div>

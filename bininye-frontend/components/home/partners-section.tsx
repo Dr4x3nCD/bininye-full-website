@@ -1,57 +1,96 @@
-import { UnicefLogo, WHOIcon, WorldBankLogo, UnescoLogo, USAIDLogo, AfricanUnionLogo } from "@/components/partner-logos"
+import Image from "next/image"
+import Link from "next/link"
 
-export function PartnersSection() {
-  const partners = [
-    {
-      name: "UNICEF",
-      Logo: UnicefLogo,
-    },
-    {
-      name: "OMS",
-      Logo: WHOIcon,
-    },
-    {
-      name: "Banque Mondiale",
-      Logo: WorldBankLogo,
-    },
-    {
-      name: "UNESCO",
-      Logo: UnescoLogo,
-    },
-    {
-      name: "USAID",
-      Logo: USAIDLogo,
-    },
-    {
-      name: "Union Africaine",
-      Logo: AfricanUnionLogo,
-    },
-  ]
+interface Partner {
+  documentId: string
+  id: number
+  name: string
+  websiteUrl?: string
+  logo?: {
+    url: string
+    alternativeText?: string
+  }
+}
+
+interface PartnersSectionProps {
+  title?: string
+  subtitle?: string
+  partners?: Partner[]
+}
+
+export function PartnersSection({
+  title,
+  subtitle,
+  partners,
+}: PartnersSectionProps) {
+  const hasPartners = partners && partners.length > 0
+
+  // Déterminer le nombre de colonnes pour centrer si peu de partenaires
+  const getGridClass = (count: number) => {
+    if (count <= 2) return "grid-cols-2 max-w-md"
+    if (count <= 3) return "grid-cols-3 max-w-2xl"
+    if (count <= 4) return "grid-cols-2 md:grid-cols-4 max-w-4xl"
+    if (count <= 5) return "grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-w-5xl"
+    return "grid-cols-2 md:grid-cols-3 lg:grid-cols-6"
+  }
 
   return (
     <section className="border-t bg-muted/30 py-24">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-serif text-4xl font-bold text-foreground md:text-5xl">Nos Partenaires</h2>
+          <h2 className="font-serif text-4xl font-bold text-foreground md:text-5xl">
+            {title || "[Donnée non récupérée: partnersTitle]"}
+          </h2>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            Nous collaborons avec des organisations de renommée mondiale pour maximiser notre impact et atteindre nos
-            objectifs communs.
+            {subtitle || "[Donnée non récupérée: partnersSubtitle]"}
           </p>
         </div>
 
-        <div className="mt-16 grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-6">
-          {partners.map((partner, index) => (
-            <div
-              key={index}
-              className="group flex items-center justify-center rounded-2xl bg-white p-6 shadow-sm transition-all hover:shadow-lg"
-            >
-              {/* Replaced placeholder images with SVG component logos */}
-              {partner.Logo && (
-                <partner.Logo className="h-12 w-auto text-foreground opacity-60 transition-all duration-300 group-hover:scale-110 group-hover:opacity-100" />
-              )}
-            </div>
-          ))}
-        </div>
+        {hasPartners ? (
+          <div className={`mt-16 mx-auto grid gap-8 ${getGridClass(partners.length)}`}>
+            {partners.map((partner) => {
+              const content = (
+                <div
+                  className="group flex items-center justify-center rounded-2xl bg-white p-6 shadow-sm transition-all hover:shadow-lg cursor-pointer"
+                >
+                  {partner.logo?.url ? (
+                    <Image
+                      src={partner.logo.url}
+                      alt={partner.logo.alternativeText || partner.name}
+                      width={120}
+                      height={48}
+                      className="h-12 w-auto object-contain opacity-60 transition-all duration-300 group-hover:scale-110 group-hover:opacity-100"
+                    />
+                  ) : (
+                    <span className="text-sm font-semibold text-muted-foreground group-hover:text-primary transition-colors">
+                      {partner.name}
+                    </span>
+                  )}
+                </div>
+              )
+
+              // Si websiteUrl existe, envelopper dans un Link
+              if (partner.websiteUrl) {
+                return (
+                  <Link
+                    key={partner.documentId}
+                    href={partner.websiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {content}
+                  </Link>
+                )
+              }
+
+              return <div key={partner.documentId}>{content}</div>
+            })}
+          </div>
+        ) : (
+          <div className="mt-16 text-center py-12 border-2 border-dashed border-muted-foreground/30 rounded-xl">
+            <p className="text-muted-foreground">[Donnée non récupérée: highlightedPartners]</p>
+          </div>
+        )}
 
         <div className="mt-12 text-center">
           <p className="text-sm text-muted-foreground">

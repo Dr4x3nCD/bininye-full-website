@@ -14,6 +14,8 @@ export const strapiClient = createStrapiClient({
 export type StrapiFetchOptions = RequestInit & {
   /** Ajoute automatiquement /api devant le path si true (par défaut) */
   useApiPrefix?: boolean;
+  /** Forcer ou désactiver l'envoi du token d'auth (par défaut: true si STRAPI_API_TOKEN est défini) */
+  withAuth?: boolean;
 };
 
 export function getStrapiUrl(path: string = ""): string {
@@ -25,11 +27,11 @@ export async function fetchStrapi<T = unknown>(
   path: string,
   options: StrapiFetchOptions = {},
 ): Promise<T> {
-  const { useApiPrefix = true, headers, ...rest } = options;
+  const { useApiPrefix = true, headers, withAuth = true, ...rest } = options;
 
   const url = getStrapiUrl(`${useApiPrefix ? "/api" : ""}${path.startsWith("/") ? path : `/${path}`}`);
 
-  const authHeaders: HeadersInit = STRAPI_API_TOKEN
+  const authHeaders: HeadersInit = STRAPI_API_TOKEN && withAuth
     ? { Authorization: `Bearer ${STRAPI_API_TOKEN}` }
     : {};
 

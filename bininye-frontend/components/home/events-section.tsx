@@ -2,26 +2,32 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, Calendar, MapPin } from "lucide-react"
 import Link from "next/link"
 
-const events = [
-  {
-    id: 1,
-    number: "01",
-    date: "Novembre 2024",
-    location: "Abidjan",
-    title: "Binin Yé Forme les Leaders Religieux et Soutient l'Épargne des Jeunes",
-    image: "/community-meeting-africa.jpg",
-  },
-  {
-    id: 2,
-    number: "02",
-    date: "Novembre 2024",
-    location: "Bouaké",
-    title: "Renforcement de Capacité des Adolescents et des Jeunes",
-    image: "/community-activities-workshop-training-africa.jpg",
-  },
-]
+interface Activity {
+  documentId: string
+  id: number
+  title: string
+  slug: string
+  date?: string
+  location?: string
+  image?: {
+    url: string
+    alternativeText?: string
+  }
+}
 
-export function EventsSection() {
+interface EventsSectionProps {
+  title?: string
+  subtitle?: string
+  events?: Activity[]
+}
+
+export function EventsSection({
+  title,
+  subtitle,
+  events,
+}: EventsSectionProps) {
+  const hasEvents = events && events.length > 0
+
   return (
     <section className="bg-accent/30 py-16 lg:py-24">
       <div className="container mx-auto px-4 lg:px-8">
@@ -31,44 +37,56 @@ export function EventsSection() {
             ÉVÉNEMENTS
           </div>
           <h2 className="font-serif text-balance text-4xl font-bold leading-tight md:text-5xl">
-            Explorez nos événements
+            {title || "[Donnée non récupérée: eventsTitle]"}
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">Découvrez nos actions sur le terrain</p>
+          <p className="mt-4 text-lg text-muted-foreground">
+            {subtitle || "[Donnée non récupérée: eventsSubtitle]"}
+          </p>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-2">
-          {events.map((event) => (
-            <article
-              key={event.id}
-              className="group overflow-hidden rounded-3xl bg-card shadow-lg transition-all hover:shadow-2xl"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden">
-                <img
-                  src={event.image || "/placeholder.svg"}
-                  alt={event.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                <div className="absolute bottom-4 left-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/95 backdrop-blur-sm">
-                  <span className="font-serif text-3xl font-bold text-primary">{event.number}</span>
-                </div>
-              </div>
-              <div className="p-8">
-                <div className="mb-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-primary" />
-                    <span>{event.date}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-secondary" />
-                    <span>{event.location}</span>
+        {hasEvents ? (
+          <div className="grid gap-8 lg:grid-cols-2">
+            {events.slice(0, 4).map((event, index) => (
+              <article
+                key={event.documentId}
+                className="group overflow-hidden rounded-3xl bg-card shadow-lg transition-all hover:shadow-2xl"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <img
+                    src={event.image?.url || "/placeholder.svg"}
+                    alt={event.image?.alternativeText || event.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                  <div className="absolute bottom-4 left-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/95 backdrop-blur-sm">
+                    <span className="font-serif text-3xl font-bold text-primary">{String(index + 1).padStart(2, '0')}</span>
                   </div>
                 </div>
-                <h3 className="text-balance text-xl font-bold leading-tight md:text-2xl">{event.title}</h3>
-              </div>
-            </article>
-          ))}
-        </div>
+                <div className="p-8">
+                  <div className="mb-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                    {event.date && (
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4 text-primary" />
+                        <span>{new Date(event.date).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}</span>
+                      </div>
+                    )}
+                    {event.location && (
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-secondary" />
+                        <span>{event.location}</span>
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="text-balance text-xl font-bold leading-tight md:text-2xl">{event.title}</h3>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 border-2 border-dashed border-muted-foreground/30 rounded-xl">
+            <p className="text-muted-foreground">[Donnée non récupérée: highlightedEvents]</p>
+          </div>
+        )}
 
         <div className="mt-16 text-center">
           <Button

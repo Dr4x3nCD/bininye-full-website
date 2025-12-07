@@ -7,7 +7,9 @@
     "displayName": "Activity",
     "description": ""
   },
-  "options": {},
+  "options": {
+    "draftAndPublish": false
+  },
   "pluginOptions": {},
   "attributes": {
     "activityStatus": {
@@ -29,7 +31,9 @@
       "type": "richtext"
     },
     "image": {
-      "type": "media"
+      "type": "media",
+      "multiple": false,
+      "required": false
     },
     "location": {
       "type": "string"
@@ -55,6 +59,16 @@
     "title": {
       "required": true,
       "type": "string"
+    },
+    "domain": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::domain.domain"
+    },
+    "programItems": {
+      "component": "activity.activity-program-item",
+      "repeatable": true,
+      "type": "component"
     }
   }
 }

@@ -26,6 +26,9 @@ export function DonationModal({ isOpen, onClose, defaultAmount }: DonationModalP
   const [customAmount, setCustomAmount] = React.useState("")
   const [isLoading, setIsLoading] = React.useState(false)
   const [countryCode, setCountryCode] = React.useState("+225")
+  const [materialCategory, setMaterialCategory] = React.useState("")
+  const [materialDescription, setMaterialDescription] = React.useState("")
+  const [contactMessage, setContactMessage] = React.useState("")
 
   // Reset state when modal opens
   React.useEffect(() => {
@@ -33,6 +36,9 @@ export function DonationModal({ isOpen, onClose, defaultAmount }: DonationModalP
       setStep("form")
       setAmount(defaultAmount || "")
       setCustomAmount("")
+      setMaterialCategory("")
+      setMaterialDescription("")
+      setContactMessage("")
       // If no default amount, default to financial but no amount selected
       if (!defaultAmount) {
         setDonationType("financial")
@@ -40,13 +46,66 @@ export function DonationModal({ isOpen, onClose, defaultAmount }: DonationModalP
     }
   }, [isOpen, defaultAmount])
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setIsLoading(false)
-    setStep("success")
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
+    const firstName = formData.get("firstName")?.toString() ?? ""
+    const lastName = formData.get("lastName")?.toString() ?? ""
+    const email = formData.get("email")?.toString() ?? ""
+    const phoneLocal = formData.get("phone")?.toString() ?? ""
+    const phone = `${countryCode} ${phoneLocal}`.trim()
+
+    let amountLabel: string | null = null
+    let amountValue: number | null = null
+
+    if (donationType === "financial") {
+      if (amount === "custom") {
+        amountLabel = "custom"
+        amountValue = customAmount ? Number(customAmount) : null
+      } else if (amount) {
+        amountLabel = amount
+        const numeric = amount.replace(/[^0-9.,]/g, "").replace(",", ".")
+        const parsed = Number(numeric)
+        amountValue = Number.isFinite(parsed) ? parsed : null
+      }
+    }
+
+    const payload = {
+      firstName,
+      lastName,
+      email,
+      phone,
+      type: donationType,
+      amountLabel,
+      amountValue,
+      materialCategory: donationType === "material" ? materialCategory || null : null,
+      materialDescription: donationType === "material" ? materialDescription || null : null,
+      message: donationType === "contact" ? contactMessage || null : null,
+      sourcePage: "/contribuer",
+    }
+
+    try {
+      const res = await fetch("/api/donation-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`)
+      }
+
+      setStep("success")
+    } catch (error) {
+      console.error("[DonationModal] submit failed", error)
+      // On échec, on reste sur l'écran du formulaire
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleAmountSelect = (value: string) => {
@@ -79,22 +138,22 @@ export function DonationModal({ isOpen, onClose, defaultAmount }: DonationModalP
             </div>
 
             <div className="flex-1 overflow-y-auto p-6">
-              <form id="donation-form" onSubmit={handleSubmit} className="space-y-6">
+                  <form id="donation-form" onSubmit={handleSubmit} className="space-y-6">
                 {/* Personal Info */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="firstName">Prénom</Label>
-                    <Input id="firstName" placeholder="Jean" required />
+                    <Input id="firstName" name="firstName" placeholder="Jean" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastName">Nom</Label>
-                    <Input id="lastName" placeholder="Dupont" required />
+                    <Input id="lastName" name="lastName" placeholder="Dupont" required />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="jean.dupont@exemple.com" required />
+                  <Input id="email" name="email" type="email" placeholder="jean.dupont@exemple.com" required />
                 </div>
 
                 {/* Phone Number Field with Country Code */}
@@ -113,7 +172,7 @@ export function DonationModal({ isOpen, onClose, defaultAmount }: DonationModalP
                         ))}
                       </SelectContent>
                     </Select>
-                    <Input id="phone" type="tel" placeholder="07 07 07 07 07" className="flex-1" required />
+                    <Input id="phone" name="phone" type="tel" placeholder="07 07 07 07 07" className="flex-1" required />
                   </div>
                 </div>
 
@@ -216,7 +275,7 @@ export function DonationModal({ isOpen, onClose, defaultAmount }: DonationModalP
                   <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
                     <div className="space-y-2">
                       <Label htmlFor="material-type">Type de matériel</Label>
-                      <Select required>
+                      <Select value={materialCategory} onValueChange={setMaterialCategory} required>
                         <SelectTrigger>
                           <SelectValue placeholder="Sélectionnez une catégorie" />
                         </SelectTrigger>
@@ -235,6 +294,8 @@ export function DonationModal({ isOpen, onClose, defaultAmount }: DonationModalP
                         id="material-desc"
                         placeholder="Décrivez ce que vous souhaitez donner..."
                         className="min-h-[100px]"
+                        value={materialDescription}
+                        onChange={(e) => setMaterialDescription(e.target.value)}
                         required
                       />
                     </div>
@@ -249,6 +310,8 @@ export function DonationModal({ isOpen, onClose, defaultAmount }: DonationModalP
                         id="message"
                         placeholder="Comment souhaitez-vous nous aider ?"
                         className="min-h-[120px]"
+                        value={contactMessage}
+                        onChange={(e) => setContactMessage(e.target.value)}
                         required
                       />
                     </div>

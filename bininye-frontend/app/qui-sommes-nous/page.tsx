@@ -3,62 +3,18 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Check, Target, Eye, Heart, ChevronDown, Mail, Linkedin } from "lucide-react"
 import Link from "next/link"
+import { fetchAboutPage } from "@/lib/strapi-about"
 
-const featuredTeamMembers = [
-  {
-    name: "Marie Kouassi",
-    role: "Directrice Exécutive",
-    image: "/placeholder.svg?height=400&width=400",
-    bio: "Passionnée par le développement communautaire avec plus de 15 ans d'expérience.",
-  },
-  {
-    name: "Jean-Baptiste Touré",
-    role: "Coordinateur de Projets",
-    image: "/placeholder.svg?height=400&width=400",
-    bio: "Expert en gestion de projets de développement et mobilisation communautaire.",
-  },
-  {
-    name: "Aminata Diallo",
-    role: "Responsable Programmes",
-    image: "/placeholder.svg?height=400&width=400",
-    bio: "Spécialiste en santé publique et nutrition communautaire.",
-  },
-]
+export default async function QuiSommesNousPage() {
+  const about = await fetchAboutPage()
+  const heroBackground = about.heroBackgroundUrl || "/placeholder.svg"
+  const storyImage = about.storyImageUrl || "/placeholder.svg"
 
-const faqs = [
-  {
-    question: "Qu'est-ce que Binin Ye ?",
-    answer:
-      "Binin Ye est une Organisation Non Gouvernementale (ONG) qui œuvre pour le développement communautaire en Afrique. Nous intervenons dans les domaines de l'éducation, la santé, l'environnement et le développement économique.",
-  },
-  {
-    question: "Comment Binin Ye est-elle financée ?",
-    answer:
-      "Nous sommes financés par des dons individuels, des subventions de fondations, des partenariats avec des organisations internationales et des contributions d'entreprises socialement responsables. Nous assurons une transparence totale dans l'utilisation de nos fonds.",
-  },
-  {
-    question: "Dans quelles régions intervenez-vous ?",
-    answer:
-      "Nous intervenons principalement dans les zones rurales et périurbaines d'Afrique de l'Ouest, en nous concentrant sur les communautés les plus vulnérables. Nos projets touchent actuellement plus de 8 communautés dans plusieurs pays.",
-  },
-  {
-    question: "Comment puis-je contribuer à votre mission ?",
-    answer:
-      "Vous pouvez contribuer de plusieurs façons : faire un don financier, devenir bénévole, offrir vos compétences professionnelles, ou devenir partenaire. Chaque contribution, quelle que soit sa forme, fait une différence réelle dans la vie des communautés.",
-  },
-  {
-    question: "Comment mesurez-vous l'impact de vos actions ?",
-    answer:
-      "Nous utilisons des indicateurs précis pour chaque projet : nombre de bénéficiaires, amélioration des conditions de vie, taux de réussite des formations, etc. Nous publions régulièrement des rapports d'activité détaillés pour assurer la transparence de nos actions.",
-  },
-  {
-    question: "Puis-je visiter vos projets sur le terrain ?",
-    answer:
-      "Oui, nous organisons régulièrement des visites de terrain pour nos donateurs et partenaires. Contactez-nous pour planifier une visite et découvrir concrètement l'impact de nos actions dans les communautés.",
-  },
-]
+  const hasValues = about.values && about.values.length > 0
+  const hasStats = about.achievementsStats && about.achievementsStats.length > 0
+  const hasTeam = about.featuredTeamMembers && about.featuredTeamMembers.length > 0
+  const hasFaqs = about.faqs && about.faqs.length > 0
 
-export default function QuiSommesNousPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -68,7 +24,7 @@ export default function QuiSommesNousPage() {
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <img
-              src="/african-community-happy-diverse-group.jpg"
+              src={heroBackground}
               alt="Qui sommes nous background"
               className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
             />
@@ -78,10 +34,10 @@ export default function QuiSommesNousPage() {
           <div className="container relative z-10 mx-auto px-4 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
               <h1 className="font-serif mb-6 text-balance text-4xl font-bold text-white drop-shadow-lg md:text-5xl lg:text-6xl">
-                Qui sommes nous ?
+                {about.heroTitle}
               </h1>
               <p className="text-pretty text-lg leading-relaxed text-white/90 drop-shadow-md md:text-xl">
-                Découvrez l'histoire, la mission et les valeurs qui guident notre engagement pour un avenir meilleur.
+                {about.heroSubtitle}
               </p>
             </div>
           </div>
@@ -94,7 +50,7 @@ export default function QuiSommesNousPage() {
               <div className="relative">
                 <div className="overflow-hidden rounded-3xl shadow-2xl">
                   <img
-                    src="/placeholder.svg?height=600&width=500"
+                    src={storyImage}
                     alt="Équipe Binin Ye"
                     className="h-full w-full object-cover"
                   />
@@ -108,19 +64,13 @@ export default function QuiSommesNousPage() {
                 </div>
 
                 <h2 className="font-serif text-balance text-3xl font-bold leading-tight md:text-4xl">
-                  Une organisation engagée depuis sa création
+                  {about.storyTitle}
                 </h2>
 
-                <p className="text-pretty leading-relaxed text-muted-foreground">
-                  Binin Ye est une Organisation Non Gouvernementale (ONG) créée avec la vision de bâtir un avenir
-                  durable pour tous. Depuis nos débuts, nous nous sommes engagés à améliorer les conditions de vie des
-                  communautés, en particulier celles des femmes et des enfants.
-                </p>
-
-                <p className="text-pretty leading-relaxed text-muted-foreground">
-                  Notre approche holistique combine développement communautaire, éducation, santé et autonomisation
-                  économique pour créer un impact durable et mesurable dans les communautés que nous servons.
-                </p>
+                <div
+                  className="text-pretty leading-relaxed text-muted-foreground [&>p]:mb-4"
+                  dangerouslySetInnerHTML={{ __html: about.storyHtml }}
+                />
 
                 <Button
                   asChild
@@ -143,11 +93,11 @@ export default function QuiSommesNousPage() {
                 <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
                   <Target className="h-7 w-7" />
                 </div>
-                <h3 className="font-serif mb-4 text-2xl font-bold">Notre Mission</h3>
-                <p className="leading-relaxed text-muted-foreground">
-                  Promouvoir le bien-être de l'Homme et la préservation de la nature en plaçant les besoins des
-                  populations au cœur de toutes nos actions.
-                </p>
+                <h3 className="font-serif mb-4 text-2xl font-bold">{about.missionTitle}</h3>
+                <div
+                  className="leading-relaxed text-muted-foreground [&>p]:mb-4"
+                  dangerouslySetInnerHTML={{ __html: about.missionHtml }}
+                />
               </div>
 
               {/* Vision */}
@@ -155,11 +105,11 @@ export default function QuiSommesNousPage() {
                 <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-accent text-accent-foreground">
                   <Eye className="h-7 w-7" />
                 </div>
-                <h3 className="font-serif mb-4 text-2xl font-bold">Notre Vision</h3>
-                <p className="leading-relaxed text-muted-foreground">
-                  Un monde où chaque communauté a accès aux ressources nécessaires pour s'épanouir et construire un
-                  avenir durable pour les générations futures.
-                </p>
+                <h3 className="font-serif mb-4 text-2xl font-bold">{about.visionTitle}</h3>
+                <div
+                  className="leading-relaxed text-muted-foreground [&>p]:mb-4"
+                  dangerouslySetInnerHTML={{ __html: about.visionHtml }}
+                />
               </div>
 
               {/* Valeurs */}
@@ -167,15 +117,19 @@ export default function QuiSommesNousPage() {
                 <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary text-secondary-foreground">
                   <Heart className="h-7 w-7" />
                 </div>
-                <h3 className="font-serif mb-4 text-2xl font-bold">Nos Valeurs</h3>
-                <ul className="space-y-2">
-                  {["Engagement", "Durabilité", "Inclusion", "Intégrité", "Excellence"].map((value) => (
-                    <li key={value} className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-primary" />
-                      <span className="text-muted-foreground">{value}</span>
-                    </li>
-                  ))}
-                </ul>
+                <h3 className="font-serif mb-4 text-2xl font-bold">{about.valuesTitle}</h3>
+                {hasValues ? (
+                  <ul className="space-y-2">
+                    {about.values.map((value) => (
+                      <li key={value.title} className="flex items-center gap-2">
+                        <Check className="h-4 w-4 text-primary" />
+                        <span className="text-muted-foreground">{value.title}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-muted-foreground italic">[Donnée non récupérée: values]</p>
+                )}
               </div>
             </div>
           </div>
@@ -185,28 +139,29 @@ export default function QuiSommesNousPage() {
         <section className="py-16 lg:py-24">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="mb-12 text-center">
-              <h2 className="font-serif mb-4 text-balance text-3xl font-bold md:text-4xl">Nos Réalisations</h2>
+              <h2 className="font-serif mb-4 text-balance text-3xl font-bold md:text-4xl">{about.achievementsTitle}</h2>
               <p className="mx-auto max-w-2xl text-pretty text-muted-foreground">
-                Des chiffres qui témoignent de notre impact dans les communautés
+                {about.achievementsSubtitle}
               </p>
             </div>
 
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {[
-                { number: "60+", label: "Personnes aidées" },
-                { number: "15+", label: "Projets réalisés" },
-                { number: "8+", label: "Communautés touchées" },
-                { number: "25+", label: "Partenaires" },
-              ].map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-3xl bg-primary p-8 text-center text-primary-foreground shadow-lg"
-                >
-                  <div className="mb-2 text-5xl font-bold">{stat.number}</div>
-                  <div className="text-sm">{stat.label}</div>
-                </div>
-              ))}
-            </div>
+            {hasStats ? (
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                {about.achievementsStats.map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="rounded-3xl bg-primary p-8 text-center text-primary-foreground shadow-lg"
+                  >
+                    <div className="mb-2 text-5xl font-bold">{stat.number}</div>
+                    <div className="text-sm">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 border-2 border-dashed border-muted-foreground/30 rounded-xl">
+                <p className="text-muted-foreground">[Donnée non récupérée: achievementsStats]</p>
+              </div>
+            )}
 
             <div className="mt-12 text-center">
               <Button asChild size="lg" className="rounded-full bg-accent text-accent-foreground hover:bg-accent/90">
@@ -216,45 +171,63 @@ export default function QuiSommesNousPage() {
           </div>
         </section>
 
+        {/* Équipe */}
         <section className="bg-muted/30 py-16 lg:py-24">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="mb-12 text-center">
-              <h2 className="font-serif mb-4 text-balance text-3xl font-bold md:text-4xl">Rencontrez Notre Équipe</h2>
+              <h2 className="font-serif mb-4 text-balance text-3xl font-bold md:text-4xl">{about.teamSectionTitle}</h2>
               <p className="mx-auto max-w-2xl text-pretty text-muted-foreground">
-                Des personnes passionnées et dévouées qui travaillent chaque jour pour faire de notre mission une
-                réalité
+                {about.teamSectionSubtitle}
               </p>
             </div>
 
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {featuredTeamMembers.map((member) => (
-                <div
-                  key={member.name}
-                  className="group overflow-hidden rounded-3xl bg-card shadow-lg transition-all hover:shadow-xl"
-                >
-                  <div className="relative aspect-square overflow-hidden">
-                    <img
-                      src={member.image || "/placeholder.svg"}
-                      alt={member.name}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <h3 className="font-serif mb-1 text-xl font-bold">{member.name}</h3>
-                    <p className="mb-3 text-sm font-medium text-primary">{member.role}</p>
-                    <p className="mb-4 text-sm leading-relaxed text-muted-foreground">{member.bio}</p>
-                    <div className="flex gap-3">
-                      <button className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground">
-                        <Mail className="h-4 w-4" />
-                      </button>
-                      <button className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground">
-                        <Linkedin className="h-4 w-4" />
-                      </button>
+            {hasTeam ? (
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                {about.featuredTeamMembers.map((member) => (
+                  <div
+                    key={member.name}
+                    className="group overflow-hidden rounded-3xl bg-card shadow-lg transition-all hover:shadow-xl"
+                  >
+                    <div className="relative aspect-square overflow-hidden">
+                      <img
+                        src={member.image || "/placeholder.svg"}
+                        alt={member.name}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    </div>
+                    <div className="p-6">
+                      <h3 className="font-serif mb-1 text-xl font-bold">{member.name}</h3>
+                      <p className="mb-3 text-sm font-medium text-primary">{member.role}</p>
+                      <p className="mb-4 text-sm leading-relaxed text-muted-foreground">{member.bio}</p>
+                      <div className="flex gap-3">
+                        {member.email && (
+                          <a
+                            href={`mailto:${member.email}`}
+                            className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+                          >
+                            <Mail className="h-4 w-4" />
+                          </a>
+                        )}
+                        {member.linkedinUrl && (
+                          <a
+                            href={member.linkedinUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+                          >
+                            <Linkedin className="h-4 w-4" />
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 border-2 border-dashed border-muted-foreground/30 rounded-xl">
+                <p className="text-muted-foreground">[Donnée non récupérée: featuredTeamMembers]</p>
+              </div>
+            )}
 
             <div className="mt-12 text-center">
               <Button asChild size="lg" variant="outline" className="rounded-full border-2 bg-transparent">
@@ -264,31 +237,38 @@ export default function QuiSommesNousPage() {
           </div>
         </section>
 
+        {/* FAQ */}
         <section className="py-16 lg:py-24">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="mb-12 text-center">
               <h2 className="font-serif mb-4 text-balance text-3xl font-bold md:text-4xl">
-                Questions Fréquemment Posées
+                {about.faqSectionTitle}
               </h2>
               <p className="mx-auto max-w-2xl text-pretty text-muted-foreground">
-                Tout ce que vous devez savoir sur Binin Ye et notre mission
+                {about.faqSectionSubtitle}
               </p>
             </div>
 
-            <div className="mx-auto max-w-3xl space-y-4">
-              {faqs.map((faq, index) => (
-                <details
-                  key={index}
-                  className="group rounded-2xl bg-card p-6 shadow-md transition-shadow hover:shadow-lg"
-                >
-                  <summary className="flex cursor-pointer items-center justify-between font-semibold">
-                    <span className="text-pretty pr-4">{faq.question}</span>
-                    <ChevronDown className="h-5 w-5 flex-shrink-0 text-primary transition-transform group-open:rotate-180" />
-                  </summary>
-                  <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">{faq.answer}</p>
-                </details>
-              ))}
-            </div>
+            {hasFaqs ? (
+              <div className="mx-auto max-w-3xl space-y-4">
+                {about.faqs.map((faq, index) => (
+                  <details
+                    key={index}
+                    className="group rounded-2xl bg-card p-6 shadow-md transition-shadow hover:shadow-lg"
+                  >
+                    <summary className="flex cursor-pointer items-center justify-between font-semibold">
+                      <span className="text-pretty pr-4">{faq.question}</span>
+                      <ChevronDown className="h-5 w-5 flex-shrink-0 text-primary transition-transform group-open:rotate-180" />
+                    </summary>
+                    <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">{faq.answer}</p>
+                  </details>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 border-2 border-dashed border-muted-foreground/30 rounded-xl max-w-3xl mx-auto">
+                <p className="text-muted-foreground">[Donnée non récupérée: faqs]</p>
+              </div>
+            )}
           </div>
         </section>
       </main>
